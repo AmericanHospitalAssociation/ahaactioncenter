@@ -1,6 +1,13 @@
 platform :ios, '7.0'
 
 pod 'AFNetworking', '~> 2.0'
-
-
+pod 'FXForms', '~> 1.2'
+pod 'MSDynamicsDrawerViewController', '~> 1.5'
+pod 'RATreeView', '~> 1.0'
+pod 'STTwitter', '~> 0.2'
+pod 'FontAwesomeKit', '~> 2.2'
+pod 'MDCFocusView', '~> 0.1'
+pod 'SWRevealViewController', '~> 2.3'
+pod 'M13ProgressSuite', '~> 1.2'
+pod 'KGModal', '~> 1.1'
 #workspace 'ahaactioncenter'
