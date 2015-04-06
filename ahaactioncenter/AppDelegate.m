@@ -10,8 +10,16 @@
 #import <Fabric/Fabric.h>
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
+#import <Social/Social.h>
+#import <Twitter/Twitter.h>
+#import <Parse/Parse.h>
+#import "Constants.h"
+#import "MSDynamicsDrawerViewController.h"
+#import "MSDynamicsDrawerStyler.h"
+#import "MenuViewController.h"
+#import "MainViewController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<MSDynamicsDrawerViewControllerDelegate>
 
 @end
 
@@ -21,8 +29,38 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [Fabric with:@[CrashlyticsKit, TwitterKit]];
+    
+    // Set up Parse for Push Notifications
+    [Parse setApplicationId:kParseAppId
+                  clientKey:kParseClientKey];
+    // Register for Push Notitications
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+    
+    _dynamicsDrawerViewController = [MSDynamicsDrawerViewController new];
 
+    MSDynamicsDrawerResizeStyler *resize = [MSDynamicsDrawerResizeStyler styler];
+    resize.minimumResizeRevealWidth = 40.0;
+    [_dynamicsDrawerViewController addStylersFromArray:@[[MSDynamicsDrawerScaleStyler styler], [MSDynamicsDrawerFadeStyler styler], [MSDynamicsDrawerParallaxStyler styler], resize] forDirection:MSDynamicsDrawerDirectionLeft];
+    
+    MenuViewController *menuViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"menu"];
+    menuViewController.dynamicsDrawerViewController = self.dynamicsDrawerViewController;
+    UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+    [_dynamicsDrawerViewController setDrawerViewController:menuNav forDirection:MSDynamicsDrawerDirectionLeft];
+    
+    MainViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"main"];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    _dynamicsDrawerViewController.paneViewController = nav;
 
+    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    _window.rootViewController = _dynamicsDrawerViewController;
+    [_window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -46,6 +84,18 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    currentInstallation.channels = @[ @"global" ];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 
 @end

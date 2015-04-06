@@ -10,4 +10,7 @@ pod 'MDCFocusView', '~> 0.1'
 pod 'SWRevealViewController', '~> 2.3'
 pod 'M13ProgressSuite', '~> 1.2'
 pod 'KGModal', '~> 1.1'
+pod 'Parse', '~> 1.7'
+pod 'NSObject-ObjectMap', '~> 2.3'
+
 #workspace 'ahaactioncenter'

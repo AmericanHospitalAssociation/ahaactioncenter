@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3E1A1E661AD07C2B00223873 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E1A1E651AD07C2B00223873 /* main.m */; };
 		3E1A1E691AD07C2B00223873 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E1A1E681AD07C2B00223873 /* AppDelegate.m */; };
-		3E1A1E6C1AD07C2B00223873 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E1A1E6B1AD07C2B00223873 /* ViewController.m */; };
 		3E1A1E6F1AD07C2B00223873 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E1A1E6D1AD07C2B00223873 /* Main.storyboard */; };
 		3E1A1E711AD07C2B00223873 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E1A1E701AD07C2B00223873 /* Images.xcassets */; };
 		3E1A1E741AD07C2B00223873 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E1A1E721AD07C2B00223873 /* LaunchScreen.xib */; };
@@ -19,6 +18,16 @@
 		3E373DE21AD0AF3C004DE20B /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E373DE01AD0AF3C004DE20B /* TwitterKit.framework */; };
 		3E373DE31AD0AF3C004DE20B /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3E373DE11AD0AF3C004DE20B /* TwitterKitResources.bundle */; };
 		3E373DE51AD0AFE8004DE20B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E373DE41AD0AFE8004DE20B /* StoreKit.framework */; };
+		3E373DE81AD0C6FE004DE20B /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E373DE71AD0C6FE004DE20B /* Constants.m */; };
+		3E373DEA1AD0C855004DE20B /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E373DE91AD0C855004DE20B /* Social.framework */; };
+		3E373DEC1AD0C85E004DE20B /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E373DEB1AD0C85E004DE20B /* Twitter.framework */; };
+		3E373DF31AD0D79B004DE20B /* ActionCenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E373DF21AD0D79B004DE20B /* ActionCenterManager.m */; };
+		3E373DF61AD0DB30004DE20B /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E373DF51AD0DB30004DE20B /* MenuViewController.m */; };
+		3E5A44031AD19B83001D6806 /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A44021AD19B83001D6806 /* ProgressHUD.m */; };
+		3EB8083C1AD20A7800FC8584 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8083B1AD20A7800FC8584 /* LoginViewController.m */; };
+		3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8083E1AD20CC300FC8584 /* MainViewController.m */; };
+		3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ED95A861AD0F231003269D8 /* RATableViewCell.m */; };
+		3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ED95A871AD0F231003269D8 /* RATableViewCell.xib */; };
 		A086770766F0983F6765C99A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDA86D67A6B3548A0EC686B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -40,8 +49,6 @@
 		3E1A1E651AD07C2B00223873 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3E1A1E671AD07C2B00223873 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3E1A1E681AD07C2B00223873 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3E1A1E6A1AD07C2B00223873 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3E1A1E6B1AD07C2B00223873 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		3E1A1E6E1AD07C2B00223873 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3E1A1E701AD07C2B00223873 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3E1A1E731AD07C2B00223873 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -53,6 +60,23 @@
 		3E373DE01AD0AF3C004DE20B /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		3E373DE11AD0AF3C004DE20B /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
 		3E373DE41AD0AFE8004DE20B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		3E373DE61AD0C6FE004DE20B /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		3E373DE71AD0C6FE004DE20B /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		3E373DE91AD0C855004DE20B /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		3E373DEB1AD0C85E004DE20B /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		3E373DF11AD0D79B004DE20B /* ActionCenterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActionCenterManager.h; path = Models/ActionCenterManager.h; sourceTree = "<group>"; };
+		3E373DF21AD0D79B004DE20B /* ActionCenterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActionCenterManager.m; path = Models/ActionCenterManager.m; sourceTree = "<group>"; };
+		3E373DF41AD0DB30004DE20B /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuViewController.h; path = Controllers/MenuViewController.h; sourceTree = "<group>"; };
+		3E373DF51AD0DB30004DE20B /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuViewController.m; path = Controllers/MenuViewController.m; sourceTree = "<group>"; };
+		3E5A44011AD19B83001D6806 /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgressHUD.h; path = Models/ProgressHUD.h; sourceTree = "<group>"; };
+		3E5A44021AD19B83001D6806 /* ProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgressHUD.m; path = Models/ProgressHUD.m; sourceTree = "<group>"; };
+		3EB8083A1AD20A7800FC8584 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Controllers/LoginViewController.h; sourceTree = "<group>"; };
+		3EB8083B1AD20A7800FC8584 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Controllers/LoginViewController.m; sourceTree = "<group>"; };
+		3EB8083D1AD20CC300FC8584 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = Controllers/MainViewController.h; sourceTree = "<group>"; };
+		3EB8083E1AD20CC300FC8584 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = Controllers/MainViewController.m; sourceTree = "<group>"; };
+		3ED95A851AD0F231003269D8 /* RATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RATableViewCell.h; path = Views/RATableViewCell.h; sourceTree = "<group>"; };
+		3ED95A861AD0F231003269D8 /* RATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RATableViewCell.m; path = Views/RATableViewCell.m; sourceTree = "<group>"; };
+		3ED95A871AD0F231003269D8 /* RATableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RATableViewCell.xib; path = Views/RATableViewCell.xib; sourceTree = "<group>"; };
 		A526A2FDFB51284950326C6D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,6 +85,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E373DEC1AD0C85E004DE20B /* Twitter.framework in Frameworks */,
+				3E373DEA1AD0C855004DE20B /* Social.framework in Frameworks */,
 				3E373DE51AD0AFE8004DE20B /* StoreKit.framework in Frameworks */,
 				3E373DDE1AD0AD80004DE20B /* Crashlytics.framework in Frameworks */,
 				A086770766F0983F6765C99A /* libPods.a in Frameworks */,
@@ -104,8 +130,11 @@
 			children = (
 				3E1A1E671AD07C2B00223873 /* AppDelegate.h */,
 				3E1A1E681AD07C2B00223873 /* AppDelegate.m */,
-				3E1A1E6A1AD07C2B00223873 /* ViewController.h */,
-				3E1A1E6B1AD07C2B00223873 /* ViewController.m */,
+				3E373DE61AD0C6FE004DE20B /* Constants.h */,
+				3E373DE71AD0C6FE004DE20B /* Constants.m */,
+				3E373DF01AD0CD91004DE20B /* Models */,
+				3E373DF81AD0DB5A004DE20B /* Views */,
+				3E373DF71AD0DB38004DE20B /* Controllers */,
 				3E1A1E6D1AD07C2B00223873 /* Main.storyboard */,
 				3E1A1E701AD07C2B00223873 /* Images.xcassets */,
 				3E1A1E721AD07C2B00223873 /* LaunchScreen.xib */,
@@ -140,9 +169,45 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3E373DF01AD0CD91004DE20B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3E373DF11AD0D79B004DE20B /* ActionCenterManager.h */,
+				3E373DF21AD0D79B004DE20B /* ActionCenterManager.m */,
+				3E5A44011AD19B83001D6806 /* ProgressHUD.h */,
+				3E5A44021AD19B83001D6806 /* ProgressHUD.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		3E373DF71AD0DB38004DE20B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3E373DF41AD0DB30004DE20B /* MenuViewController.h */,
+				3E373DF51AD0DB30004DE20B /* MenuViewController.m */,
+				3EB8083A1AD20A7800FC8584 /* LoginViewController.h */,
+				3EB8083B1AD20A7800FC8584 /* LoginViewController.m */,
+				3EB8083D1AD20CC300FC8584 /* MainViewController.h */,
+				3EB8083E1AD20CC300FC8584 /* MainViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		3E373DF81AD0DB5A004DE20B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3ED95A851AD0F231003269D8 /* RATableViewCell.h */,
+				3ED95A861AD0F231003269D8 /* RATableViewCell.m */,
+				3ED95A871AD0F231003269D8 /* RATableViewCell.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		C888BD7119310D63E5238525 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3E373DEB1AD0C85E004DE20B /* Twitter.framework */,
+				3E373DE91AD0C855004DE20B /* Social.framework */,
 				3E373DE01AD0AF3C004DE20B /* TwitterKit.framework */,
 				3E373DE11AD0AF3C004DE20B /* TwitterKitResources.bundle */,
 				3E373DDC1AD0AD80004DE20B /* Crashlytics.framework */,
@@ -247,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E373DE31AD0AF3C004DE20B /* TwitterKitResources.bundle in Resources */,
+				3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */,
 				3E1A1E6F1AD07C2B00223873 /* Main.storyboard in Resources */,
 				3E1A1E741AD07C2B00223873 /* LaunchScreen.xib in Resources */,
 				3E1A1E711AD07C2B00223873 /* Images.xcassets in Resources */,
@@ -314,9 +380,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E1A1E6C1AD07C2B00223873 /* ViewController.m in Sources */,
+				3EB8083C1AD20A7800FC8584 /* LoginViewController.m in Sources */,
 				3E1A1E691AD07C2B00223873 /* AppDelegate.m in Sources */,
 				3E1A1E661AD07C2B00223873 /* main.m in Sources */,
+				3E373DE81AD0C6FE004DE20B /* Constants.m in Sources */,
+				3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */,
+				3E5A44031AD19B83001D6806 /* ProgressHUD.m in Sources */,
+				3E373DF31AD0D79B004DE20B /* ActionCenterManager.m in Sources */,
+				3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */,
+				3E373DF61AD0DB30004DE20B /* MenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,15 +1,13 @@
 //
-//  ViewController.h
+//  LoginViewController.h
 //  ahaactioncenter
 //
-//  Created by Server on 4/4/15.
+//  Created by Server on 4/5/15.
 //  Copyright (c) 2015 AHA. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface LoginViewController : UIViewController
 
 @end
-
