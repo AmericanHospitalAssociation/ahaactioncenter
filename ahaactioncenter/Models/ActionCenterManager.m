@@ -7,8 +7,15 @@
 //
 
 #import "ActionCenterManager.h"
+#import "AppDelegate.h"
+#import "FontAwesomeKit.h"
 
-static NSString *SolsticeContacts = @"https://solstice.applauncher.com/external/contacts.json";
+static NSString *AMSOAM = @"http://ahaconnect.org/apis/sso.php?email=%@&password=%@&db=prod";
+static NSString *VoterVoiceGetUser = @"http://54.245.255.190/p/action_center/api/v1/getUserIdentity?zipcode=%@&email=%@";
+static NSString *VoterVoiceVerifyAddress = @"http://54.245.255.190/p/action_center/api/v1/verifyAddress?address=%@&zipcode=%@&country=%@";
+static NSString *VoterVoiceSendEmailVerify = @"http://54.245.255.190/p/action_center/api/v1/emailVerification?email=%@";
+static NSString *VoterVoiceVerifyEmailID = @"http://54.245.255.190/p/action_center/api/v1/emailVerification?phone=%@&prefix=%@&verificationID=%@&code=%@&org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@";
+static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/api/v1/createUser?org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@&phone=%@&prefix=%@";
 
 @implementation ActionCenterManager
 
@@ -28,6 +35,35 @@ static NSString *SolsticeContacts = @"https://solstice.applauncher.com/external/
         
     }
     return self;
+}
+
+#pragma mark - Share Methods
++ (UIBarButtonItem *)dragButton {
+    FAKIonIcons *drag = [FAKIonIcons iconWithCode:@"\uf130" size:30];
+    [drag addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    
+    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithImage:[drag imageWithSize:CGSizeMake(30, 30)]
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(openPane)];
+    return btn;
+}
+
++ (UIBarButtonItem *)refreshButton {
+    FAKIonIcons *refresh = [FAKIonIcons iconWithCode:@"\uf49a" size:30];
+    [refresh addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    
+    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithImage:[refresh imageWithSize:CGSizeMake(30, 30)]
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:nil
+                                                                             action:nil];
+    return btn;
+}
+
++ (void)openPane
+{
+    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [ad openSideMenu];
 }
 
 + (NSArray *)menuItems
@@ -60,9 +96,11 @@ static NSString *SolsticeContacts = @"https://solstice.applauncher.com/external/
     return @[home, action, events, twitter, news, contact];
 }
 
-- (void)getSolisticeContacts:(CompletionContactsBlock)completion
+#pragma mark - OAM
+- (void)getOAMUser:(NSString *)email withPassword:(NSString *)password completion:(CompletionOAM)completion
 {
-    NSURL *url = [NSURL URLWithString:SolsticeContacts];
+    NSString *strUrl = [NSString stringWithFormat:AMSOAM, email, password];
+    NSURL *url = [NSURL URLWithString:strUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:20.0];
@@ -70,9 +108,52 @@ static NSString *SolsticeContacts = @"https://solstice.applauncher.com/external/
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSArray *contacts = [NSObject arrayOfType:[Contact class] FromJSONData:responseObject];
+        OAM *oam = [[OAM alloc] initWithJSONData:responseObject];
         
-        //completion(contacts, nil);
+        completion(oam, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+#pragma mark - Voter Voice Methods
+- (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceGetUser, zip, email];
+    NSURL *url = [NSURL URLWithString:strUrl];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+- (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceVerifyAddress, address, zip, country];
+    NSURL *url = [NSURL URLWithString:strUrl];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(nil, error);
     }];

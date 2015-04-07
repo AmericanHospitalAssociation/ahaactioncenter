@@ -19,6 +19,8 @@
 #import "MenuViewController.h"
 #import "MainViewController.h"
 
+#import "ActionCenterManager.h"
+
 @interface AppDelegate ()<MSDynamicsDrawerViewControllerDelegate>
 
 @end
@@ -42,6 +44,18 @@
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
+    //Setup Global Colors
+    [[UINavigationBar appearance] setBarTintColor:kAHABlue];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    
+    [[UIToolbar appearance] setTintColor:[UIColor whiteColor]]; // this will change the back button tint
+    [[UIToolbar appearance] setBarTintColor:kAHARed];
+    //[[UIToolbar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    // Setup Side Menu
     _dynamicsDrawerViewController = [MSDynamicsDrawerViewController new];
 
     MSDynamicsDrawerResizeStyler *resize = [MSDynamicsDrawerResizeStyler styler];
@@ -55,13 +69,38 @@
     
     MainViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"main"];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav.toolbarHidden = NO;
     _dynamicsDrawerViewController.paneViewController = nav;
-
+    // End Side Menu Setup
+    [self testVoterVoice];
+    
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _window.rootViewController = _dynamicsDrawerViewController;
     [_window makeKeyAndVisible];
     
     return YES;
+}
+
+- (void)testVoterVoice
+{
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    [action getOAMUser:@"vince.davis@icloud.com"
+          withPassword:@"Welcome1"
+            completion:^(OAM *oam, NSError *error){
+                NSLog(@"error %@", error.description);
+                if (error == nil) {
+                    NSLog(@"OAM %@", oam.first_name);
+                    
+                    [action verifyUser:@"vince.davis@icloud.com"
+                               withZip:oam.zip
+                            completion:^(VoterVoice *voter, NSError *error){
+                                if (error == nil) {
+                                    VoterVoiceBody *v = voter.response.body[0];
+                                    NSLog(@"Voter - %@", v.givenNames);
+                                }
+                            }];
+                }
+            }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -96,6 +135,15 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [PFPush handlePush:userInfo];
+}
+
+#pragma mark - Side Menu Methods
+- (void)openSideMenu
+{
+    [_dynamicsDrawerViewController setPaneState:MSDynamicsDrawerPaneStateOpen
+                                       animated:YES
+                          allowUserInterruption:YES
+                                     completion:nil];
 }
 
 @end

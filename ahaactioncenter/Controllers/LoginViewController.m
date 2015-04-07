@@ -8,7 +8,10 @@
 
 #import "LoginViewController.h"
 
-@interface LoginViewController ()
+@interface LoginViewController ()<UITextFieldDelegate>
+
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 
 @end
 
@@ -16,22 +19,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.title = @"Log In";
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) launchURLInBrowser:(NSURL *)url {
+    if (![[UIApplication sharedApplication] openURL:url]) {
+        NSLog(@"%@%@",@"Failed to open url:",[url description]);
+    }
 }
-*/
+
+- (IBAction)login:(id)sender {
+}
+
+- (void)showAlert
+{
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Invalid Login Credentials" message:@"The Email Address or Password you entered is incorrect. Please verify your credentials and try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [av show];
+}
+
+- (IBAction)forgotPassword:(id)sender {
+    NSURL *url = [NSURL URLWithString:@"http://www.aha.org/oam/forgot-password.dhtml?ahasite=AHA&goto=http://www.aha.org/oam-aha/oam/welcome.html"];
+    
+    [self launchURLInBrowser:url];
+}
+
+- (IBAction)createAccount:(id)sender {
+    NSURL *url = [NSURL URLWithString:@"https://ams.aha.org/EWEB/DynamicPage.aspx?Site=AHA&webcode=Register&action=add&nostore=1&AHABU=AHA&RedirectURL=http%3A%2F%2Fwww.aha.org%3A80%2Fhospital-members%2Fadvocacy-issues%2Faction%2Findex.shtml"];
+    
+    [self launchURLInBrowser:url];
+}
+
+#pragma mark - UITextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
 
 @end

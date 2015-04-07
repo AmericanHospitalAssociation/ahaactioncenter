@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
-
+#import "OAM.h"
+#import "VoterVoice.h"
 /**
  `ActionCenterManager` is a class that pulls in data from Solstice rest to get contact info
  */
 @interface ActionCenterManager : NSObject
 
-typedef void (^CompletionContactsBlock)(NSArray *contacts, NSError *error);
+typedef void (^CompletionOAM)(OAM *oam, NSError *error);
+typedef void (^CompletionVoterVoice)(VoterVoice *voterVoice, NSError *error);
 //typedef void (^CompletionContactBlock)(Contact *contact, NSError *error);
 
 
@@ -28,22 +30,17 @@ typedef void (^CompletionContactsBlock)(NSArray *contacts, NSError *error);
  */
 + (id)sharedInstance;
 
-/**
- This methods returns an array of Contacts Objects
- 
- @returns NSArray of Contact Objects and NSError if any
- */
-- (void)getSolisticeContacts:(CompletionContactsBlock)completion;
 
-/**
- This methods returns details of one Contact
- 
- @param url The url needed to pull in contact info
- @returns A Contact Object and NSError if any
- */
-//- (void)getSolisticeContactDetail:(NSString *)url withCompletion:(CompletionContactBlock)completion;
+- (void)getOAMUser:(NSString *)email withPassword:(NSString *)password completion:(CompletionOAM)completion;
+- (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion;
 
 + (NSArray *)menuItems;
+
++ (UIBarButtonItem *)dragButton;
+
++ (UIBarButtonItem *)refreshButton;
+
++ (void)openPane;
 
 
 @end
