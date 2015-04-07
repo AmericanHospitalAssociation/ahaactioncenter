@@ -16,6 +16,9 @@ static NSString *VoterVoiceVerifyAddress = @"http://54.245.255.190/p/action_cent
 static NSString *VoterVoiceSendEmailVerify = @"http://54.245.255.190/p/action_center/api/v1/emailVerification?email=%@";
 static NSString *VoterVoiceVerifyEmailID = @"http://54.245.255.190/p/action_center/api/v1/emailVerification?phone=%@&prefix=%@&verificationID=%@&code=%@&org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@";
 static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/api/v1/createUser?org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@&phone=%@&prefix=%@";
+static NSString *VoterVoiceMatchesForCampaign = @"http://54.245.255.190/p/action_center/api/v1/getMatchedTargetsForCampaign?campaignId=%d&token=%@";
+static NSString *VoterVoiceCampaignSummaries = @"http://54.245.255.190/p/action_center/api/v1/getCampaignSummaries";
+static NSString *VoterVoiceTargertedMessage = @"http://54.245.255.190/p/action_center/api/v1/getTargetedMessages?campaignId=%d";
 
 @implementation ActionCenterManager
 
@@ -96,11 +99,21 @@ static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/
     return @[home, action, events, twitter, news, contact];
 }
 
+- (NSString *)encodeURL:(NSString *)url {
+    NSString * encoded = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(
+                                                                                      NULL,
+                                                                                      (__bridge CFStringRef)url,
+                                                                                      NULL,
+                                                                                      (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                                      kCFStringEncodingUTF8);
+    return encoded;
+}
+
 #pragma mark - OAM
 - (void)getOAMUser:(NSString *)email withPassword:(NSString *)password completion:(CompletionOAM)completion
 {
     NSString *strUrl = [NSString stringWithFormat:AMSOAM, email, password];
-    NSURL *url = [NSURL URLWithString:strUrl];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:20.0];
@@ -122,7 +135,7 @@ static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/
 - (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion
 {
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceGetUser, zip, email];
-    NSURL *url = [NSURL URLWithString:strUrl];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:20.0];
@@ -143,7 +156,154 @@ static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/
 - (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoice)completion
 {
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceVerifyAddress, address, zip, country];
-    NSURL *url = [NSURL URLWithString:strUrl];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+//@"http://54.245.255.190/p/action_center/api/v1/createUser?org=NEW&email=vince.davis@me.com&firstName=vince&address=24a%20Blake%20St&zipcode=29403&country=US&lastName=davis&phone=8472128597&prefix=dr"
+- (void)createUser:(OAM *)oam completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceCreateUser,
+                        oam.org_name,
+                        oam.first_name,
+                        oam.address_line,
+                        oam.zip,
+                        @"US",
+                        oam.last_name,
+                        oam.phone,
+                        oam.prefix];
+ 
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+- (void)sendEmailVerification:(NSString *)email completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceSendEmailVerify,email];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+- (void)getMatchesForCampaign:(NSString*)campaignId withToken:(NSString *)token completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceMatchesForCampaign, campaignId, token];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+//@"http://54.245.255.190/p/action_center/api/v1/emailVerification?phone=%@&prefix=%@&verificationID=%@&code=%@&org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@"
+- (void)verifyEmailID:(OAM *)oam withID:(NSString *)verificationID andCode:(NSString *)code completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceVerifyEmailID,
+                        oam.phone,
+                        oam.prefix,
+                        verificationID,
+                        code,
+                        oam.org_name,
+                        oam.email,
+                        oam.first_name,
+                        oam.address_line,
+                        oam.zip,
+                        @"US",
+                        oam.last_name];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+- (void)getCampaignSummaries:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = VoterVoiceCampaignSummaries;
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+- (void)getTargetedMessages:(NSString *)campaignID completion:(CompletionVoterVoice)completion
+{
+    NSString *strUrl = [NSString stringWithFormat:VoterVoiceTargertedMessage, campaignID];
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:20.0];

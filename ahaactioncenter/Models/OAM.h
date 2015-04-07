@@ -13,6 +13,7 @@
 
 @property (nonatomic, retain) NSString *address_line;
 @property (nonatomic, retain) NSString *ahaid;
+@property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *city;
 @property (nonatomic, retain) NSString *first_name;
 @property (nonatomic, retain) NSString *last_name;

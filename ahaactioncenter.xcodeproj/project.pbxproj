@@ -37,12 +37,16 @@
 		619BC2431AD3123100E9FAE4 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC23C1AD3123100E9FAE4 /* User.m */; };
 		619BC2441AD3123100E9FAE4 /* UserStatusTwitterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC23E1AD3123100E9FAE4 /* UserStatusTwitterItem.m */; };
 		619BC2471AD3287C00E9FAE4 /* CampaignDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2461AD3287C00E9FAE4 /* CampaignDetailViewController.m */; };
-		619BC24A1AD3326B00E9FAE4 /* AHANavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2491AD3326B00E9FAE4 /* AHANavigationItem.m */; };
 		619BC24D1AD33D1400E9FAE4 /* CampaignDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC24C1AD33D1400E9FAE4 /* CampaignDetailView.m */; };
 		619BC2501AD38E7E00E9FAE4 /* OAM.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC24F1AD38E7E00E9FAE4 /* OAM.m */; };
-		619BC2531AD3917700E9FAE4 /* VoterVoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2521AD3917700E9FAE4 /* VoterVoice.m */; };
-		619BC2561AD3925400E9FAE4 /* VoterVoiceResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2551AD3925400E9FAE4 /* VoterVoiceResponse.m */; };
-		619BC2591AD3933100E9FAE4 /* VoterVoiceBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2581AD3933100E9FAE4 /* VoterVoiceBody.m */; };
+		61F103651AD3A98B00547571 /* VoterVoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103561AD3A98B00547571 /* VoterVoice.m */; };
+		61F103661AD3A98B00547571 /* VoterVoiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103581AD3A98B00547571 /* VoterVoiceAddress.m */; };
+		61F103671AD3A98B00547571 /* VoterVoiceBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1035A1AD3A98B00547571 /* VoterVoiceBody.m */; };
+		61F103681AD3A98B00547571 /* VoterVoiceMatches.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1035C1AD3A98B00547571 /* VoterVoiceMatches.m */; };
+		61F103691AD3A98B00547571 /* VoterVoiceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1035E1AD3A98B00547571 /* VoterVoiceMessage.m */; };
+		61F1036A1AD3A98B00547571 /* VoterVoiceResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103601AD3A98B00547571 /* VoterVoiceResponse.m */; };
+		61F1036B1AD3A98B00547571 /* VoterVoiceSelectedAnswers.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103621AD3A98B00547571 /* VoterVoiceSelectedAnswers.m */; };
+		61F1036C1AD3A98B00547571 /* VoterVoiceTargets.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103641AD3A98B00547571 /* VoterVoiceTargets.m */; };
 		A086770766F0983F6765C99A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDA86D67A6B3548A0EC686B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -111,18 +115,26 @@
 		619BC23E1AD3123100E9FAE4 /* UserStatusTwitterItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserStatusTwitterItem.m; sourceTree = "<group>"; };
 		619BC2451AD3287C00E9FAE4 /* CampaignDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignDetailViewController.h; path = Controllers/CampaignDetailViewController.h; sourceTree = "<group>"; };
 		619BC2461AD3287C00E9FAE4 /* CampaignDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CampaignDetailViewController.m; path = Controllers/CampaignDetailViewController.m; sourceTree = "<group>"; };
-		619BC2481AD3326B00E9FAE4 /* AHANavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHANavigationItem.h; path = Models/AHANavigationItem.h; sourceTree = "<group>"; };
-		619BC2491AD3326B00E9FAE4 /* AHANavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHANavigationItem.m; path = Models/AHANavigationItem.m; sourceTree = "<group>"; };
 		619BC24B1AD33D1400E9FAE4 /* CampaignDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignDetailView.h; path = Views/CampaignDetailView.h; sourceTree = "<group>"; };
 		619BC24C1AD33D1400E9FAE4 /* CampaignDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CampaignDetailView.m; path = Views/CampaignDetailView.m; sourceTree = "<group>"; };
 		619BC24E1AD38E7E00E9FAE4 /* OAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAM.h; path = Models/OAM.h; sourceTree = "<group>"; };
 		619BC24F1AD38E7E00E9FAE4 /* OAM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAM.m; path = Models/OAM.m; sourceTree = "<group>"; };
-		619BC2511AD3917700E9FAE4 /* VoterVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VoterVoice.h; path = Models/VoterVoice.h; sourceTree = "<group>"; };
-		619BC2521AD3917700E9FAE4 /* VoterVoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VoterVoice.m; path = Models/VoterVoice.m; sourceTree = "<group>"; };
-		619BC2541AD3925400E9FAE4 /* VoterVoiceResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VoterVoiceResponse.h; path = Models/VoterVoiceResponse.h; sourceTree = "<group>"; };
-		619BC2551AD3925400E9FAE4 /* VoterVoiceResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VoterVoiceResponse.m; path = Models/VoterVoiceResponse.m; sourceTree = "<group>"; };
-		619BC2571AD3933100E9FAE4 /* VoterVoiceBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VoterVoiceBody.h; path = Models/VoterVoiceBody.h; sourceTree = "<group>"; };
-		619BC2581AD3933100E9FAE4 /* VoterVoiceBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VoterVoiceBody.m; path = Models/VoterVoiceBody.m; sourceTree = "<group>"; };
+		61F103551AD3A98B00547571 /* VoterVoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoice.h; sourceTree = "<group>"; };
+		61F103561AD3A98B00547571 /* VoterVoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoice.m; sourceTree = "<group>"; };
+		61F103571AD3A98B00547571 /* VoterVoiceAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceAddress.h; sourceTree = "<group>"; };
+		61F103581AD3A98B00547571 /* VoterVoiceAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceAddress.m; sourceTree = "<group>"; };
+		61F103591AD3A98B00547571 /* VoterVoiceBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceBody.h; sourceTree = "<group>"; };
+		61F1035A1AD3A98B00547571 /* VoterVoiceBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceBody.m; sourceTree = "<group>"; };
+		61F1035B1AD3A98B00547571 /* VoterVoiceMatches.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceMatches.h; sourceTree = "<group>"; };
+		61F1035C1AD3A98B00547571 /* VoterVoiceMatches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceMatches.m; sourceTree = "<group>"; };
+		61F1035D1AD3A98B00547571 /* VoterVoiceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceMessage.h; sourceTree = "<group>"; };
+		61F1035E1AD3A98B00547571 /* VoterVoiceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceMessage.m; sourceTree = "<group>"; };
+		61F1035F1AD3A98B00547571 /* VoterVoiceResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceResponse.h; sourceTree = "<group>"; };
+		61F103601AD3A98B00547571 /* VoterVoiceResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceResponse.m; sourceTree = "<group>"; };
+		61F103611AD3A98B00547571 /* VoterVoiceSelectedAnswers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceSelectedAnswers.h; sourceTree = "<group>"; };
+		61F103621AD3A98B00547571 /* VoterVoiceSelectedAnswers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceSelectedAnswers.m; sourceTree = "<group>"; };
+		61F103631AD3A98B00547571 /* VoterVoiceTargets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceTargets.h; sourceTree = "<group>"; };
+		61F103641AD3A98B00547571 /* VoterVoiceTargets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceTargets.m; sourceTree = "<group>"; };
 		A526A2FDFB51284950326C6D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -218,21 +230,14 @@
 		3E373DF01AD0CD91004DE20B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				61F103541AD3A98B00547571 /* VoterVoice */,
 				619BC2311AD3123100E9FAE4 /* TwitterModels */,
 				3E373DF11AD0D79B004DE20B /* ActionCenterManager.h */,
 				3E373DF21AD0D79B004DE20B /* ActionCenterManager.m */,
 				3E5A44011AD19B83001D6806 /* ProgressHUD.h */,
 				3E5A44021AD19B83001D6806 /* ProgressHUD.m */,
-				619BC2481AD3326B00E9FAE4 /* AHANavigationItem.h */,
-				619BC2491AD3326B00E9FAE4 /* AHANavigationItem.m */,
 				619BC24E1AD38E7E00E9FAE4 /* OAM.h */,
 				619BC24F1AD38E7E00E9FAE4 /* OAM.m */,
-				619BC2511AD3917700E9FAE4 /* VoterVoice.h */,
-				619BC2521AD3917700E9FAE4 /* VoterVoice.m */,
-				619BC2541AD3925400E9FAE4 /* VoterVoiceResponse.h */,
-				619BC2551AD3925400E9FAE4 /* VoterVoiceResponse.m */,
-				619BC2571AD3933100E9FAE4 /* VoterVoiceBody.h */,
-				619BC2581AD3933100E9FAE4 /* VoterVoiceBody.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -287,6 +292,30 @@
 			);
 			name = TwitterModels;
 			path = Models/TwitterModels;
+			sourceTree = "<group>";
+		};
+		61F103541AD3A98B00547571 /* VoterVoice */ = {
+			isa = PBXGroup;
+			children = (
+				61F103551AD3A98B00547571 /* VoterVoice.h */,
+				61F103561AD3A98B00547571 /* VoterVoice.m */,
+				61F103571AD3A98B00547571 /* VoterVoiceAddress.h */,
+				61F103581AD3A98B00547571 /* VoterVoiceAddress.m */,
+				61F103591AD3A98B00547571 /* VoterVoiceBody.h */,
+				61F1035A1AD3A98B00547571 /* VoterVoiceBody.m */,
+				61F1035B1AD3A98B00547571 /* VoterVoiceMatches.h */,
+				61F1035C1AD3A98B00547571 /* VoterVoiceMatches.m */,
+				61F1035D1AD3A98B00547571 /* VoterVoiceMessage.h */,
+				61F1035E1AD3A98B00547571 /* VoterVoiceMessage.m */,
+				61F1035F1AD3A98B00547571 /* VoterVoiceResponse.h */,
+				61F103601AD3A98B00547571 /* VoterVoiceResponse.m */,
+				61F103611AD3A98B00547571 /* VoterVoiceSelectedAnswers.h */,
+				61F103621AD3A98B00547571 /* VoterVoiceSelectedAnswers.m */,
+				61F103631AD3A98B00547571 /* VoterVoiceTargets.h */,
+				61F103641AD3A98B00547571 /* VoterVoiceTargets.m */,
+			);
+			name = VoterVoice;
+			path = Models/VoterVoice;
 			sourceTree = "<group>";
 		};
 		C888BD7119310D63E5238525 /* Frameworks */ = {
@@ -467,29 +496,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				619BC2431AD3123100E9FAE4 /* User.m in Sources */,
+				61F103681AD3A98B00547571 /* VoterVoiceMatches.m in Sources */,
+				61F1036C1AD3A98B00547571 /* VoterVoiceTargets.m in Sources */,
 				619BC2421AD3123100E9FAE4 /* Urls.m in Sources */,
 				3EB8083C1AD20A7800FC8584 /* LoginViewController.m in Sources */,
 				619BC2301AD310BB00E9FAE4 /* TwitterTableViewCell.m in Sources */,
+				61F103691AD3A98B00547571 /* VoterVoiceMessage.m in Sources */,
 				3E1A1E691AD07C2B00223873 /* AppDelegate.m in Sources */,
 				3E1A1E661AD07C2B00223873 /* main.m in Sources */,
-				619BC2561AD3925400E9FAE4 /* VoterVoiceResponse.m in Sources */,
+				61F103661AD3A98B00547571 /* VoterVoiceAddress.m in Sources */,
 				619BC2501AD38E7E00E9FAE4 /* OAM.m in Sources */,
 				3E373DE81AD0C6FE004DE20B /* Constants.m in Sources */,
+				61F103651AD3A98B00547571 /* VoterVoice.m in Sources */,
+				61F1036A1AD3A98B00547571 /* VoterVoiceResponse.m in Sources */,
 				619BC2441AD3123100E9FAE4 /* UserStatusTwitterItem.m in Sources */,
 				619BC2401AD3123100E9FAE4 /* Entities.m in Sources */,
 				3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */,
-				619BC2531AD3917700E9FAE4 /* VoterVoice.m in Sources */,
 				619BC2411AD3123100E9FAE4 /* Url.m in Sources */,
 				3E5A44031AD19B83001D6806 /* ProgressHUD.m in Sources */,
+				61F1036B1AD3A98B00547571 /* VoterVoiceSelectedAnswers.m in Sources */,
 				619BC23F1AD3123100E9FAE4 /* DescriptionClass.m in Sources */,
+				61F103671AD3A98B00547571 /* VoterVoiceBody.m in Sources */,
 				619BC24D1AD33D1400E9FAE4 /* CampaignDetailView.m in Sources */,
 				3E373DF31AD0D79B004DE20B /* ActionCenterManager.m in Sources */,
-				619BC24A1AD3326B00E9FAE4 /* AHANavigationItem.m in Sources */,
 				3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */,
 				619BC22D1AD310A700E9FAE4 /* TwitterFeedsViewController.m in Sources */,
 				3E373DF61AD0DB30004DE20B /* MenuViewController.m in Sources */,
 				619BC2471AD3287C00E9FAE4 /* CampaignDetailViewController.m in Sources */,
-				619BC2591AD3933100E9FAE4 /* VoterVoiceBody.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
