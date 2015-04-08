@@ -18,6 +18,7 @@
         [self setValue:@"VoterVoiceMessage" forKeyPath:@"propertyArrayMap.messages"];
         [self setValue:@"VoterVoiceSelectedAnswers" forKeyPath:@"propertyArrayMap.preSelectedAnswers"];
         [self setValue:@"VoterVoiceTargets" forKeyPath:@"propertyArrayMap.targets"];
+        [self setValue:@"VoterVoiceSection" forKeyPath:@"propertyArrayMap.sections"];
     }
     return self;
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D72i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DirectoryTableViewCell">
+            <connections>
+                <outlet property="descriptionLabel" destination="Bu2-rt-gvO" id="x9w-Bg-Dhf"/>
+                <outlet property="nameLabel" destination="BUa-WA-YLO" id="gcL-Th-2k8"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ex5-oh-Zsr">
+                    <rect key="frame" x="138" y="8" width="2" height="184"/>
+                    <color key="backgroundColor" red="0.61568627450000002" green="0.1333333333" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="2" id="ENt-oN-HIN"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bu2-rt-gvO">
+                    <rect key="frame" x="148" y="8" width="444" height="184"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-WA-YLO">
+                    <rect key="frame" x="8" y="8" width="122" height="184"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="122" id="5kb-Qi-vJg"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="ex5-oh-Zsr" firstAttribute="leading" secondItem="BUa-WA-YLO" secondAttribute="trailing" constant="8" id="8vV-gw-u5U"/>
+                <constraint firstAttribute="trailing" secondItem="ex5-oh-Zsr" secondAttribute="trailing" constant="460" id="Buy-t8-e6G"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="leading" secondItem="ex5-oh-Zsr" secondAttribute="trailing" constant="8" id="DEP-bG-Hkt"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="leading" secondItem="ex5-oh-Zsr" secondAttribute="trailing" constant="8" id="FPI-Aq-MWJ"/>
+                <constraint firstItem="BUa-WA-YLO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="H6J-ul-2kx"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="J2c-M7-jvY"/>
+                <constraint firstItem="BUa-WA-YLO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" id="K7C-pk-ich"/>
+                <constraint firstAttribute="bottom" secondItem="Bu2-rt-gvO" secondAttribute="bottom" constant="8" id="SHK-Lm-1ZO"/>
+                <constraint firstItem="ex5-oh-Zsr" firstAttribute="bottom" secondItem="BUa-WA-YLO" secondAttribute="bottom" id="ThO-iC-9Ix"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="baseline" secondItem="BUa-WA-YLO" secondAttribute="baseline" id="VIc-VL-UOB"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="leading" secondItem="ex5-oh-Zsr" secondAttribute="trailing" constant="8" symbolic="YES" id="YWR-0z-k7m"/>
+                <constraint firstItem="ex5-oh-Zsr" firstAttribute="leading" secondItem="BUa-WA-YLO" secondAttribute="trailing" constant="8" symbolic="YES" id="aHF-Lx-Utr"/>
+                <constraint firstItem="BUa-WA-YLO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="dSz-VR-UDv"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="firstBaseline" secondItem="BUa-WA-YLO" secondAttribute="firstBaseline" id="gMT-nK-rpj"/>
+                <constraint firstItem="BUa-WA-YLO" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottomMargin" id="hVB-XX-Sxb"/>
+                <constraint firstAttribute="bottom" secondItem="BUa-WA-YLO" secondAttribute="bottom" constant="8" id="j4t-9n-bZ4"/>
+                <constraint firstItem="ex5-oh-Zsr" firstAttribute="leading" secondItem="BUa-WA-YLO" secondAttribute="trailing" constant="8" id="jYA-mF-nTi"/>
+                <constraint firstItem="Bu2-rt-gvO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="qPv-CX-9Cy"/>
+                <constraint firstItem="ex5-oh-Zsr" firstAttribute="top" secondItem="BUa-WA-YLO" secondAttribute="top" id="rwN-rN-K49"/>
+                <constraint firstAttribute="trailing" secondItem="Bu2-rt-gvO" secondAttribute="trailing" constant="8" id="tqN-Om-87d"/>
+                <constraint firstItem="BUa-WA-YLO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="xf2-Nc-9O3"/>
+                <constraint firstAttribute="bottom" secondItem="ex5-oh-Zsr" secondAttribute="bottom" constant="8" id="z57-L7-JXK"/>
+                <constraint firstItem="ex5-oh-Zsr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="z7J-Y8-uVy"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
+    </objects>
+</document>

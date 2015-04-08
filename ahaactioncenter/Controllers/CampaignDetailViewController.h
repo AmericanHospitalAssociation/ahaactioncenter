@@ -10,8 +10,7 @@
 
 @interface CampaignDetailViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
-@property (weak, nonatomic) IBOutlet UIButton *sendButton;
+@property(nonatomic, retain)NSString *campaignID;
+
 
 @end

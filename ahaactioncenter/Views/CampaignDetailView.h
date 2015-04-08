@@ -14,6 +14,7 @@ typedef void (^SendButtonTapped)();
 
 - (void)setHeader:(NSString *)header;
 - (void)loadHTMLString:(NSString *)string;
+- (void)setButtonTitle:(NSString *)string;
 
 @property(nonatomic, copy)SendButtonTapped sendButtonTapped;
 

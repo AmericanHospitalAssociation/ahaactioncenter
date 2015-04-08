@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSString *prefix;
 @property (nonatomic, retain) NSString *state;
 @property (nonatomic, retain) NSString *status;
+@property (nonatomic, retain) NSString *country_code;
 @property (nonatomic, retain) NSString *zip;
 
 /* Example JSON

@@ -65,6 +65,7 @@
     MenuViewController *menuViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"menu"];
     menuViewController.dynamicsDrawerViewController = self.dynamicsDrawerViewController;
     UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+    menuNav.toolbarHidden = NO;
     [_dynamicsDrawerViewController setDrawerViewController:menuNav forDirection:MSDynamicsDrawerDirectionLeft];
     
     MainViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"main"];
@@ -72,7 +73,9 @@
     nav.toolbarHidden = NO;
     _dynamicsDrawerViewController.paneViewController = nav;
     // End Side Menu Setup
-    [self testVoterVoice];
+    //[self testVoterVoice];
+    [self getFeed];
+    //[self testCalendar];
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _window.rootViewController = _dynamicsDrawerViewController;
@@ -101,6 +104,22 @@
                             }];
                 }
             }];
+}
+
+- (void)getFeed
+{
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    [action getAHAFeed:^(NSArray *feeds, NSError *error){
+        NSLog(@"Feed %@", feeds);
+    }];
+}
+
+- (void)testCalendar
+{
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
+        NSLog(@"calendar %@", calendar);
+    }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

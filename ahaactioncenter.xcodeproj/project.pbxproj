@@ -28,7 +28,6 @@
 		3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8083E1AD20CC300FC8584 /* MainViewController.m */; };
 		3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ED95A861AD0F231003269D8 /* RATableViewCell.m */; };
 		3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ED95A871AD0F231003269D8 /* RATableViewCell.xib */; };
-		619BC22D1AD310A700E9FAE4 /* TwitterFeedsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC22B1AD310A700E9FAE4 /* TwitterFeedsViewController.m */; };
 		619BC2301AD310BB00E9FAE4 /* TwitterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */; };
 		619BC23F1AD3123100E9FAE4 /* DescriptionClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2341AD3123100E9FAE4 /* DescriptionClass.m */; };
 		619BC2401AD3123100E9FAE4 /* Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2361AD3123100E9FAE4 /* Entities.m */; };
@@ -47,6 +46,28 @@
 		61F1036A1AD3A98B00547571 /* VoterVoiceResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103601AD3A98B00547571 /* VoterVoiceResponse.m */; };
 		61F1036B1AD3A98B00547571 /* VoterVoiceSelectedAnswers.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103621AD3A98B00547571 /* VoterVoiceSelectedAnswers.m */; };
 		61F1036C1AD3A98B00547571 /* VoterVoiceTargets.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103641AD3A98B00547571 /* VoterVoiceTargets.m */; };
+		61F103721AD409F700547571 /* CampaignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103711AD409F700547571 /* CampaignViewController.m */; };
+		61F103751AD449EE00547571 /* AHANews.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103741AD449EE00547571 /* AHANews.m */; };
+		61F103781AD44A0D00547571 /* AHAArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103771AD44A0D00547571 /* AHAArticle.m */; };
+		61F1037B1AD44D7000547571 /* AHACalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1037A1AD44D7000547571 /* AHACalendar.m */; };
+		61F1037E1AD44D8200547571 /* AHACalendarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1037D1AD44D8200547571 /* AHACalendarItem.m */; };
+		61F103941AD46F0200547571 /* AHAAdvisoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103801AD46F0200547571 /* AHAAdvisoryTableViewCell.m */; };
+		61F103951AD46F0200547571 /* DirectoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103821AD46F0200547571 /* DirectoryTableViewCell.m */; };
+		61F103961AD46F0200547571 /* DirectoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61F103831AD46F0200547571 /* DirectoryCell.xib */; };
+		61F103971AD46F0200547571 /* MatchedTargetTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103861AD46F0200547571 /* MatchedTargetTableViewCell.m */; };
+		61F103981AD46F0200547571 /* CampaignTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103871AD46F0200547571 /* CampaignTableViewCell.m */; };
+		61F103991AD46F0200547571 /* MedicareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1038B1AD46F0200547571 /* MedicareTableViewCell.m */; };
+		61F1039A1AD46F0200547571 /* EventCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1038C1AD46F0200547571 /* EventCalendarTableViewCell.m */; };
+		61F1039B1AD46F0200547571 /* SpecialBulletinTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F1038F1AD46F0200547571 /* SpecialBulletinTableViewCell.m */; };
+		61F1039C1AD46F0200547571 /* ActionAlertTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103901AD46F0200547571 /* ActionAlertTableViewCell.m */; };
+		61F1039D1AD46F0200547571 /* ActivityFeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103911AD46F0200547571 /* ActivityFeedTableViewCell.m */; };
+		61F1039E1AD46F0200547571 /* AHAStaffTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103931AD46F0200547571 /* AHAStaffTableViewCell.m */; };
+		61F103A11AD4727100547571 /* GeneralTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103A01AD4727100547571 /* GeneralTableViewController.m */; };
+		61F103A41AD4A49900547571 /* AHAFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103A31AD4A49900547571 /* AHAFeed.m */; };
+		61F103A71AD4A4EA00547571 /* AHAFeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103A61AD4A4EA00547571 /* AHAFeedItem.m */; };
+		61F103AA1AD4B4DB00547571 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103A91AD4B4DB00547571 /* WebViewController.m */; };
+		61F103AD1AD4CCF200547571 /* VoterVoiceSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103AC1AD4CCF200547571 /* VoterVoiceSection.m */; };
+		61F103B01AD4CD6600547571 /* VoterVoiceProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F103AF1AD4CD6600547571 /* VoterVoiceProperty.m */; };
 		A086770766F0983F6765C99A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDA86D67A6B3548A0EC686B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -96,8 +117,6 @@
 		3ED95A851AD0F231003269D8 /* RATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RATableViewCell.h; path = Views/RATableViewCell.h; sourceTree = "<group>"; };
 		3ED95A861AD0F231003269D8 /* RATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RATableViewCell.m; path = Views/RATableViewCell.m; sourceTree = "<group>"; };
 		3ED95A871AD0F231003269D8 /* RATableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RATableViewCell.xib; path = Views/RATableViewCell.xib; sourceTree = "<group>"; };
-		619BC22B1AD310A700E9FAE4 /* TwitterFeedsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterFeedsViewController.m; path = Controllers/TwitterFeedsViewController.m; sourceTree = "<group>"; };
-		619BC22C1AD310A700E9FAE4 /* TwitterFeedsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterFeedsViewController.h; path = Controllers/TwitterFeedsViewController.h; sourceTree = "<group>"; };
 		619BC22E1AD310BB00E9FAE4 /* TwitterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTableViewCell.h; path = Views/TwitterTableViewCell.h; sourceTree = "<group>"; };
 		619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTableViewCell.m; path = Views/TwitterTableViewCell.m; sourceTree = "<group>"; };
 		619BC2321AD3123100E9FAE4 /* DataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
@@ -135,6 +154,49 @@
 		61F103621AD3A98B00547571 /* VoterVoiceSelectedAnswers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceSelectedAnswers.m; sourceTree = "<group>"; };
 		61F103631AD3A98B00547571 /* VoterVoiceTargets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceTargets.h; sourceTree = "<group>"; };
 		61F103641AD3A98B00547571 /* VoterVoiceTargets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceTargets.m; sourceTree = "<group>"; };
+		61F103701AD409F700547571 /* CampaignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignViewController.h; path = Controllers/CampaignViewController.h; sourceTree = "<group>"; };
+		61F103711AD409F700547571 /* CampaignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CampaignViewController.m; path = Controllers/CampaignViewController.m; sourceTree = "<group>"; };
+		61F103731AD449EE00547571 /* AHANews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHANews.h; path = Models/AHANews.h; sourceTree = "<group>"; };
+		61F103741AD449EE00547571 /* AHANews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHANews.m; path = Models/AHANews.m; sourceTree = "<group>"; };
+		61F103761AD44A0D00547571 /* AHAArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHAArticle.h; path = Models/AHAArticle.h; sourceTree = "<group>"; };
+		61F103771AD44A0D00547571 /* AHAArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHAArticle.m; path = Models/AHAArticle.m; sourceTree = "<group>"; };
+		61F103791AD44D7000547571 /* AHACalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHACalendar.h; path = Models/AHACalendar.h; sourceTree = "<group>"; };
+		61F1037A1AD44D7000547571 /* AHACalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHACalendar.m; path = Models/AHACalendar.m; sourceTree = "<group>"; };
+		61F1037C1AD44D8200547571 /* AHACalendarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHACalendarItem.h; path = Models/AHACalendarItem.h; sourceTree = "<group>"; };
+		61F1037D1AD44D8200547571 /* AHACalendarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHACalendarItem.m; path = Models/AHACalendarItem.m; sourceTree = "<group>"; };
+		61F1037F1AD46F0200547571 /* AHAAdvisoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHAAdvisoryTableViewCell.h; path = Views/AHAAdvisoryTableViewCell.h; sourceTree = "<group>"; };
+		61F103801AD46F0200547571 /* AHAAdvisoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHAAdvisoryTableViewCell.m; path = Views/AHAAdvisoryTableViewCell.m; sourceTree = "<group>"; };
+		61F103811AD46F0200547571 /* CampaignTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CampaignTableViewCell.h; path = Views/CampaignTableViewCell.h; sourceTree = "<group>"; };
+		61F103821AD46F0200547571 /* DirectoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DirectoryTableViewCell.m; path = Views/DirectoryTableViewCell.m; sourceTree = "<group>"; };
+		61F103831AD46F0200547571 /* DirectoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DirectoryCell.xib; path = Views/DirectoryCell.xib; sourceTree = "<group>"; };
+		61F103841AD46F0200547571 /* DirectoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DirectoryTableViewCell.h; path = Views/DirectoryTableViewCell.h; sourceTree = "<group>"; };
+		61F103851AD46F0200547571 /* MatchedTargetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MatchedTargetTableViewCell.h; path = Views/MatchedTargetTableViewCell.h; sourceTree = "<group>"; };
+		61F103861AD46F0200547571 /* MatchedTargetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MatchedTargetTableViewCell.m; path = Views/MatchedTargetTableViewCell.m; sourceTree = "<group>"; };
+		61F103871AD46F0200547571 /* CampaignTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CampaignTableViewCell.m; path = Views/CampaignTableViewCell.m; sourceTree = "<group>"; };
+		61F103881AD46F0200547571 /* EventCalendarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventCalendarTableViewCell.h; path = Views/EventCalendarTableViewCell.h; sourceTree = "<group>"; };
+		61F103891AD46F0200547571 /* ActivityFeedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityFeedTableViewCell.h; path = Views/ActivityFeedTableViewCell.h; sourceTree = "<group>"; };
+		61F1038A1AD46F0200547571 /* MedicareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MedicareTableViewCell.h; path = Views/MedicareTableViewCell.h; sourceTree = "<group>"; };
+		61F1038B1AD46F0200547571 /* MedicareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MedicareTableViewCell.m; path = Views/MedicareTableViewCell.m; sourceTree = "<group>"; };
+		61F1038C1AD46F0200547571 /* EventCalendarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventCalendarTableViewCell.m; path = Views/EventCalendarTableViewCell.m; sourceTree = "<group>"; };
+		61F1038D1AD46F0200547571 /* SpecialBulletinTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpecialBulletinTableViewCell.h; path = Views/SpecialBulletinTableViewCell.h; sourceTree = "<group>"; };
+		61F1038E1AD46F0200547571 /* ActionAlertTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActionAlertTableViewCell.h; path = Views/ActionAlertTableViewCell.h; sourceTree = "<group>"; };
+		61F1038F1AD46F0200547571 /* SpecialBulletinTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpecialBulletinTableViewCell.m; path = Views/SpecialBulletinTableViewCell.m; sourceTree = "<group>"; };
+		61F103901AD46F0200547571 /* ActionAlertTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActionAlertTableViewCell.m; path = Views/ActionAlertTableViewCell.m; sourceTree = "<group>"; };
+		61F103911AD46F0200547571 /* ActivityFeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityFeedTableViewCell.m; path = Views/ActivityFeedTableViewCell.m; sourceTree = "<group>"; };
+		61F103921AD46F0200547571 /* AHAStaffTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHAStaffTableViewCell.h; path = Views/AHAStaffTableViewCell.h; sourceTree = "<group>"; };
+		61F103931AD46F0200547571 /* AHAStaffTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHAStaffTableViewCell.m; path = Views/AHAStaffTableViewCell.m; sourceTree = "<group>"; };
+		61F1039F1AD4727100547571 /* GeneralTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeneralTableViewController.h; path = Controllers/GeneralTableViewController.h; sourceTree = "<group>"; };
+		61F103A01AD4727100547571 /* GeneralTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralTableViewController.m; path = Controllers/GeneralTableViewController.m; sourceTree = "<group>"; };
+		61F103A21AD4A49900547571 /* AHAFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHAFeed.h; path = Models/AHAFeed.h; sourceTree = "<group>"; };
+		61F103A31AD4A49900547571 /* AHAFeed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHAFeed.m; path = Models/AHAFeed.m; sourceTree = "<group>"; };
+		61F103A51AD4A4EA00547571 /* AHAFeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AHAFeedItem.h; path = Models/AHAFeedItem.h; sourceTree = "<group>"; };
+		61F103A61AD4A4EA00547571 /* AHAFeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AHAFeedItem.m; path = Models/AHAFeedItem.m; sourceTree = "<group>"; };
+		61F103A81AD4B4DB00547571 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebViewController.h; path = Controllers/WebViewController.h; sourceTree = "<group>"; };
+		61F103A91AD4B4DB00547571 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebViewController.m; path = Controllers/WebViewController.m; sourceTree = "<group>"; };
+		61F103AB1AD4CCF200547571 /* VoterVoiceSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceSection.h; sourceTree = "<group>"; };
+		61F103AC1AD4CCF200547571 /* VoterVoiceSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceSection.m; sourceTree = "<group>"; };
+		61F103AE1AD4CD6600547571 /* VoterVoiceProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoterVoiceProperty.h; sourceTree = "<group>"; };
+		61F103AF1AD4CD6600547571 /* VoterVoiceProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoterVoiceProperty.m; sourceTree = "<group>"; };
 		A526A2FDFB51284950326C6D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,14 +292,26 @@
 		3E373DF01AD0CD91004DE20B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				61F103541AD3A98B00547571 /* VoterVoice */,
-				619BC2311AD3123100E9FAE4 /* TwitterModels */,
 				3E373DF11AD0D79B004DE20B /* ActionCenterManager.h */,
 				3E373DF21AD0D79B004DE20B /* ActionCenterManager.m */,
+				61F103541AD3A98B00547571 /* VoterVoice */,
+				619BC2311AD3123100E9FAE4 /* TwitterModels */,
 				3E5A44011AD19B83001D6806 /* ProgressHUD.h */,
 				3E5A44021AD19B83001D6806 /* ProgressHUD.m */,
 				619BC24E1AD38E7E00E9FAE4 /* OAM.h */,
 				619BC24F1AD38E7E00E9FAE4 /* OAM.m */,
+				61F103731AD449EE00547571 /* AHANews.h */,
+				61F103741AD449EE00547571 /* AHANews.m */,
+				61F103761AD44A0D00547571 /* AHAArticle.h */,
+				61F103771AD44A0D00547571 /* AHAArticle.m */,
+				61F103791AD44D7000547571 /* AHACalendar.h */,
+				61F1037A1AD44D7000547571 /* AHACalendar.m */,
+				61F1037C1AD44D8200547571 /* AHACalendarItem.h */,
+				61F1037D1AD44D8200547571 /* AHACalendarItem.m */,
+				61F103A21AD4A49900547571 /* AHAFeed.h */,
+				61F103A31AD4A49900547571 /* AHAFeed.m */,
+				61F103A51AD4A4EA00547571 /* AHAFeedItem.h */,
+				61F103A61AD4A4EA00547571 /* AHAFeedItem.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -251,10 +325,14 @@
 				3EB8083B1AD20A7800FC8584 /* LoginViewController.m */,
 				3EB8083D1AD20CC300FC8584 /* MainViewController.h */,
 				3EB8083E1AD20CC300FC8584 /* MainViewController.m */,
-				619BC22C1AD310A700E9FAE4 /* TwitterFeedsViewController.h */,
-				619BC22B1AD310A700E9FAE4 /* TwitterFeedsViewController.m */,
+				61F103701AD409F700547571 /* CampaignViewController.h */,
+				61F103711AD409F700547571 /* CampaignViewController.m */,
 				619BC2451AD3287C00E9FAE4 /* CampaignDetailViewController.h */,
 				619BC2461AD3287C00E9FAE4 /* CampaignDetailViewController.m */,
+				61F1039F1AD4727100547571 /* GeneralTableViewController.h */,
+				61F103A01AD4727100547571 /* GeneralTableViewController.m */,
+				61F103A81AD4B4DB00547571 /* WebViewController.h */,
+				61F103A91AD4B4DB00547571 /* WebViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -262,6 +340,27 @@
 		3E373DF81AD0DB5A004DE20B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61F1037F1AD46F0200547571 /* AHAAdvisoryTableViewCell.h */,
+				61F103801AD46F0200547571 /* AHAAdvisoryTableViewCell.m */,
+				61F103811AD46F0200547571 /* CampaignTableViewCell.h */,
+				61F103871AD46F0200547571 /* CampaignTableViewCell.m */,
+				61F103841AD46F0200547571 /* DirectoryTableViewCell.h */,
+				61F103821AD46F0200547571 /* DirectoryTableViewCell.m */,
+				61F103831AD46F0200547571 /* DirectoryCell.xib */,
+				61F103851AD46F0200547571 /* MatchedTargetTableViewCell.h */,
+				61F103861AD46F0200547571 /* MatchedTargetTableViewCell.m */,
+				61F103881AD46F0200547571 /* EventCalendarTableViewCell.h */,
+				61F1038C1AD46F0200547571 /* EventCalendarTableViewCell.m */,
+				61F103891AD46F0200547571 /* ActivityFeedTableViewCell.h */,
+				61F103911AD46F0200547571 /* ActivityFeedTableViewCell.m */,
+				61F1038A1AD46F0200547571 /* MedicareTableViewCell.h */,
+				61F1038B1AD46F0200547571 /* MedicareTableViewCell.m */,
+				61F1038D1AD46F0200547571 /* SpecialBulletinTableViewCell.h */,
+				61F1038F1AD46F0200547571 /* SpecialBulletinTableViewCell.m */,
+				61F1038E1AD46F0200547571 /* ActionAlertTableViewCell.h */,
+				61F103901AD46F0200547571 /* ActionAlertTableViewCell.m */,
+				61F103921AD46F0200547571 /* AHAStaffTableViewCell.h */,
+				61F103931AD46F0200547571 /* AHAStaffTableViewCell.m */,
 				619BC22E1AD310BB00E9FAE4 /* TwitterTableViewCell.h */,
 				619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */,
 				3ED95A851AD0F231003269D8 /* RATableViewCell.h */,
@@ -313,6 +412,10 @@
 				61F103621AD3A98B00547571 /* VoterVoiceSelectedAnswers.m */,
 				61F103631AD3A98B00547571 /* VoterVoiceTargets.h */,
 				61F103641AD3A98B00547571 /* VoterVoiceTargets.m */,
+				61F103AB1AD4CCF200547571 /* VoterVoiceSection.h */,
+				61F103AC1AD4CCF200547571 /* VoterVoiceSection.m */,
+				61F103AE1AD4CD6600547571 /* VoterVoiceProperty.h */,
+				61F103AF1AD4CD6600547571 /* VoterVoiceProperty.m */,
 			);
 			name = VoterVoice;
 			path = Models/VoterVoice;
@@ -431,6 +534,7 @@
 				3E1A1E6F1AD07C2B00223873 /* Main.storyboard in Resources */,
 				3E1A1E741AD07C2B00223873 /* LaunchScreen.xib in Resources */,
 				3E1A1E711AD07C2B00223873 /* Images.xcassets in Resources */,
+				61F103961AD46F0200547571 /* DirectoryCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,33 +600,53 @@
 			buildActionMask = 2147483647;
 			files = (
 				619BC2431AD3123100E9FAE4 /* User.m in Sources */,
+				61F1039E1AD46F0200547571 /* AHAStaffTableViewCell.m in Sources */,
 				61F103681AD3A98B00547571 /* VoterVoiceMatches.m in Sources */,
+				61F1037E1AD44D8200547571 /* AHACalendarItem.m in Sources */,
 				61F1036C1AD3A98B00547571 /* VoterVoiceTargets.m in Sources */,
 				619BC2421AD3123100E9FAE4 /* Urls.m in Sources */,
+				61F103941AD46F0200547571 /* AHAAdvisoryTableViewCell.m in Sources */,
 				3EB8083C1AD20A7800FC8584 /* LoginViewController.m in Sources */,
+				61F103991AD46F0200547571 /* MedicareTableViewCell.m in Sources */,
+				61F103A71AD4A4EA00547571 /* AHAFeedItem.m in Sources */,
+				61F103781AD44A0D00547571 /* AHAArticle.m in Sources */,
 				619BC2301AD310BB00E9FAE4 /* TwitterTableViewCell.m in Sources */,
 				61F103691AD3A98B00547571 /* VoterVoiceMessage.m in Sources */,
+				61F103A11AD4727100547571 /* GeneralTableViewController.m in Sources */,
 				3E1A1E691AD07C2B00223873 /* AppDelegate.m in Sources */,
+				61F103951AD46F0200547571 /* DirectoryTableViewCell.m in Sources */,
+				61F103721AD409F700547571 /* CampaignViewController.m in Sources */,
+				61F1039C1AD46F0200547571 /* ActionAlertTableViewCell.m in Sources */,
 				3E1A1E661AD07C2B00223873 /* main.m in Sources */,
+				61F103AA1AD4B4DB00547571 /* WebViewController.m in Sources */,
 				61F103661AD3A98B00547571 /* VoterVoiceAddress.m in Sources */,
+				61F103971AD46F0200547571 /* MatchedTargetTableViewCell.m in Sources */,
+				61F1037B1AD44D7000547571 /* AHACalendar.m in Sources */,
 				619BC2501AD38E7E00E9FAE4 /* OAM.m in Sources */,
 				3E373DE81AD0C6FE004DE20B /* Constants.m in Sources */,
 				61F103651AD3A98B00547571 /* VoterVoice.m in Sources */,
+				61F103B01AD4CD6600547571 /* VoterVoiceProperty.m in Sources */,
+				61F1039A1AD46F0200547571 /* EventCalendarTableViewCell.m in Sources */,
 				61F1036A1AD3A98B00547571 /* VoterVoiceResponse.m in Sources */,
 				619BC2441AD3123100E9FAE4 /* UserStatusTwitterItem.m in Sources */,
 				619BC2401AD3123100E9FAE4 /* Entities.m in Sources */,
 				3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */,
 				619BC2411AD3123100E9FAE4 /* Url.m in Sources */,
+				61F103AD1AD4CCF200547571 /* VoterVoiceSection.m in Sources */,
 				3E5A44031AD19B83001D6806 /* ProgressHUD.m in Sources */,
 				61F1036B1AD3A98B00547571 /* VoterVoiceSelectedAnswers.m in Sources */,
 				619BC23F1AD3123100E9FAE4 /* DescriptionClass.m in Sources */,
 				61F103671AD3A98B00547571 /* VoterVoiceBody.m in Sources */,
 				619BC24D1AD33D1400E9FAE4 /* CampaignDetailView.m in Sources */,
 				3E373DF31AD0D79B004DE20B /* ActionCenterManager.m in Sources */,
+				61F103751AD449EE00547571 /* AHANews.m in Sources */,
 				3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */,
-				619BC22D1AD310A700E9FAE4 /* TwitterFeedsViewController.m in Sources */,
+				61F103A41AD4A49900547571 /* AHAFeed.m in Sources */,
+				61F1039B1AD46F0200547571 /* SpecialBulletinTableViewCell.m in Sources */,
+				61F1039D1AD46F0200547571 /* ActivityFeedTableViewCell.m in Sources */,
 				3E373DF61AD0DB30004DE20B /* MenuViewController.m in Sources */,
 				619BC2471AD3287C00E9FAE4 /* CampaignDetailViewController.m in Sources */,
+				61F103981AD46F0200547571 /* CampaignTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,6 @@
 
 @property (nonatomic, weak) MSDynamicsDrawerViewController *dynamicsDrawerViewController;
 
-- (void)transitionToViewController:(NSString *)storyboard;
+- (void)transitionToViewController:(NSDictionary *)dict;
 
 @end

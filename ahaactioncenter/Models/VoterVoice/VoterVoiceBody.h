@@ -13,6 +13,7 @@
 #import "VoterVoiceMessage.h"
 #import "VoterVoiceSelectedAnswers.h"
 #import "VoterVoiceTargets.h"
+#import "VoterVoiceSection.h"
 
 @interface VoterVoiceBody : NSObject
 
@@ -38,9 +39,12 @@
 @property (nonatomic, assign) BOOL targetsState;
 
 @property (nonatomic, retain) NSString *messageDisplay;
+@property (nonatomic, retain) NSString *displayName;
+@property (nonatomic, retain) NSString *photoUrl;
 @property (nonatomic, retain) NSString *phoneCallMethod;
 @property (nonatomic, retain) NSArray *preSelectedAnswers;
 @property (nonatomic, retain) NSArray *targets;
 @property (nonatomic, retain) NSArray *messages;
+@property (nonatomic, retain) NSArray *sections;
 
 @end

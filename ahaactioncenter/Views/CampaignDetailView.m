@@ -51,9 +51,12 @@
     [self addSubview:sendButton];
 }
 
-- (void)setHeader:(NSString *)header
-{
+- (void)setHeader:(NSString *)header {
     titleLabel.text = header;
+}
+
+- (void)setButtonTitle:(NSString *)string {
+    [sendButton setTitle:string forState:UIControlStateNormal];
 }
 
 - (void)loadHTMLString:(NSString *)string {

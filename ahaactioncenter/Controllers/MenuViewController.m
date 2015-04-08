@@ -15,10 +15,15 @@
 #import "KGModal.h"
 #import "LoginViewController.h"
 #import "MainViewController.h"
-#import "TwitterFeedsViewController.h"
+#import "CampaignViewController.h"
 #import "CampaignDetailView.h"
+#import "GeneralTableViewController.h"
+#import "WebViewController.h"
 
 @interface MenuViewController () <RATreeViewDelegate, RATreeViewDataSource>
+{
+    ActionCenterManager *action;
+}
 
 @property (strong, nonatomic) NSArray *data;
 @property (weak, nonatomic) RATreeView *treeView;
@@ -31,12 +36,16 @@
     [super viewDidLoad];
     self.title = @"Menu";
     
+    action = [ActionCenterManager sharedInstance];
+    
     _data = [ActionCenterManager menuItems];
     
     RATreeView *treeView = [[RATreeView alloc] initWithFrame:self.view.bounds];
     
+    
     treeView.delegate = self;
     treeView.dataSource = self;
+    treeView.treeFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     treeView.separatorStyle = RATreeViewCellSeparatorStyleSingleLine;
     treeView.backgroundColor = [UIColor clearColor];
     treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -46,6 +55,12 @@
     
     self.treeView = treeView;
     [self.view insertSubview:treeView atIndex:0];
+    
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 144, 100, 100)];
+    iv.image = [UIImage imageNamed:@"aha_a30"];
+    [self.view addSubview:iv];
+    //[self.view addSubview:_treeView];
+    
     
     //[self.treeView registerNib:[UINib nibWithNibName:NSStringFromClass([UITableViewCell class]) bundle:nil] forCellReuseIdentifier:@"Cell"];
     [self.treeView registerNib:[UINib nibWithNibName:NSStringFromClass([RATableViewCell class]) bundle:nil] forCellReuseIdentifier:NSStringFromClass([RATableViewCell class])];
@@ -93,6 +108,7 @@
     }
     else
     {
+        
         cell.imageView.image = nil;
     }
     
@@ -134,16 +150,18 @@
         [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:nil];
     };
     
-    [[KGModal sharedInstance] showWithContentView:v andAnimated:YES];
+    //[[KGModal sharedInstance] showWithContentView:v andAnimated:YES];
     if (![row[@"storyboard"] isEqualToString:@""])
     {
-        [self transitionToViewController:row[@"storyboard"]];
+        //NSLog(@"Storyboard %@", row[@"storyboard"]);
+        [self transitionToViewController:row];
     }
 }
 
-- (void)transitionToViewController:(NSString *)storyboard
+- (void)transitionToViewController:(NSDictionary *)dict
 {
     UINavigationController *nav;
+    NSString *storyboard = dict[@"storyboard"];
     
     if ([storyboard isEqualToString:@"main"])
     {
@@ -156,11 +174,85 @@
         nav = [[UINavigationController alloc] initWithRootViewController:vc];
     }
     
-    if ([storyboard isEqualToString:@"twitter"])
+    if ([storyboard isEqualToString:@"campaign"])
     {
-        TwitterFeedsViewController *vc = (TwitterFeedsViewController *)[self.storyboard instantiateViewControllerWithIdentifier:storyboard];
-        vc.twitterHandle = @"@AHAhospitals";
+        CampaignViewController *vc = (CampaignViewController *)[self.storyboard instantiateViewControllerWithIdentifier:storyboard];
         nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    }
+    
+    if ([storyboard isEqualToString:@"webView"]) {
+        WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+        if ([dict[@"title"] isEqualToString:@"Congressional Calendar"])
+        {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"congressional-calendar"];
+            NSArray *list = [action.feeds filteredArrayUsingPredicate:predicate];
+            NSDictionary *d = (NSDictionary *)list[0];
+            vc.link = d[@"ResourceURI"];
+            vc.webType = kWebTypeCongressCalendar;
+            nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        }
+        if ([dict[@"title"] isEqualToString:@"Working with Congress"])
+        {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"working-with-congress"];
+            NSArray *list = [action.feeds filteredArrayUsingPredicate:predicate];
+            NSDictionary *d = (NSDictionary *)list[0];
+            vc.link = d[@"ResourceURI"];
+            vc.webType = kWebTypeWorkingWithCongress;
+            nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        }
+        
+    }
+    if ([storyboard isEqualToString:@"general"])
+    {
+        GeneralTableViewController *vc = (GeneralTableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:storyboard];
+        nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.dict = dict;
+        if ([dict[@"title"] isEqualToString:@"@AHAadvocacy"] || [dict[@"title"] isEqualToString:@"@AHAhospitals"])
+        {
+            vc.viewType = kViewTypeTwitter;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Events"])
+        {
+            vc.viewType = kViewTypeCalendar;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Contact Your Legislators"]) {
+            vc.viewType = kViewTypeCampaign;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Action Alerts"]) {
+            vc.viewType = kViewTypeActionAlert;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Letters"]) {
+            vc.viewType = kViewTypeLetter;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Special Bulletins"]) {
+            vc.viewType = kViewTypeBulletin;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Directory"]) {
+            vc.viewType = kViewTypeDirectory;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Fact Sheets"]) {
+            vc.viewType = kViewTypeFactSheet;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Testimony"]) {
+            vc.viewType = kViewTypeTestimony;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"AHA Advisories"]) {
+            vc.viewType = kViewTypeAdvisory;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"AHA News"]) {
+            vc.viewType = kViewTypeAHANews;
+            vc.viewShouldRefresh = YES;
+        }
     }
     
     [self.dynamicsDrawerViewController setPaneViewController:nav animated:YES completion:nil];

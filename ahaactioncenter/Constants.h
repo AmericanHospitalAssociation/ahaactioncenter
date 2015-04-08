@@ -27,6 +27,9 @@
 #define kParseAppId             @"eCgr0cenQyGE8gAGe2i3HSR4TA9l3DwkBZWkJ5NI"
 #define kParseClientKey         @"SWJUl9v413kjadIrowI8GucGsBhEuqLYGxUMPeDM"
 
+#define kTwitterKey             @"e142fgaT5I5ktjtEtY3bThbZF"
+#define kTwitterSecret          @"DpucZemiwEQ4StqvGOo1NLhGuBRyqWm9ma0uEt7ohXDofl5pp9"
+
 #define kAHABlue                [UIColor colorWithRed:13.0f/255.0f green:71.0f/255.0f blue:161.0f/255.0f alpha:1.0f]
 #define kAHARed                 [UIColor colorWithRed:157.0f/255.0f green:34.0f/255.0f blue:53.0f/255.0f alpha:1.0f]
 

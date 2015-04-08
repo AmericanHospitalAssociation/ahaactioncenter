@@ -22,7 +22,7 @@
 
 @interface RATableViewCell ()
 
-@property (weak, nonatomic) IBOutlet UILabel *customTitleLabel;
+
 
 @end
 
@@ -56,10 +56,10 @@
       self.backgroundColor = [UIColor whiteColor];
       left = 11 + 40 * [level intValue];
   } else if ([level intValue]  == 2) {
-      self.backgroundColor = [UIColor lightGrayColor];
+      self.backgroundColor = [UIColor colorWithWhite:0.800 alpha:1.000];
       left = 11 + 25 * [level intValue];
   } else if ([level intValue]  >= 3) {
-      self.backgroundColor = [UIColor darkGrayColor];
+      self.backgroundColor = [UIColor colorWithWhite:0.702 alpha:1.000];
       left = 11 + 20 * [level intValue];
   }
   
