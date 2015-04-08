@@ -105,10 +105,13 @@
             [hud showHUDSucces:YES withMessage:@"Loaded"];
         }];
     }
-    if (_viewType == kViewTypeCampaign && _viewShouldRefresh) {
-        self.title = @"Campaigns";
-        [hud showHUDWithMessage:@"Getting Campaigns"];
-        [action getCampaignSummaries:^(VoterVoice *votervoice, NSError *error){
+    if (_viewType == kViewTypeDirectory && _viewShouldRefresh) {
+        self.title = @"Directory";
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [hud showHUDWithMessage:@"Getting Representatives"];
+        [action getMatchesForCampaign:@"30763"
+                            withToken:[prefs objectForKey:@"token"]
+                           completion:^(VoterVoice *votervoice, NSError *error){
             if (!error) {
                 list = votervoice.response.body;
                 voter = votervoice;
@@ -189,22 +192,10 @@
 }
 
 - (void)sectionButtonClicked:(id)sender {
-    if ([sender isKindOfClass:[UIButton class]]) {
-        UIButton *btn = (UIButton *)sender;
-        UIView *parent = [btn superview];
-        NSString *groupID;
-        for (UIView *child in [parent subviews]) {
-            if ([child isKindOfClass:[UILabel class]]) {
-                UILabel *label = (UILabel *)child;
-                // NSLog(@"LABEL TEXT: %@", label.text);
-                groupID = label.text;
-            }
-            
-        }
-        if (groupID != nil && groupID.length > 0) {
-            [self performSegueWithIdentifier:@"take_action" sender:groupID];
-        }
-    }
+    GeneralTableViewController *vc = (GeneralTableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"general"];
+    vc.viewType = kViewTypeCampaign;
+    vc.viewShouldRefresh = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -20,7 +20,7 @@
 @property (nonatomic, retain) NSString *givenNames;
 @property (nonatomic, retain) NSNumber *id;
 @property (nonatomic, retain) NSNumber *surname;
-@property (nonatomic, retain) NSNumber *token;
+@property (nonatomic, retain) NSString *token;
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSNumber *userId;
 @property (nonatomic, retain) NSString *userToken;

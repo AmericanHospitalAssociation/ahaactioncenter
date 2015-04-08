@@ -46,11 +46,12 @@ typedef void (^CompletionVoterVoiceBody)(NSDictionary *dict, NSError *error);
 
 - (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion;
 - (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoice)completion;
-- (void)createUser:(OAM *)oam completion:(CompletionVoterVoice)completion;
+- (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoice)completion;
 - (void)sendEmailVerification:(NSString *)email completion:(CompletionVoterVoice)completion;
 - (void)getMatchesForCampaign:(NSString*)campaignId withToken:(NSString *)token completion:(CompletionVoterVoice)completion;
 - (void)verifyEmailID:(OAM *)oam withID:(NSString *)verificationID andCode:(NSString *)code completion:(CompletionVoterVoice)completion;
 - (void)getCampaignSummaries:(CompletionVoterVoice)completion;
+- (void)postVoterUrl:(NSString *)strUrl completion:(CompletionVoterVoice)completion;
 - (void)getTargetedMessages:(NSString *)campaignID completion:(CompletionVoterVoice)completion;
 - (void)getProfile:(NSString *)profileID withType:(NSString *)type completion:(CompletionVoterVoiceBody)completion;
 

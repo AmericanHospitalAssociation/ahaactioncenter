@@ -7,8 +7,14 @@
 //
 
 #import "LoginViewController.h"
+#import "ActionCenterManager.h"
+#import "ProgressHUD.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
+{
+    ActionCenterManager *action;
+    ProgressHUD *hud;
+}
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -20,6 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Log In";
+    action = [ActionCenterManager sharedInstance];
+    hud = [ProgressHUD sharedInstance];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +41,64 @@
 }
 
 - (IBAction)login:(id)sender {
+    [hud showHUDWithMessage:@"Checking User"];
+    [action getOAMUser:_emailField.text
+          withPassword:_passwordField.text
+            completion:^(OAM *oam, NSError *err) {
+                if (!err) {
+                    if ([oam.status isEqualToString:@"found user"]) {
+                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                        [action verifyUser:_emailField.text
+                                   withZip:oam.zip
+                                completion:^(VoterVoice *voter, NSError *err) {
+                                    if (!err) {
+                                        
+                                        if (voter.response.body.count > 0) {
+                                            VoterVoiceBody *body = voter.response.body[0];
+                                            
+                                            [hud showHUDSucces:YES withMessage:@"Success"];
+                                            NSLog(@"Already there %@", [body.id stringValue]);
+                                            [prefs setBool:YES forKey:@"isLoggedIn"];
+                                            [prefs setObject:_emailField.text forKey:@"email"];
+                                            [prefs setObject:body.token forKey:@"token"];
+                                            [prefs setObject:[body.id stringValue] forKey:@"userId"];
+                                            [prefs synchronize];
+                                            [self dismissViewControllerAnimated:YES completion:nil];
+                                        }
+                                        else {
+                                            [action createUser:oam
+                                                     withEmail:_emailField.text
+                                                    completion:^(VoterVoice *voter, NSError *err) {
+                                                        NSLog(@"error %@", voter);
+                                                if (!err) {
+                                                    if ([voter.response.status intValue] == 200) {
+                                                        VoterVoiceBody *body = voter.response.body[0];
+                                                        [hud showHUDSucces:YES withMessage:@"Success"];
+                                                        NSLog(@"created %@", [body.userId stringValue]);
+                                                        [prefs setBool:YES forKey:@"isLoggedIn"];
+                                                        [prefs setObject:_emailField.text forKey:@"email"];
+                                                        [prefs setObject:body.token forKey:@"token"];
+                                                        [prefs setObject:[body.id stringValue] forKey:@"userId"];
+                                                        [prefs synchronize];
+                                                        [self dismissViewControllerAnimated:YES completion:nil];
+                                                    }
+                                                }
+                                            }];
+                                        }
+                                        
+                                    }
+                                }];
+                    }
+                    else {
+                        [hud showHUDSucces:NO withMessage:@"Failed"];
+                        [self showAlert];
+                    }
+                }
+                else {
+                    [hud showHUDSucces:NO withMessage:@"Failed"];
+                    [self showAlert];
+                }
+            }];
 }
 
 - (void)showAlert

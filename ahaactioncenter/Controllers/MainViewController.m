@@ -31,11 +31,15 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if ([prefs boolForKey:@"isLoggedIn"])
+    if (![prefs boolForKey:@"isLoggedIn"])
     {
         LoginViewController *vc = (LoginViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"login"];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
         [self presentViewController:nav animated:YES completion:nil];
+    }
+    else {
+        //OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
+        //NSLog(@"oam %@", oam.first_name);
     }
 }
 

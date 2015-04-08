@@ -19,6 +19,7 @@
 #import "CampaignDetailView.h"
 #import "GeneralTableViewController.h"
 #import "WebViewController.h"
+#import "FontAwesomeKit.h"
 
 @interface MenuViewController () <RATreeViewDelegate, RATreeViewDataSource>
 {
@@ -40,6 +41,24 @@
     
     _data = [ActionCenterManager menuItems];
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
+    
+    FAKIonIcons *icon = [FAKIonIcons iconWithCode:@"\uf2a9" size:30];
+    [icon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[icon imageWithSize:CGSizeMake(30, 30)]
+                                                              style:UIBarButtonItemStyleDone
+                                                             target:self
+                                                             action:@selector(logout)];
+    
+    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"Logout (%@)", oam.first_name]
+                                                              style:UIBarButtonItemStyleDone
+                                                             target:self action:@selector(logout)];
+    
+    NSArray *buttons = [NSArray arrayWithObjects: item1, item2, nil];
+    [self setToolbarItems:buttons];
+    
+    
     RATreeView *treeView = [[RATreeView alloc] initWithFrame:self.view.bounds];
     
     
@@ -51,7 +70,7 @@
     treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     [treeView reloadData];
-    //[treeView setBackgroundColor:[UIColor colorWithWhite:0.97 alpha:1.0]];    
+    //[treeView setBackgroundColor:[UIColor colorWithWhite:0.97 alpha:1.0]];
     
     self.treeView = treeView;
     [self.view insertSubview:treeView atIndex:0];
@@ -89,6 +108,31 @@
 {
     [super viewDidAppear:YES];
     //[[ProgressHUD sharedInstance] showHUDWithMessage:@"tesin"];
+}
+
+- (void)logout {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Logout"
+                                                                   message:@"Are you sure?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          
+                      }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                          [prefs setBool:NO forKey:@"isLoggedIn"];
+                          [prefs synchronize];
+                          LoginViewController *vc = (LoginViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"login"];
+                          UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                          [self presentViewController:nav animated:YES completion:nil];
+                          
+                      }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark TreeView Data Source

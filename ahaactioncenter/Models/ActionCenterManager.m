@@ -117,6 +117,11 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     return encoded;
 }
 
+- (NSString *)isNull:(NSString *)str {
+    NSString *tmpStr = (str) ? str : @"";
+    return tmpStr;
+}
+
 #pragma mark - AHA News Methods
 - (void)getAHANews:(CompletionAHANews)completion
 {
@@ -224,7 +229,9 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         OAM *oam = [[OAM alloc] initWithJSONData:responseObject];
-        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setObject:(NSData *)responseObject forKey:@"user"];
+        [prefs synchronize];
         completion(oam, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(nil, error);
@@ -276,17 +283,18 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     [operation start];
 }
 //@"http://54.245.255.190/p/action_center/api/v1/createUser?org=NEW&email=vince.davis@me.com&firstName=vince&address=24a%20Blake%20St&zipcode=29403&country=US&lastName=davis&phone=8472128597&prefix=dr"
-- (void)createUser:(OAM *)oam completion:(CompletionVoterVoice)completion
+- (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoice)completion
 {
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceCreateUser,
-                        oam.org_name,
-                        oam.first_name,
-                        oam.address_line,
-                        oam.zip,
+                        [self isNull:oam.org_name],
+                        email,
+                        [self isNull:oam.first_name],
+                        [self isNull:oam.address_line],
+                        [self isNull:oam.zip],
                         @"US",
-                        oam.last_name,
-                        oam.phone,
-                        oam.prefix];
+                        [self isNull:oam.last_name],
+                        [self isNull:oam.phone],
+                        [self isNull:oam.prefix]];
  
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -384,6 +392,27 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 - (void)getCampaignSummaries:(CompletionVoterVoice)completion
 {
     NSString *strUrl = VoterVoiceCampaignSummaries;
+    NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                         timeoutInterval:20.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        
+        completion(voter, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+    
+    [operation start];
+}
+
+- (void)postVoterUrl:(NSString *)strUrl completion:(CompletionVoterVoice)completion
+{
+    //NSString *strUrl = VoterVoiceCampaignSummaries;
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
