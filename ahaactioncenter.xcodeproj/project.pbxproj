@@ -28,6 +28,10 @@
 		3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8083E1AD20CC300FC8584 /* MainViewController.m */; };
 		3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ED95A861AD0F231003269D8 /* RATableViewCell.m */; };
 		3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ED95A871AD0F231003269D8 /* RATableViewCell.xib */; };
+		61553F901AD6F353008D5BE4 /* RootForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F8C1AD6F353008D5BE4 /* RootForm.m */; };
+		61553F961AD6F66A008D5BE4 /* UpdateUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F921AD6F66A008D5BE4 /* UpdateUserViewController.m */; };
+		61553F971AD6F66A008D5BE4 /* UserForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F941AD6F66A008D5BE4 /* UserForm.m */; };
+		61553FF01AD76BD9008D5BE4 /* Wikipedia.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 61553FEF1AD76BD9008D5BE4 /* Wikipedia.pdf */; };
 		619BC2301AD310BB00E9FAE4 /* TwitterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */; };
 		619BC23F1AD3123100E9FAE4 /* DescriptionClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2341AD3123100E9FAE4 /* DescriptionClass.m */; };
 		619BC2401AD3123100E9FAE4 /* Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2361AD3123100E9FAE4 /* Entities.m */; };
@@ -117,6 +121,13 @@
 		3ED95A851AD0F231003269D8 /* RATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RATableViewCell.h; path = Views/RATableViewCell.h; sourceTree = "<group>"; };
 		3ED95A861AD0F231003269D8 /* RATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RATableViewCell.m; path = Views/RATableViewCell.m; sourceTree = "<group>"; };
 		3ED95A871AD0F231003269D8 /* RATableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RATableViewCell.xib; path = Views/RATableViewCell.xib; sourceTree = "<group>"; };
+		61553F8C1AD6F353008D5BE4 /* RootForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootForm.m; path = Forms/RootForm.m; sourceTree = "<group>"; };
+		61553F8D1AD6F353008D5BE4 /* RootForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootForm.h; path = Forms/RootForm.h; sourceTree = "<group>"; };
+		61553F921AD6F66A008D5BE4 /* UpdateUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateUserViewController.m; path = Forms/UpdateUserViewController.m; sourceTree = "<group>"; };
+		61553F931AD6F66A008D5BE4 /* UpdateUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateUserViewController.h; path = Forms/UpdateUserViewController.h; sourceTree = "<group>"; };
+		61553F941AD6F66A008D5BE4 /* UserForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserForm.m; path = Forms/UserForm.m; sourceTree = "<group>"; };
+		61553F951AD6F66A008D5BE4 /* UserForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserForm.h; path = Forms/UserForm.h; sourceTree = "<group>"; };
+		61553FEF1AD76BD9008D5BE4 /* Wikipedia.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Wikipedia.pdf; path = ahaactioncenter/Wikipedia.pdf; sourceTree = "<group>"; };
 		619BC22E1AD310BB00E9FAE4 /* TwitterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTableViewCell.h; path = Views/TwitterTableViewCell.h; sourceTree = "<group>"; };
 		619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTableViewCell.m; path = Views/TwitterTableViewCell.m; sourceTree = "<group>"; };
 		619BC2321AD3123100E9FAE4 /* DataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
@@ -228,6 +239,7 @@
 		3E1A1E571AD07C2B00223873 = {
 			isa = PBXGroup;
 			children = (
+				61553FEF1AD76BD9008D5BE4 /* Wikipedia.pdf */,
 				3E1A1E621AD07C2B00223873 /* ahaactioncenter */,
 				3E1A1E7C1AD07C2B00223873 /* ahaactioncenterTests */,
 				3E1A1E611AD07C2B00223873 /* Products */,
@@ -252,6 +264,7 @@
 				3E1A1E681AD07C2B00223873 /* AppDelegate.m */,
 				3E373DE61AD0C6FE004DE20B /* Constants.h */,
 				3E373DE71AD0C6FE004DE20B /* Constants.m */,
+				61553F8B1AD6F342008D5BE4 /* Forms */,
 				3E373DF01AD0CD91004DE20B /* Models */,
 				3E373DF81AD0DB5A004DE20B /* Views */,
 				3E373DF71AD0DB38004DE20B /* Controllers */,
@@ -370,6 +383,19 @@
 				619BC24C1AD33D1400E9FAE4 /* CampaignDetailView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		61553F8B1AD6F342008D5BE4 /* Forms */ = {
+			isa = PBXGroup;
+			children = (
+				61553F931AD6F66A008D5BE4 /* UpdateUserViewController.h */,
+				61553F921AD6F66A008D5BE4 /* UpdateUserViewController.m */,
+				61553F951AD6F66A008D5BE4 /* UserForm.h */,
+				61553F941AD6F66A008D5BE4 /* UserForm.m */,
+				61553F8D1AD6F353008D5BE4 /* RootForm.h */,
+				61553F8C1AD6F353008D5BE4 /* RootForm.m */,
+			);
+			name = Forms;
 			sourceTree = "<group>";
 		};
 		619BC2311AD3123100E9FAE4 /* TwitterModels */ = {
@@ -531,6 +557,7 @@
 			files = (
 				3E373DE31AD0AF3C004DE20B /* TwitterKitResources.bundle in Resources */,
 				3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */,
+				61553FF01AD76BD9008D5BE4 /* Wikipedia.pdf in Resources */,
 				3E1A1E6F1AD07C2B00223873 /* Main.storyboard in Resources */,
 				3E1A1E741AD07C2B00223873 /* LaunchScreen.xib in Resources */,
 				3E1A1E711AD07C2B00223873 /* Images.xcassets in Resources */,
@@ -607,6 +634,7 @@
 				619BC2421AD3123100E9FAE4 /* Urls.m in Sources */,
 				61F103941AD46F0200547571 /* AHAAdvisoryTableViewCell.m in Sources */,
 				3EB8083C1AD20A7800FC8584 /* LoginViewController.m in Sources */,
+				61553F961AD6F66A008D5BE4 /* UpdateUserViewController.m in Sources */,
 				61F103991AD46F0200547571 /* MedicareTableViewCell.m in Sources */,
 				61F103A71AD4A4EA00547571 /* AHAFeedItem.m in Sources */,
 				61F103781AD44A0D00547571 /* AHAArticle.m in Sources */,
@@ -625,6 +653,7 @@
 				619BC2501AD38E7E00E9FAE4 /* OAM.m in Sources */,
 				3E373DE81AD0C6FE004DE20B /* Constants.m in Sources */,
 				61F103651AD3A98B00547571 /* VoterVoice.m in Sources */,
+				61553F901AD6F353008D5BE4 /* RootForm.m in Sources */,
 				61F103B01AD4CD6600547571 /* VoterVoiceProperty.m in Sources */,
 				61F1039A1AD46F0200547571 /* EventCalendarTableViewCell.m in Sources */,
 				61F1036A1AD3A98B00547571 /* VoterVoiceResponse.m in Sources */,
@@ -638,6 +667,7 @@
 				619BC23F1AD3123100E9FAE4 /* DescriptionClass.m in Sources */,
 				61F103671AD3A98B00547571 /* VoterVoiceBody.m in Sources */,
 				619BC24D1AD33D1400E9FAE4 /* CampaignDetailView.m in Sources */,
+				61553F971AD6F66A008D5BE4 /* UserForm.m in Sources */,
 				3E373DF31AD0D79B004DE20B /* ActionCenterManager.m in Sources */,
 				61F103751AD449EE00547571 /* AHANews.m in Sources */,
 				3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */,

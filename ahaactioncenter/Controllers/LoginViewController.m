@@ -40,6 +40,22 @@
     }
 }
 
+- (void)bypassVoterVoice {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setBool:YES forKey:@"isLoggedIn"];
+    [hud showHUDSucces:YES withMessage:@"Success"];
+    [prefs setBool:NO forKey:@"inVoterVoice"];
+    [prefs setBool:YES forKey:@"showTip"];
+    [prefs setObject:_emailField.text forKey:@"email"];
+    [prefs synchronize];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"bypass");
+}
+
+- (void)registeredInVoterVoice {
+    
+}
+
 - (IBAction)login:(id)sender {
     [hud showHUDWithMessage:@"Checking User"];
     [action getOAMUser:_emailField.text
@@ -51,14 +67,16 @@
                         [action verifyUser:_emailField.text
                                    withZip:oam.zip
                                 completion:^(VoterVoice *voter, NSError *err) {
+                                    //NSLog(@"%@", voter);
                                     if (!err) {
-                                        
                                         if (voter.response.body.count > 0) {
                                             VoterVoiceBody *body = voter.response.body[0];
                                             
                                             [hud showHUDSucces:YES withMessage:@"Success"];
                                             NSLog(@"Already there %@", [body.id stringValue]);
                                             [prefs setBool:YES forKey:@"isLoggedIn"];
+                                            [prefs setBool:YES forKey:@"showTip"];
+                                            [prefs setBool:YES forKey:@"inVoterVoice"];
                                             [prefs setObject:_emailField.text forKey:@"email"];
                                             [prefs setObject:body.token forKey:@"token"];
                                             [prefs setObject:[body.id stringValue] forKey:@"userId"];
@@ -66,26 +84,36 @@
                                             [self dismissViewControllerAnimated:YES completion:nil];
                                         }
                                         else {
-                                            [action createUser:oam
-                                                     withEmail:_emailField.text
-                                                    completion:^(VoterVoice *voter, NSError *err) {
-                                                        NSLog(@"error %@", voter);
-                                                if (!err) {
-                                                    if ([voter.response.status intValue] == 200) {
-                                                        VoterVoiceBody *body = voter.response.body[0];
-                                                        [hud showHUDSucces:YES withMessage:@"Success"];
-                                                        NSLog(@"created %@", [body.userId stringValue]);
-                                                        [prefs setBool:YES forKey:@"isLoggedIn"];
-                                                        [prefs setObject:_emailField.text forKey:@"email"];
-                                                        [prefs setObject:body.token forKey:@"token"];
-                                                        [prefs setObject:[body.id stringValue] forKey:@"userId"];
-                                                        [prefs synchronize];
-                                                        [self dismissViewControllerAnimated:YES completion:nil];
-                                                    }
-                                                }
-                                            }];
+                                            if (oam.phone != nil && oam.prefix != nil) {
+                                                [action createUser:oam
+                                                         withEmail:[prefs objectForKey:@"email"]
+                                                        completion:^(NSString *userId, NSString *token, NSError *err) {
+                                                            //NSLog(@"error %@ ----%@", userId, token);
+                                                            if (!err && userId != nil) {
+                                                                //VoterVoiceBody *body = voter.response.body[0];
+                                                                [hud showHUDSucces:YES withMessage:@"Success"];
+                                                                NSLog(@"created %@", userId);
+                                                                [prefs setBool:YES forKey:@"isLoggedIn"];
+                                                                [prefs setBool:YES forKey:@"inVoterVoice"];
+                                                                [prefs setBool:YES forKey:@"showTip"];
+                                                                [prefs setObject:_emailField.text forKey:@"email"];
+                                                                [prefs setObject:token forKey:@"token"];
+                                                                [prefs setObject:userId forKey:@"userId"];
+                                                                [prefs synchronize];
+                                                                [self dismissViewControllerAnimated:YES completion:nil];
+                                                            }
+                                                            else {
+                                                                [self bypassVoterVoice];
+                                                            }
+                                                        }];
+                                            }
+                                            else {
+                                                [self bypassVoterVoice];
+                                            }
                                         }
-                                        
+                                    }
+                                    else {
+                                        [self bypassVoterVoice];
                                     }
                                 }];
                     }

@@ -25,6 +25,7 @@ typedef void (^CompletionAHACalendar)(AHACalendar *calendar, NSError *error);
 typedef void (^CompletionOAM)(OAM *oam, NSError *error);
 typedef void (^CompletionVoterVoice)(VoterVoice *voterVoice, NSError *error);
 typedef void (^CompletionVoterVoiceBody)(NSDictionary *dict, NSError *error);
+typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSError *error);
 //typedef void (^CompletionContactBlock)(Contact *contact, NSError *error);
 
 @property(nonatomic, retain)NSArray *feeds;
@@ -46,7 +47,7 @@ typedef void (^CompletionVoterVoiceBody)(NSDictionary *dict, NSError *error);
 
 - (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion;
 - (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoice)completion;
-- (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoice)completion;
+- (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoiceNew)completion;
 - (void)sendEmailVerification:(NSString *)email completion:(CompletionVoterVoice)completion;
 - (void)getMatchesForCampaign:(NSString*)campaignId withToken:(NSString *)token completion:(CompletionVoterVoice)completion;
 - (void)verifyEmailID:(OAM *)oam withID:(NSString *)verificationID andCode:(NSString *)code completion:(CompletionVoterVoice)completion;
@@ -59,9 +60,14 @@ typedef void (^CompletionVoterVoiceBody)(NSDictionary *dict, NSError *error);
 
 + (UIBarButtonItem *)dragButton;
 
++ (NSString *)formatDate:(NSString *)date;
+
 + (UIBarButtonItem *)refreshButton;
 
 + (void)openPane;
 
+- (NSString *)encodeURL:(NSString *)url;
+- (NSString *)cleanPhone:(NSString *)str;
+- (NSString *)isNull:(NSString *)str;
 
 @end

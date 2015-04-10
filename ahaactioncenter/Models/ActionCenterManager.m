@@ -11,7 +11,8 @@
 #import "FontAwesomeKit.h"
 
 static NSString *AHANews = @"http://news.aha.org/feed/json?type=aha-news-now&show=25";
-static NSString *AHAFeedLink = @"http://ahaconnect.org/feed.php?id=app_feed_1&lastUpdate=0";
+//static NSString *AHAFeedLink = @"http://ahaconnect.org/feed.php?id=app_feed_1&lastUpdate=0";
+static NSString *AHAFeedLink = @"http://ahaconnect.org/feed.php?id=app_feed_1";
 static NSString *AHANewsLink = @"http://54.245.255.190/p/action_center/api/v1/getAHANewsDescription?url=%@";
 static NSString *AHACalendarLink = @"http://ahaconnect.org/feed.php?id=app_cal_public";
 static NSString *AMSOAM = @"http://ahaconnect.org/apis/sso.php?email=%@&password=%@&db=prod";
@@ -19,7 +20,7 @@ static NSString *VoterVoiceGetUser = @"http://54.245.255.190/p/action_center/api
 static NSString *VoterVoiceVerifyAddress = @"http://54.245.255.190/p/action_center/api/v1/verifyAddress?address=%@&zipcode=%@&country=%@";
 static NSString *VoterVoiceSendEmailVerify = @"http://54.245.255.190/p/action_center/api/v1/emailVerification?email=%@";
 static NSString *VoterVoiceVerifyEmailID = @"http://54.245.255.190/p/action_center/api/v1/emailVerification?phone=%@&prefix=%@&verificationID=%@&code=%@&org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@";
-static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/api/v1/createUser?org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@&phone=%@&prefix=%@";
+static NSString *VoterVoiceCreateUser = @"http://54.245.255.190/p/action_center/api/v1/createUser?org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=%@&lastName=%@&phone=%@&prefix=%@";
 static NSString *VoterVoiceMatchesForCampaign = @"http://54.245.255.190/p/action_center/api/v1/getMatchedTargetsForCampaign?campaignId=%@&token=%@";
 static NSString *VoterVoiceCampaignSummaries = @"http://54.245.255.190/p/action_center/api/v1/getCampaignSummaries";
 static NSString *VoterVoiceTargertedMessage = @"http://54.245.255.190/p/action_center/api/v1/getTargetedMessages?campaignId=%@";
@@ -74,22 +75,40 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     [ad openSideMenu];
 }
 
++ (NSString *)formatDate:(NSString *)date {
+    NSDateFormatter *oldFormatter = [[NSDateFormatter alloc] init];
+    //NSLog(@"IN %@", date);
+    if ([date containsString:@"-"]) {
+        [oldFormatter setDateFormat:@"yyyy-MM-dd"];
+    }
+    else {
+        [oldFormatter setDateFormat:@"MM/dd/yyyy"];
+    }
+    
+    NSDate *dateFromStr = [oldFormatter dateFromString:date];
+    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
+    newFormatter.dateStyle = NSDateIntervalFormatterMediumStyle;;
+    //[newFormatter setDateFormat:@"MMM dd, yyyy"];
+    //NSLog(@"IN %@- OUT %@", date, [newFormatter stringFromDate:dateFromStr]);
+    return [newFormatter stringFromDate:dateFromStr];
+}
+
 + (NSArray *)menuItems
 {
     NSDictionary *alerts = @{@"title" : @"Action Alerts", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *facts = @{@"title" : @"Fact Sheets", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *bulletins = @{@"title" : @"Special Bulletins", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
-    NSDictionary *advisories = @{@"title" : @"AHA Advisories", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
+    NSDictionary *advisories = @{@"title" : @"Advisories", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *letters = @{@"title" : @"Letters", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *testimony = @{@"title" : @"Testimony", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
-    NSDictionary *additional = @{@"title" : @"Additional Info", @"storyboard" : @"", @"level" : @"3", @"image" : @"", @"items" : @[]};
+    NSDictionary *additional = @{@"title" : @"Additional Info", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     
     NSDictionary *legislators = @{@"title" : @"Contact Your Legislators", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *congress = @{@"title" : @"Working with Congress", @"storyboard" : @"webView", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *calendar = @{@"title" : @"Congressional Calendar", @"storyboard" : @"webView", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *directory = @{@"title" : @"Directory", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     
-    NSDictionary *latest = @{@"title" : @"Latest Infomation", @"storyboard" : @"", @"level" : @"2", @"image" : @"", @"items" : @[alerts, facts, bulletins, advisories, letters, testimony, additional]};
+    NSDictionary *latest = @{@"title" : @"Latest Information", @"storyboard" : @"", @"level" : @"2", @"image" : @"", @"items" : @[alerts, facts, bulletins, advisories, letters, testimony, additional]};
     NSDictionary *takeAction = @{@"title" : @"Take Action", @"storyboard" : @"", @"level" : @"2", @"image" : @"", @"items" : @[legislators, congress, calendar, directory]};
     NSDictionary *twAdvocacy = @{@"title" : @"@AHAadvocacy", @"storyboard" : @"general", @"level" : @"2", @"image" : @"", @"items" : @[]};
     NSDictionary *twHospitals = @{@"title" : @"@AHAhospitals", @"storyboard" : @"general", @"level" : @"2", @"image" : @"", @"items" : @[]};
@@ -119,7 +138,20 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (NSString *)isNull:(NSString *)str {
     NSString *tmpStr = (str) ? str : @"";
+    //NSLog(@"nillly %@", tmpStr);
     return tmpStr;
+}
+
+- (NSString *)cleanPhone:(NSString *)str {
+    str = [str stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@")" withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@"*" withString:@""];
+    
+    return str;
 }
 
 #pragma mark - AHA News Methods
@@ -253,7 +285,9 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
-        
+        NSError *error = nil;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error];
+        NSLog(@"dict %@", dict);
         completion(voter, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(nil, error);
@@ -283,19 +317,26 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     [operation start];
 }
 //@"http://54.245.255.190/p/action_center/api/v1/createUser?org=NEW&email=vince.davis@me.com&firstName=vince&address=24a%20Blake%20St&zipcode=29403&country=US&lastName=davis&phone=8472128597&prefix=dr"
-- (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoice)completion
+- (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoiceNew)completion
 {
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceCreateUser,
                         [self isNull:oam.org_name],
                         email,
                         [self isNull:oam.first_name],
                         [self isNull:oam.address_line],
-                        [self isNull:oam.zip],
+                        [[self isNull:oam.zip] substringToIndex:5],
                         @"US",
                         [self isNull:oam.last_name],
-                        [self isNull:oam.phone],
+                        [self cleanPhone:[self isNull:oam.phone]],
                         [self isNull:oam.prefix]];
- 
+    
+    if ([[self isNull:oam.prefix] isEqualToString:@""]) {
+        strUrl = [strUrl stringByReplacingOccurrencesOfString:@"&prefix=" withString:@""];
+    }
+    if ([[self isNull:oam.phone] isEqualToString:@""]) {
+        strUrl = [strUrl stringByReplacingOccurrencesOfString:@"&phone=" withString:@""];
+    }
+    
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -304,11 +345,21 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
+        NSError *error = nil;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error];
         
-        completion(voter, nil);
+        long status = (long)[dict valueForKeyPath:@"response.status"];
+        NSLog(@"dict %@  %ld", dict, status);
+        if ([dict valueForKeyPath:@"response.body.userId"] != nil && [dict valueForKeyPath:@"response.body.userToken"] != nil) {
+            NSLog(@"-----------------asdsadsadasdasdsa------");
+            completion((NSString *)[dict valueForKeyPath:@"response.body.userId"], [dict valueForKeyPath:@"response.body.userToken"], nil);
+        }
+        else {
+            completion(nil, nil, error);
+        }
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(nil, error);
+        completion(nil, nil, error);
     }];
     
     [operation start];
@@ -438,7 +489,7 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:20.0];
-    
+    NSLog(@"%@", [self encodeURL:strUrl]);
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {

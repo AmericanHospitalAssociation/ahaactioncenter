@@ -17,9 +17,12 @@
 #import "MainViewController.h"
 #import "CampaignViewController.h"
 #import "CampaignDetailView.h"
+#import "CampaignDetailViewController.h"
 #import "GeneralTableViewController.h"
 #import "WebViewController.h"
 #import "FontAwesomeKit.h"
+#import "AppDelegate.h"
+#import "UpdateUserViewController.h"
 
 @interface MenuViewController () <RATreeViewDelegate, RATreeViewDataSource>
 {
@@ -41,8 +44,8 @@
     
     _data = [ActionCenterManager menuItems];
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
+    //NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    //OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
     
     FAKIonIcons *icon = [FAKIonIcons iconWithCode:@"\uf2a9" size:30];
     [icon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
@@ -51,7 +54,7 @@
                                                              target:self
                                                              action:@selector(logout)];
     
-    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"Logout (%@)", oam.first_name]
+    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"Logout %@",@""]
                                                               style:UIBarButtonItemStyleDone
                                                              target:self action:@selector(logout)];
     
@@ -129,7 +132,32 @@
                           [prefs synchronize];
                           LoginViewController *vc = (LoginViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"login"];
                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                          nav.modalPresentationStyle = UIModalPresentationFormSheet;
                           [self presentViewController:nav animated:YES completion:nil];
+                          
+                      }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)requiredInfo
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed"
+                                                                   message:@"Would you like to enter the needed info?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"NO"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          
+                      }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"YES"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                          UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
+                          nav.modalPresentationStyle = UIModalPresentationFormSheet;
+                          [self.navigationController presentViewController:nav animated:YES completion:nil];
                           
                       }]];
     [self presentViewController:alert animated:YES completion:nil];
@@ -152,7 +180,6 @@
     }
     else
     {
-        
         cell.imageView.image = nil;
     }
     
@@ -178,6 +205,10 @@
     }
     NSArray *children = (NSArray *)row[@"items"];
     return children[index];
+}
+
+- (BOOL)treeView:(RATreeView *)treeView canEditRowForItem:(id)item {
+    return NO;
 }
 
 - (void)treeView:(RATreeView *)treeView didSelectRowForItem:(id)item
@@ -280,6 +311,11 @@
         if ([dict[@"title"] isEqualToString:@"Directory"]) {
             vc.viewType = kViewTypeDirectory;
             vc.viewShouldRefresh = YES;
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            if ([prefs boolForKey:@"inVoterVoice"] == NO) {
+                [self requiredInfo];
+                return;
+            }
         }
         if ([dict[@"title"] isEqualToString:@"Fact Sheets"]) {
             vc.viewType = kViewTypeFactSheet;
@@ -289,7 +325,7 @@
             vc.viewType = kViewTypeTestimony;
             vc.viewShouldRefresh = YES;
         }
-        if ([dict[@"title"] isEqualToString:@"AHA Advisories"]) {
+        if ([dict[@"title"] isEqualToString:@"Advisories"]) {
             vc.viewType = kViewTypeAdvisory;
             vc.viewShouldRefresh = YES;
         }
@@ -297,11 +333,33 @@
             vc.viewType = kViewTypeAHANews;
             vc.viewShouldRefresh = YES;
         }
+        if ([dict[@"title"] isEqualToString:@"Additional Info"]) {
+            vc.viewType = kViewTypeAdditional;
+            vc.viewShouldRefresh = YES;
+        }
+        if ([dict[@"title"] isEqualToString:@"Contact AHA"]) {
+            vc.viewType = kViewTypeContactUs;
+            vc.viewShouldRefresh = YES;
+            
+            CampaignDetailViewController *cd = (CampaignDetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"campaignDetail"];
+            cd.campaignID = nil;
+            nav = [[UINavigationController alloc] initWithRootViewController:cd];
+        }
     }
     
-    [self.dynamicsDrawerViewController setPaneViewController:nav animated:YES completion:nil];
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+        [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
+        //NSLog(@"ipad");
+    }
+    else {
+        //NSLog(@"iphone");
+        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+        [dynamic setPaneViewController:nav animated:YES completion:nil];
+    }
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

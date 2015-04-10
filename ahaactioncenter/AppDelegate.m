@@ -55,30 +55,48 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    // Setup Side Menu
-    _dynamicsDrawerViewController = [MSDynamicsDrawerViewController new];
-
-    MSDynamicsDrawerResizeStyler *resize = [MSDynamicsDrawerResizeStyler styler];
-    resize.minimumResizeRevealWidth = 40.0;
-    [_dynamicsDrawerViewController addStylersFromArray:@[[MSDynamicsDrawerScaleStyler styler], [MSDynamicsDrawerFadeStyler styler], [MSDynamicsDrawerParallaxStyler styler], resize] forDirection:MSDynamicsDrawerDirectionLeft];
-    
     MenuViewController *menuViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"menu"];
     menuViewController.dynamicsDrawerViewController = self.dynamicsDrawerViewController;
     UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menuViewController];
     menuNav.toolbarHidden = NO;
-    [_dynamicsDrawerViewController setDrawerViewController:menuNav forDirection:MSDynamicsDrawerDirectionLeft];
     
     MainViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"main"];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.toolbarHidden = NO;
-    _dynamicsDrawerViewController.paneViewController = nav;
-    // End Side Menu Setup
-    //[self testVoterVoice];
-    [self getFeed];
-    //[self testCalendar];
     
-    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    _window.rootViewController = _dynamicsDrawerViewController;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        _splitViewController = [[UISplitViewController alloc] init];
+        //_splitViewController.delegate = self;
+        _splitViewController.viewControllers = @[menuNav, nav];
+        _splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+        //NSLog(@"ipad");
+        _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        _window.rootViewController = _splitViewController;
+    }
+    else {
+        // Setup Side Menu
+        _dynamicsDrawerViewController = [MSDynamicsDrawerViewController new];
+        
+        MSDynamicsDrawerResizeStyler *resize = [MSDynamicsDrawerResizeStyler styler];
+        resize.minimumResizeRevealWidth = 40.0;
+        [_dynamicsDrawerViewController addStylersFromArray:@[[MSDynamicsDrawerScaleStyler styler], [MSDynamicsDrawerFadeStyler styler], [MSDynamicsDrawerParallaxStyler styler], resize] forDirection:MSDynamicsDrawerDirectionLeft];
+        
+        
+        [_dynamicsDrawerViewController setDrawerViewController:menuNav forDirection:MSDynamicsDrawerDirectionLeft];
+        
+        
+        _dynamicsDrawerViewController.paneViewController = nav;
+        // End Side Menu Setup
+        //[self testVoterVoice];
+        //NSLog(@"iphone");
+        //[self testCalendar];
+        
+        _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        _window.rootViewController = _dynamicsDrawerViewController;
+    }
+    [self checkVoterVoice];
+    [self getFeed];
+    
     [_window makeKeyAndVisible];
     
     return YES;
@@ -106,11 +124,50 @@
             }];
 }
 
+- (void)checkVoterVoice {
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs objectForKey:@"user"] && [prefs objectForKey:@"email"] && ![prefs boolForKey:@"inVoterVoice"]) {
+        OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
+        if (oam.prefix != nil) {
+            [action createUser:oam
+                     withEmail:[prefs objectForKey:@"email"]
+                    completion:^(NSString *userId, NSString *token, NSError *err) {
+                        //NSLog(@"error %@ ----%@", userId, token);
+                        if (!err && userId != nil) {
+                            //VoterVoiceBody *body = voter.response.body[0];
+                            //[hud showHUDSucces:YES withMessage:@"Success"];
+                            NSLog(@"created %@", userId);
+                            [prefs setBool:YES forKey:@"isLoggedIn"];
+                            [prefs setBool:YES forKey:@"inVoterVoice"];
+                            [prefs setBool:YES forKey:@"showTip"];
+                            //[prefs setObject:_emailField.text forKey:@"email"];
+                            [prefs setObject:token forKey:@"token"];
+                            [prefs setObject:userId forKey:@"userId"];
+                            [prefs synchronize];
+                            //[self dismissViewControllerAnimated:YES completion:nil];
+                        }
+                        else {
+                            //[self bypassVoterVoice];
+                            [prefs setBool:NO forKey:@"inVoterVoice"];
+                        }
+                    }];
+        }
+        else {
+            [prefs setBool:YES forKey:@"inVoterVoice"];
+        }
+            }
+    else {
+        [prefs setBool:YES forKey:@"inVoterVoice"];
+    }
+    [prefs synchronize];
+}
+
 - (void)getFeed
 {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     [action getAHAFeed:^(NSArray *feeds, NSError *error){
-        //NSLog(@"Feed %@", feeds);
+        NSLog(@"Feed %@", feeds);
     }];
 }
 
@@ -120,6 +177,26 @@
     [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
         NSLog(@"calendar %@", calendar);
     }];
+}
+
+- (void)splitViewController:(UISplitViewController *)splitController
+     willHideViewController:(UIViewController *)viewController
+          withBarButtonItem:(UIBarButtonItem *)barButtonItem
+       forPopoverController:(UIPopoverController *)popoverController
+{
+    //barButtonItem.title = NSLocalizedString(@"Master", @"Master");
+    //[self.navigationItem setLeftBarButtonItem:barButtonItem
+                                     //animated:YES];
+    //self.masterPopoverController = popoverController;
+}
+
+- (void)splitViewController:(UISplitViewController *)splitController
+     willShowViewController:(UIViewController *)viewController
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+    // Called when the view is shown again in the split view, invalidating the button and popover controller.
+    //[self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    //self.masterPopoverController = nil;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

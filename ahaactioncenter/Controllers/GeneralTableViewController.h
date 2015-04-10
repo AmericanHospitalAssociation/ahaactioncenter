@@ -20,6 +20,8 @@ typedef enum {
     kViewTypeAdvisory,
     kViewTypeTestimony,
     kViewTypeAHANews,
+    kViewTypeAdditional,
+    kViewTypeContactUs,
     kViewTypeDefault
 } kViewType;
 

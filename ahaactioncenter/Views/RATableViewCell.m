@@ -45,6 +45,7 @@
 - (void)setupWithTitle:(NSString *)title level:(NSString *)level
 {
   self.customTitleLabel.text = title;
+    self.customTitleLabel.textColor = [UIColor colorWithRed:0.188 green:0.498 blue:0.886 alpha:1];
     //NSLog(@"level %i", level);
   if ([level intValue] == 0) {
     self.detailTextLabel.textColor = [UIColor blackColor];

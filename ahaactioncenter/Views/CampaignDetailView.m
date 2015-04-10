@@ -22,14 +22,20 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
-        [self setupView:frame];
+    CGRect  newFrame       = [[UIScreen mainScreen] bounds];
+    CGFloat widthOfScreen  = newFrame.size.width;
+    CGFloat heightOfScreen = newFrame.size.height;
+    newFrame.size.width = widthOfScreen * 0.85;
+    newFrame.size.height = heightOfScreen * 0.85;
+    if (self = [super initWithFrame:newFrame]) {
+        [self setupView:newFrame];
     }
     return self;
 }
 
 - (void)setupView:(CGRect)frame
 {
+    
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 50)];
     titleLabel.numberOfLines = 0;
     titleLabel.textAlignment = NSTextAlignmentCenter;

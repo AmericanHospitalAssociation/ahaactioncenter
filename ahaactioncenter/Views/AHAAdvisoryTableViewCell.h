@@ -11,6 +11,7 @@
 @interface AHAAdvisoryTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *advisoryTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *advisoryDescriptionLabel;
 
 @property (nonatomic) CGFloat cellHeight;
 

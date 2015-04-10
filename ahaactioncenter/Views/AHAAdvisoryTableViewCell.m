@@ -13,7 +13,7 @@
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *advisoryDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *advisoryDescriptionLabel;
+
 
 @end
 

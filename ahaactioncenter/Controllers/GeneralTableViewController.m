@@ -24,6 +24,8 @@
 #import "CampaignDetailViewController.h"
 #import "KGModal.h"
 #import "WebViewController.h"
+#import "UpdateUserViewController.h"
+#import <AMPPreviewController/AMPPreviewController.h>
 
 @interface GeneralTableViewController ()
 {
@@ -44,7 +46,10 @@
     action = [ActionCenterManager sharedInstance];
     voter = [[VoterVoice alloc] init];
     
-    self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+    self.tableView.backgroundColor = [UIColor lightGrayColor];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -84,22 +89,29 @@
         self.title = @"Calendar";
         [hud showHUDWithMessage:@"Loading Calendar"];
         NSMutableArray *items = [[NSMutableArray alloc] init];
-        NSMutableSet *set = [[NSMutableSet alloc] init];
+        NSMutableArray *set = [[NSMutableArray alloc] init];
         [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
-            for (AHACalendarItem *item in calendar.items) {
-                [set addObject:item.pretty_date];
+            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:YES];
+            NSArray *calendarItems = [calendar.items sortedArrayUsingDescriptors:@[sort]];
+            for (int i = 0; i < calendarItems.count; i++) {
+                AHACalendarItem *item = (AHACalendarItem *)calendarItems[i];
+                if (![set containsObject:item.pretty_date]) {
+                    [set addObject:item.pretty_date];
+                }
             }
-            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"description" ascending:YES];
-            [set sortedArrayUsingDescriptors:@[sort]];
-            for (NSString *date in set) {
+            for (int i = 0; i < set.count; i++) {
+                NSString *date = set[i];
+                //NSLog(@"set %@", date);
                 NSMutableArray *arr = [[NSMutableArray alloc] init];
-                for (AHACalendarItem *item in calendar.items) {
+                for (int i = 0; i < calendarItems.count; i++) {
+                    AHACalendarItem *item = (AHACalendarItem *)calendarItems[i];
                     if ([date isEqualToString:item.pretty_date]) {
                         [arr addObject:item];
                     }
                 }
                 [items addObject:arr];
             }
+            
             list = (NSArray *)items;
             [self.tableView reloadData];
             [hud showHUDSucces:YES withMessage:@"Loaded"];
@@ -148,37 +160,50 @@
     }
     if (_viewType == kViewTypeActionAlert && _viewShouldRefresh) {
         self.title = @"Action Alerts";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"action-alert"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"action-alert", @"0"];
         list = [action.feeds filteredArrayUsingPredicate:predicate];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeLetter && _viewShouldRefresh) {
         self.title = @"Letters";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"letter"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"letter", @"0"];
         list = [action.feeds filteredArrayUsingPredicate:predicate];
+        [self.tableView reloadData];
+    }
+    if (_viewType == kViewTypeContactUs && _viewShouldRefresh) {
+        self.title = @"Contact AHA";
+        NSDictionary *general = @{@"title" : @"General Inquiry", @"text" : @"Send an email inquiry to the American Hospital Association"};
+        NSDictionary *actionCenter = @{@"title" : @"Action Center Feedback", @"text" : @"It's important for us to know the results of your Congressional contacts.  Who did you weigh in with?  What issues were raised?  How did they respond?"};
+        list = @[general, actionCenter];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeBulletin && _viewShouldRefresh) {
         self.title = @"Special Bulletins";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"bulletin"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"bulletin", @"0"];
         list = [action.feeds filteredArrayUsingPredicate:predicate];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeFactSheet && _viewShouldRefresh) {
         self.title = @"Fact Sheets";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"issue-papers"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"issue-papers", @"0"];
         list = [action.feeds filteredArrayUsingPredicate:predicate];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeAdvisory && _viewShouldRefresh) {
         self.title = @"Advisory";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"advisory"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"advisory", @"0"];
         list = [action.feeds filteredArrayUsingPredicate:predicate];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeTestimony && _viewShouldRefresh) {
-        self.title = @"Testimonies";
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"testimony"];
+        self.title = @"Testimony";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"testimony", @"0"];
+        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        [self.tableView reloadData];
+    }
+    if (_viewType == kViewTypeAdditional && _viewShouldRefresh) {
+        self.title = @"Additional Info";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"additional-info", @"0"];
         list = [action.feeds filteredArrayUsingPredicate:predicate];
         [self.tableView reloadData];
     }
@@ -196,6 +221,52 @@
     vc.viewType = kViewTypeCampaign;
     vc.viewShouldRefresh = YES;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)campaignFeedbackPressed:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.votervoice.net/AHA/Surveys/2526/Respond"]];
+}
+
+- (void)showPDF:(NSString *)link {
+    AMPPreviewController *pc = [[AMPPreviewController alloc]
+                                initWithRemoteFile:[NSURL URLWithString:link]];
+    
+    [pc setStartDownloadBlock:^(){
+        NSLog(@"Start download");
+        
+    }];
+    [pc setFinishDownloadBlock:^(NSError *error){
+        NSLog(@"Download finished %@", error);
+        
+        //[[ProgressHUD sharedInstance] showHUDSucces:YES withMessage:@"Completed"];
+    }];
+    //[[ProgressHUD sharedInstance] showHUDWithMessage:@"Loading"];
+    [self.navigationController pushViewController:pc animated:YES];
+}
+
+- (void)requiredInfo
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed"
+                                                                   message:@"Would you like to enter the needed info?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"NO"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          
+                      }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"YES"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                          UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
+                          nav.modalPresentationStyle = UIModalPresentationFormSheet;
+                          [self.navigationController presentViewController:nav animated:YES completion:nil];
+                          
+                      }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -268,7 +339,9 @@
         return headerView;
     }
     else {
-        return nil;
+        UIView *v = [[UIView alloc] init];
+        v.backgroundColor = [UIColor clearColor];
+        return v;
     }
 }
 
@@ -279,7 +352,7 @@
     else if (_viewType == kViewTypeCalendar) {
         return 92.0f;
     }
-    else if (_viewType == kViewTypeCampaign || _viewType == kViewTypeAHANews || _viewType == kViewTypeFactSheet) {
+    else if (_viewType == kViewTypeCampaign || _viewType == kViewTypeAHANews || _viewType == kViewTypeFactSheet ||  _viewType == kViewTypeAdditional) {
         return 110.0f;
     }
     else if (_viewType == kViewTypeActionAlert) {
@@ -290,6 +363,9 @@
     }
     else if (_viewType == kViewTypeBulletin) {
         return 215.0f;
+    }
+    else if (_viewType == kViewTypeContactUs) {
+        return 235.0f;
     }
     else {
         return 44.0f;
@@ -305,28 +381,47 @@
         cell.actionNeededLabel.text = row[@"ActionNeeded"];
         cell.whenLabel.text = row[@"When_c"];
         cell.whyLabel.text = row[@"Why"];
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
-    if (_viewType == kViewTypeFactSheet) {
+    if (_viewType == kViewTypeFactSheet || _viewType == kViewTypeAdditional) {
         AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"fact_sheets"];
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
         cell.advisoryTitleLabel.text = row[@"Title"];
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeBulletin) {
         SpecialBulletinTableViewCell *cell = (SpecialBulletinTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"special_bulletin_cell"];
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
         cell.titleLabel.text = row[@"Title"];
-        cell.dateLabel.text = row[@"Date"];
+        cell.dateLabel.text = [ActionCenterManager formatDate:row[@"Date"]];
         [cell setDescriptionLabelText:row[@"Description"]];
+        
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeLetter || _viewType == kViewTypeTestimony || _viewType == kViewTypeAdvisory) {
         AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"advisories"];
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
         [cell setupCellWithTitle:row[@"Title"]
-                            date:row[@"Date"]
+                            //date:row[@"Date"]
+                            date:[ActionCenterManager formatDate:row[@"Date"]]
                      description:row[@"Description"]];
+        
+        cell.backgroundColor = [UIColor lightGrayColor];
+        return cell;
+    }
+    if (_viewType == kViewTypeContactUs) {
+        AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"advisories"];
+        NSDictionary *row = (NSDictionary *)list[indexPath.row];
+        [cell setupCellWithTitle:row[@"title"]
+                            date:nil
+                     description:row[@"text"]];
+        cell.advisoryTitleLabel.textAlignment = NSTextAlignmentCenter;
+        cell.advisoryDescriptionLabel.textAlignment = NSTextAlignmentCenter;
+        
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeTwitter) {
@@ -343,13 +438,15 @@
         
         [df setDateFormat:@"MM/dd/yyyy"];
         NSString *dateStr = [df stringFromDate:date];
-        cell.dateLabel.text = dateStr;
+        cell.dateLabel.text = [ActionCenterManager formatDate:dateStr];;
         
         NSDateFormatter *timeFormatter = [[NSDateFormatter alloc]init];
         timeFormatter.dateFormat = @"HH:mm";
         
         NSString *dateString = [timeFormatter stringFromDate: date];
         cell.timeLabel.text = dateString;
+        
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeCalendar) {
@@ -376,21 +473,23 @@
         }
         
         cell.descLabel.text = item.desc;
-        
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeCampaign) {
         AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"fact_sheets"];
         VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.row];
         cell.advisoryTitleLabel.text = body.headline;
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeAHANews) {
         AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"aha_news"];
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
         [cell setupCellWithTitle:row[@"name"]
-                            date:row[@"published"]
+                            date:[ActionCenterManager formatDate:row[@"published"]]
                      description:nil];
+        cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     if (_viewType == kViewTypeDirectory) {
@@ -399,6 +498,7 @@
         VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.section];
         VoterVoiceMatches *match = (VoterVoiceMatches *)body.matches[indexPath.row];
         cell.textLabel.text = match.name;
+        //cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
     else
@@ -411,24 +511,32 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_viewType == kViewTypeTwitter) {
         
     }
     else if (_viewType == kViewTypeCampaign) {
-        VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.row];
-        CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
-        [detailView setHeader:body.headline];
-        [detailView loadHTMLString:body.alert];
-        detailView.sendButtonTapped = ^(){
-            CampaignDetailViewController *vc = (CampaignDetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"campaignDetail"];
-            vc.campaignID = [body.id stringValue];
-            
-            [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-                [self.navigationController pushViewController:vc animated:YES];
-            }];
-        };
-        [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+        if ([prefs boolForKey:@"inVoterVoice"]) {
+            VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.row];
+            CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
+            [detailView setHeader:body.headline];
+            [detailView loadHTMLString:body.alert];
+            detailView.sendButtonTapped = ^(){
+                CampaignDetailViewController *vc = (CampaignDetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"campaignDetail"];
+                vc.campaignID = [body.id stringValue];
+                
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                    [self.navigationController pushViewController:vc animated:YES];
+                    //[self.navigationController presentViewController:vc animated:YES completion:nil];
+                }];
+            };
+            [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+        }
+        else {
+            [self requiredInfo];
+        }
+        
     }
     else if (_viewType == kViewTypeActionAlert) {
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
@@ -442,14 +550,44 @@
         };
         [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
     }
+    else if (_viewType == kViewTypeAdditional) {
+        NSDictionary *row = (NSDictionary *)list[indexPath.row];
+        CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
+        [detailView setHeader:row[@"Title"]];
+        [detailView loadHTMLString:row[@"Long_Description"]];
+        [detailView setButtonTitle:@"Read More"];
+        detailView.sendButtonTapped = ^(){
+            [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+            }];
+        };
+        [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+    }
+    else if (_viewType == kViewTypeContactUs) {
+        if (indexPath.row == 1) {
+            [self campaignFeedbackPressed:nil];
+        }
+        if (indexPath.row == 0) {
+            CampaignDetailViewController *vc = (CampaignDetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"campaignDetail"];
+            vc.campaignID = nil;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }
     else if (_viewType == kViewTypeLetter || _viewType == kViewTypeAdvisory || _viewType == kViewTypeTestimony) {
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
         CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
         [detailView setHeader:row[@"Title"]];
         [detailView loadHTMLString:row[@"Description"]];
-        [detailView setButtonTitle:@"Close"];
+        [detailView setButtonTitle:@"Read More"];
         detailView.sendButtonTapped = ^(){
+            NSDictionary *row = (NSDictionary *)list[indexPath.row];
+            WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+            vc.link = row[@"box_link_dir"];
+            vc.dict = row;
+            vc.webType = kWebTypeFactSheet;
+            
             [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                //[self showPDF:row[@"box_link_dir"]];
+                [self.navigationController pushViewController:vc animated:YES];
             }];
         };
         [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
@@ -484,8 +622,10 @@
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
         WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
         vc.link = row[@"box_link_dir"];
+        vc.dict = row;
         vc.webType = kWebTypeFactSheet;
         [self.navigationController pushViewController:vc animated:YES];
+        //[self showPDF:row[@"box_link_dir"]];
     }
     else if (_viewType == kViewTypeDirectory) {
         //NSDictionary *row = (NSDictionary *)list[indexPath.row];

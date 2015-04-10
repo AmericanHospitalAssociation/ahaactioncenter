@@ -26,25 +26,65 @@
     [super viewDidLoad];
     action = [ActionCenterManager sharedInstance];
     hud = [ProgressHUD sharedInstance];
+    _webView.delegate = self;
+    _webView.scalesPageToFit = YES;
+    self.view.backgroundColor = [UIColor lightGrayColor];
+    _webView.backgroundColor = [UIColor lightGrayColor];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                           target:self
+                                                                                           action:@selector(shareButton:)];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
-    //[hud showHUDWithMessage:@"Loading"];
+    [hud showHUDWithMessage:@"Loading"];
     if (_webType == kWebTypeCongressCalendar) {
         self.title = @"Congressional Calendar";
-        self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+        }
     }
     if (_webType == kWebTypeWorkingWithCongress) {
         self.title = @"Working with Congress";
-        self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+        }
     }
     if (_webType == kWebTypeFactSheet) {
-        self.title = @"Fact Sheets";
+        self.title = _dict[@"Title"];
         //self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
     }
     
     [_webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:_link]]];
+}
+
+- (void)shareButton:(UIBarButtonItem *)sender
+{
+    //NSString *textToShare = _dict[@"Title"];
+    NSURL *pdf = [NSURL URLWithString:_link];
+    
+    NSArray *objectsToShare = @[pdf];
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    NSArray *excludeActivities = @[UIActivityTypeAirDrop,
+                                   UIActivityTypePrint,
+                                   UIActivityTypeAssignToContact,
+                                   UIActivityTypeSaveToCameraRoll,
+                                   UIActivityTypeAddToReadingList,
+                                   UIActivityTypePostToFlickr,
+                                   UIActivityTypePostToVimeo];
+    
+    activityVC.excludedActivityTypes = excludeActivities;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:activityVC];
+        //self.popover.delegate = self;
+        [popover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
+    else {
+        [self presentViewController:activityVC animated:YES completion:nil];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,7 +99,12 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    //[hud showHUDSucces:YES withMessage:@"Loaded"];
+    [hud showHUDSucces:YES withMessage:@"Loaded"];
+    NSLog(@"Finish");
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    NSLog(@"errrrrrrrr");
 }
 
 

@@ -43,11 +43,11 @@
     [HUD setStatusPosition:M13ProgressHUDStatusPositionBelowProgress];
     UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
     [window addSubview:HUD];
-    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-    {
+    //if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    //{
         //HUD.transform = CGAffineTransformMakeRotation(M_PI/2);
         HUD.maskType = M13ProgressHUDMaskTypeNone;
-    }
+    //}
 }
 
 - (void)removeHUD
