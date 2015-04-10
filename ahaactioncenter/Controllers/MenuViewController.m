@@ -141,7 +141,7 @@
 
 - (void)requiredInfo
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed to View"
                                                                    message:@"Would you like to enter the needed info?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"NO"
@@ -325,7 +325,7 @@
             vc.viewType = kViewTypeTestimony;
             vc.viewShouldRefresh = YES;
         }
-        if ([dict[@"title"] isEqualToString:@"Advisories"]) {
+        if ([dict[@"title"] isEqualToString:@"Advisory"]) {
             vc.viewType = kViewTypeAdvisory;
             vc.viewShouldRefresh = YES;
         }

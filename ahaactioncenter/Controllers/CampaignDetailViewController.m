@@ -13,6 +13,9 @@
 #import "Constants.h"
 #import "CampaignDetailView.h"
 #import "KGModal.h"
+#import "AppDelegate.h"
+#import "MainViewController.h"
+#import "MenuViewController.h"
 
 @interface CampaignDetailViewController ()
 {
@@ -234,8 +237,29 @@
                                               style:UIAlertActionStyleDefault
                                             handler:^void (UIAlertAction *action)
                       {
-                          [self.navigationController popToRootViewControllerAnimated:YES];
-                          
+                          //[self.navigationController popToRootViewControllerAnimated:YES];
+                          AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                          //UIStoryboard *sb = [[ad.window rootViewController] storyboard];
+                          MainViewController *main = (MainViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"main"];
+                          UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:main];
+                          mainNav.toolbarHidden = NO;
+                          MenuViewController *menu = (MenuViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"menu"];
+                          UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menu];
+                          menuNav.toolbarHidden = NO;
+                          if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                              AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                              UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+                              [split setViewControllers:@[menuNav, mainNav]];
+                              //NSLog(@"ipad");
+                          }
+                          else {
+                              //NSLog(@"iphone");
+                              
+                              MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+                              [dynamic setPaneState:MSDynamicsDrawerPaneStateClosed];
+                              [dynamic setPaneViewController:mainNav animated:YES completion:nil];
+                          }
+
                       }]];
     [self presentViewController:alert animated:YES completion:nil];
 }

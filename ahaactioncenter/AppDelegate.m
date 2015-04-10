@@ -94,7 +94,7 @@
         _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _window.rootViewController = _dynamicsDrawerViewController;
     }
-    [self checkVoterVoice];
+    //[self checkVoterVoice];
     [self getFeed];
     
     [_window makeKeyAndVisible];
@@ -158,7 +158,7 @@
         }
             }
     else {
-        [prefs setBool:YES forKey:@"inVoterVoice"];
+        [prefs setBool:NO forKey:@"inVoterVoice"];
     }
     [prefs synchronize];
 }

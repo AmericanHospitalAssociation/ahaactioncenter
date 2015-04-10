@@ -9,6 +9,9 @@
 #import "LoginViewController.h"
 #import "ActionCenterManager.h"
 #import "ProgressHUD.h"
+#import "AppDelegate.h"
+#import "MenuViewController.h"
+#import "MainViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 {
@@ -56,13 +59,37 @@
     
 }
 
++ (void)resetViews {
+    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    UIStoryboard *sb = [[ad.window rootViewController] storyboard];
+    MainViewController *main = (MainViewController *)[sb instantiateViewControllerWithIdentifier:@"main"];
+    UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:main];
+    mainNav.toolbarHidden = NO;
+    MenuViewController *menu = (MenuViewController *)[sb instantiateViewControllerWithIdentifier:@"menu"];
+    UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menu];
+    menuNav.toolbarHidden = NO;
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+        [split setViewControllers:@[menuNav, mainNav]];
+        //NSLog(@"ipad");
+    }
+    else {
+        //NSLog(@"iphone");
+        
+        MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+        [dynamic setPaneState:MSDynamicsDrawerPaneStateClosed];
+        [dynamic setPaneViewController:mainNav animated:YES completion:nil];
+    }
+}
+
 - (IBAction)login:(id)sender {
     [hud showHUDWithMessage:@"Checking User"];
     [action getOAMUser:_emailField.text
           withPassword:_passwordField.text
             completion:^(OAM *oam, NSError *err) {
                 if (!err) {
-                    if ([oam.status isEqualToString:@"found user"]) {
+                    /*if ([oam.status isEqualToString:@"found user"]) {
                         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                         [action verifyUser:_emailField.text
                                    withZip:oam.zip
@@ -116,6 +143,39 @@
                                         [self bypassVoterVoice];
                                     }
                                 }];
+                    } */
+                    if ([oam.status isEqualToString:@"found user"]) {
+                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                        [prefs setBool:YES forKey:@"isLoggedIn"];
+                        [prefs setBool:YES forKey:@"showTip"];
+                        [prefs setBool:NO forKey:@"inVoterVoice"];
+                        [prefs setObject:_emailField.text forKey:@"email"];
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                        [hud showHUDSucces:YES withMessage:@"Success"];
+                        [prefs synchronize];
+                        
+                        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                        //UIStoryboard *sb = [[ad.window rootViewController] storyboard];
+                        MainViewController *main = (MainViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"main"];
+                        UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:main];
+                        mainNav.toolbarHidden = NO;
+                        MenuViewController *menu = (MenuViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"menu"];
+                        UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menu];
+                        menuNav.toolbarHidden = NO;
+                        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                            AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                            UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+                            [split setViewControllers:@[menuNav, mainNav]];
+                            //NSLog(@"ipad");
+                        }
+                        else {
+                            //NSLog(@"iphone");
+                            
+                            MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+                            [dynamic setPaneState:MSDynamicsDrawerPaneStateClosed];
+                            [dynamic setPaneViewController:mainNav animated:YES completion:nil];
+                        }
+                        
                     }
                     else {
                         [hud showHUDSucces:NO withMessage:@"Failed"];
@@ -137,6 +197,12 @@
 
 - (IBAction)forgotPassword:(id)sender {
     NSURL *url = [NSURL URLWithString:@"http://www.aha.org/oam/forgot-password.dhtml?ahasite=AHA&goto=http://www.aha.org/oam-aha/oam/welcome.html"];
+    
+    [self launchURLInBrowser:url];
+}
+
+- (IBAction)needHelp:(id)sender {
+    NSURL *url = [NSURL URLWithString:@"http://www.aha.org/oam-aha/oam/contact_us.html"];
     
     [self launchURLInBrowser:url];
 }

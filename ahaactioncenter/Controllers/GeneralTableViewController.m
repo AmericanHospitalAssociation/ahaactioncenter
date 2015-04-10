@@ -248,7 +248,7 @@
 - (void)requiredInfo
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed"
-                                                                   message:@"Would you like to enter the needed info?"
+                                                                   message:@"We need to gather some info you to view this. Would you like to enter the needed info?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"NO"
                                               style:UIAlertActionStyleCancel
@@ -543,11 +543,26 @@
         CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
         [detailView setHeader:row[@"Title"]];
         [detailView loadHTMLString:row[@"Long_Description"]];
-        [detailView setButtonTitle:@"Close"];
-        detailView.sendButtonTapped = ^(){
-            [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-            }];
-        };
+        if ([(NSString *)row[@"box_link_dir"] isEqualToString:@""]) {
+            [detailView setButtonTitle:@"Close"];
+            detailView.sendButtonTapped = ^(){
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                }];
+            };
+        }
+        else {
+            [detailView setButtonTitle:@"Read More"];
+            detailView.sendButtonTapped = ^(){
+                WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+                vc.link = row[@"box_link_dir"];
+                vc.dict = row;
+                vc.webType = kWebTypeFactSheet;
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                    //[self showPDF:row[@"box_link_dir"]];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }];
+            };
+        }
         [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
     }
     else if (_viewType == kViewTypeAdditional) {
@@ -555,11 +570,26 @@
         CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
         [detailView setHeader:row[@"Title"]];
         [detailView loadHTMLString:row[@"Long_Description"]];
-        [detailView setButtonTitle:@"Read More"];
-        detailView.sendButtonTapped = ^(){
-            [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-            }];
-        };
+        if ([(NSString *)row[@"box_link_dir"] isEqualToString:@""]) {
+            [detailView setButtonTitle:@"Close"];
+            detailView.sendButtonTapped = ^(){
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                }];
+            };
+        }
+        else {
+            [detailView setButtonTitle:@"Read More"];
+            detailView.sendButtonTapped = ^(){
+                WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+                vc.link = row[@"box_link_dir"];
+                vc.dict = row;
+                vc.webType = kWebTypeFactSheet;
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                    //[self showPDF:row[@"box_link_dir"]];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }];
+            };
+        }
         [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
     }
     else if (_viewType == kViewTypeContactUs) {
@@ -597,11 +627,26 @@
         CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
         [detailView setHeader:row[@"Title"]];
         [detailView loadHTMLString:([row[@"Long_Description"] isEqualToString:@""]) ? row[@"Description"] : row[@"Long_Description"]];
-        [detailView setButtonTitle:@"Close"];
-        detailView.sendButtonTapped = ^(){
-            [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-            }];
-        };
+        if ([(NSString *)row[@"box_link_dir"] isEqualToString:@""]) {
+            [detailView setButtonTitle:@"Close"];
+            detailView.sendButtonTapped = ^(){
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                }];
+            };
+        }
+        else {
+            [detailView setButtonTitle:@"Read More"];
+            detailView.sendButtonTapped = ^(){
+                WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+                vc.link = row[@"box_link_dir"];
+                vc.dict = row;
+                vc.webType = kWebTypeFactSheet;
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                    //[self showPDF:row[@"box_link_dir"]];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }];
+            };
+        }
         [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
     }
     else if (_viewType == kViewTypeAHANews) {

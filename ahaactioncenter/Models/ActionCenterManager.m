@@ -9,6 +9,8 @@
 #import "ActionCenterManager.h"
 #import "AppDelegate.h"
 #import "FontAwesomeKit.h"
+#import "MainViewController.h"
+#import "MenuViewController.h"
 
 static NSString *AHANews = @"http://news.aha.org/feed/json?type=aha-news-now&show=25";
 //static NSString *AHAFeedLink = @"http://ahaconnect.org/feed.php?id=app_feed_1&lastUpdate=0";
@@ -93,12 +95,13 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     return [newFormatter stringFromDate:dateFromStr];
 }
 
+
 + (NSArray *)menuItems
 {
     NSDictionary *alerts = @{@"title" : @"Action Alerts", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *facts = @{@"title" : @"Fact Sheets", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *bulletins = @{@"title" : @"Special Bulletins", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
-    NSDictionary *advisories = @{@"title" : @"Advisories", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
+    NSDictionary *advisories = @{@"title" : @"Advisory", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *letters = @{@"title" : @"Letters", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *testimony = @{@"title" : @"Testimony", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *additional = @{@"title" : @"Additional Info", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};

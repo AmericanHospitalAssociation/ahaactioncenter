@@ -31,7 +31,6 @@
 		61553F901AD6F353008D5BE4 /* RootForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F8C1AD6F353008D5BE4 /* RootForm.m */; };
 		61553F961AD6F66A008D5BE4 /* UpdateUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F921AD6F66A008D5BE4 /* UpdateUserViewController.m */; };
 		61553F971AD6F66A008D5BE4 /* UserForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F941AD6F66A008D5BE4 /* UserForm.m */; };
-		61553FF01AD76BD9008D5BE4 /* Wikipedia.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 61553FEF1AD76BD9008D5BE4 /* Wikipedia.pdf */; };
 		619BC2301AD310BB00E9FAE4 /* TwitterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */; };
 		619BC23F1AD3123100E9FAE4 /* DescriptionClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2341AD3123100E9FAE4 /* DescriptionClass.m */; };
 		619BC2401AD3123100E9FAE4 /* Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = 619BC2361AD3123100E9FAE4 /* Entities.m */; };
@@ -127,7 +126,6 @@
 		61553F931AD6F66A008D5BE4 /* UpdateUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateUserViewController.h; path = Forms/UpdateUserViewController.h; sourceTree = "<group>"; };
 		61553F941AD6F66A008D5BE4 /* UserForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserForm.m; path = Forms/UserForm.m; sourceTree = "<group>"; };
 		61553F951AD6F66A008D5BE4 /* UserForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserForm.h; path = Forms/UserForm.h; sourceTree = "<group>"; };
-		61553FEF1AD76BD9008D5BE4 /* Wikipedia.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Wikipedia.pdf; path = ahaactioncenter/Wikipedia.pdf; sourceTree = "<group>"; };
 		619BC22E1AD310BB00E9FAE4 /* TwitterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTableViewCell.h; path = Views/TwitterTableViewCell.h; sourceTree = "<group>"; };
 		619BC22F1AD310BB00E9FAE4 /* TwitterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTableViewCell.m; path = Views/TwitterTableViewCell.m; sourceTree = "<group>"; };
 		619BC2321AD3123100E9FAE4 /* DataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
@@ -239,7 +237,6 @@
 		3E1A1E571AD07C2B00223873 = {
 			isa = PBXGroup;
 			children = (
-				61553FEF1AD76BD9008D5BE4 /* Wikipedia.pdf */,
 				3E1A1E621AD07C2B00223873 /* ahaactioncenter */,
 				3E1A1E7C1AD07C2B00223873 /* ahaactioncenterTests */,
 				3E1A1E611AD07C2B00223873 /* Products */,
@@ -557,7 +554,6 @@
 			files = (
 				3E373DE31AD0AF3C004DE20B /* TwitterKitResources.bundle in Resources */,
 				3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */,
-				61553FF01AD76BD9008D5BE4 /* Wikipedia.pdf in Resources */,
 				3E1A1E6F1AD07C2B00223873 /* Main.storyboard in Resources */,
 				3E1A1E741AD07C2B00223873 /* LaunchScreen.xib in Resources */,
 				3E1A1E711AD07C2B00223873 /* Images.xcassets in Resources */,

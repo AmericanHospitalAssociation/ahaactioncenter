@@ -62,6 +62,8 @@ typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSErr
 
 + (NSString *)formatDate:(NSString *)date;
 
++ (void)resetViews;
+
 + (UIBarButtonItem *)refreshButton;
 
 + (void)openPane;
