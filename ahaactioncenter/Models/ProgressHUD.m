@@ -24,7 +24,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        [self setupHUD];
+        //[self setupHUD];
     }
     return self;
 }
@@ -37,17 +37,17 @@
     HUD = [[M13ProgressHUD alloc] initWithProgressView:progressImage];
     HUD.progressViewSize = CGSizeMake(120.0, 120.0);
     HUD.hudBackgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
-    [HUD setMaskType:M13ProgressHUDMaskTypeGradient];
+    //[HUD setMaskType:M13ProgressHUDMaskTypeGradient];
     HUD.statusColor = [UIColor blackColor];
     HUD.shouldAutorotate = YES;
     [HUD setStatusPosition:M13ProgressHUDStatusPositionBelowProgress];
     UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
     [window addSubview:HUD];
-    //if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-    //{
+    
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
         //HUD.transform = CGAffineTransformMakeRotation(M_PI/2);
         HUD.maskType = M13ProgressHUDMaskTypeNone;
-    //}
+    }
 }
 
 - (void)removeHUD
@@ -58,6 +58,7 @@
 
 - (void)showHUDWithMessage:(NSString *)msg
 {
+    [self setupHUD];
     [HUD setProgress:0.0 animated:YES];
     HUD.status = msg;
     UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
@@ -81,7 +82,7 @@
         [HUD setProgress:0.0 animated:NO];
     }
     HUD.status = msg;
-    [self performSelector:@selector(removeHUD) withObject:nil afterDelay:1.0];
+    [self performSelector:@selector(removeHUD) withObject:nil afterDelay:2.0];
 }
 
 - (void)animateHUD

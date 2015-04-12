@@ -167,7 +167,7 @@
 {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     [action getAHAFeed:^(NSArray *feeds, NSError *error){
-        NSLog(@"Feed %@", feeds);
+        //NSLog(@"Feed %@", feeds);
     }];
 }
 

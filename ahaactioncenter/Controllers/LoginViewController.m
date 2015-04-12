@@ -173,7 +173,7 @@
                             
                             MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
                             [dynamic setPaneState:MSDynamicsDrawerPaneStateClosed];
-                            [dynamic setPaneViewController:mainNav animated:YES completion:nil];
+                            [dynamic setPaneViewController:mainNav animated:NO completion:nil];
                         }
                         
                     }

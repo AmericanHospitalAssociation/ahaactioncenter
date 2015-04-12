@@ -8,6 +8,7 @@
 
 #import "ActionCenterManager.h"
 #import "AppDelegate.h"
+#import "ProgressHUD.h"
 #import "FontAwesomeKit.h"
 #import "MainViewController.h"
 #import "MenuViewController.h"
@@ -43,7 +44,7 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 -(id)init {
     self = [super init];
     if (self) {
-        
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     }
     return self;
 }
@@ -157,9 +158,35 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     return str;
 }
 
+- (NSError *)noInternetError {
+    NSMutableDictionary* details = [NSMutableDictionary dictionary];
+    [details setValue:@"No Internet" forKey:NSLocalizedDescriptionKey];
+    NSError *error = [NSError errorWithDomain:@"aha.org" code:500 userInfo:details];
+    return error;
+}
+
+- (BOOL)isReachable {
+    AFNetworkReachabilityManager *reach = [AFNetworkReachabilityManager sharedManager];
+    [reach startMonitoring];
+    BOOL reachable = [reach isReachable];
+    NSLog(@"%i reach", reachable);
+    if (!reachable) {
+        [[ProgressHUD sharedInstance] showHUDSucces:NO withMessage:@"No Internet"];
+        /*
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"NO Internet Connection" message:@"Please Try agin once you have an internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [av show];
+         */
+    }
+    return reachable;
+}
+
 #pragma mark - AHA News Methods
 - (void)getAHANews:(CompletionAHANews)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = AHANews;
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -210,6 +237,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)getAHACalendar:(CompletionAHACalendar)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = AHACalendarLink;
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -231,6 +262,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)getAHAArticle:(NSString *)link completion:(CompletionAHALink)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:AHANewsLink, link];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -254,6 +289,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 #pragma mark - OAM
 - (void)getOAMUser:(NSString *)email withPassword:(NSString *)password completion:(CompletionOAM)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:AMSOAM, email, password];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -266,6 +305,12 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
         OAM *oam = [[OAM alloc] initWithJSONData:responseObject];
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setObject:(NSData *)responseObject forKey:@"user"];
+        if (oam.phone != nil) {
+            [prefs setObject:oam.phone forKey:@"phone"];
+        }
+        if (oam.prefix != nil) {
+            [prefs setObject:oam.phone forKey:@"prefix"];
+        }
         [prefs synchronize];
         completion(oam, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -278,6 +323,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 #pragma mark - Voter Voice Methods
 - (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceGetUser, zip, email];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -301,6 +350,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceVerifyAddress, address, zip, country];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -322,6 +375,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 //@"http://54.245.255.190/p/action_center/api/v1/createUser?org=NEW&email=vince.davis@me.com&firstName=vince&address=24a%20Blake%20St&zipcode=29403&country=US&lastName=davis&phone=8472128597&prefix=dr"
 - (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoiceNew)completion
 {
+    if (![self isReachable]) {
+        completion(nil, nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceCreateUser,
                         [self isNull:oam.org_name],
                         email,
@@ -370,6 +427,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)sendEmailVerification:(NSString *)email completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceSendEmailVerify,email];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -391,6 +452,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)getMatchesForCampaign:(NSString*)campaignId withToken:(NSString *)token completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceMatchesForCampaign, campaignId, token];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -413,6 +478,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 //@"http://54.245.255.190/p/action_center/api/v1/emailVerification?phone=%@&prefix=%@&verificationID=%@&code=%@&org=%@&email=%@&firstName=%@&address=%@&zipcode=%@&country=US&lastName=%@"
 - (void)verifyEmailID:(OAM *)oam withID:(NSString *)verificationID andCode:(NSString *)code completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceVerifyEmailID,
                         oam.phone,
                         oam.prefix,
@@ -445,6 +514,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)getCampaignSummaries:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = VoterVoiceCampaignSummaries;
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -466,6 +539,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)postVoterUrl:(NSString *)strUrl completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     //NSString *strUrl = VoterVoiceCampaignSummaries;
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -487,6 +564,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)getTargetedMessages:(NSString *)campaignID completion:(CompletionVoterVoice)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceTargertedMessage, campaignID];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -508,6 +589,10 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 
 - (void)getProfile:(NSString *)profileID withType:(NSString *)type completion:(CompletionVoterVoiceBody)completion
 {
+    if (![self isReachable]) {
+        completion(nil, [self noInternetError]);
+        return;
+    }
     NSString *strUrl = [NSString stringWithFormat:VoterVoiceGetProfile, profileID, type];
     NSURL *url = [NSURL URLWithString:[self encodeURL:strUrl]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url

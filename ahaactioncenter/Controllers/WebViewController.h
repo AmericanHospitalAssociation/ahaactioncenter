@@ -11,7 +11,8 @@
 typedef enum {
     kWebTypeCongressCalendar,
     kWebTypeWorkingWithCongress,
-    kWebTypeFactSheet
+    kWebTypeFactSheet,
+    kWebTypeWeb
 } kWebType;
 
 @interface WebViewController : UIViewController
@@ -19,5 +20,6 @@ typedef enum {
 @property(nonatomic, assign)kWebType webType;
 @property(nonatomic, retain)NSDictionary *dict;
 @property(nonatomic, retain)NSString *link;
+@property(nonatomic, assign)BOOL shouldRefresh;
 
 @end

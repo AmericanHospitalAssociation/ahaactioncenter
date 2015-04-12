@@ -72,6 +72,13 @@
         return;
     }
     
+    if (oam.phone != nil) {
+        [prefs setObject:oam.phone forKey:@"phone"];
+    }
+    if (oam.prefix != nil) {
+        [prefs setObject:oam.prefix forKey:@"prefix"];
+    }
+    
     ProgressHUD *hud = [ProgressHUD sharedInstance];
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     [hud showHUDWithMessage:@"Updating User"];

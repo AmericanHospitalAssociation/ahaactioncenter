@@ -23,10 +23,12 @@
 #import "FontAwesomeKit.h"
 #import "AppDelegate.h"
 #import "UpdateUserViewController.h"
+#import "ProgressHUD.h"
 
 @interface MenuViewController () <RATreeViewDelegate, RATreeViewDataSource>
 {
     ActionCenterManager *action;
+    ProgressHUD *hud;
 }
 
 @property (strong, nonatomic) NSArray *data;
@@ -41,6 +43,7 @@
     self.title = @"Menu";
     
     action = [ActionCenterManager sharedInstance];
+    hud = [ProgressHUD sharedInstance];
     
     _data = [ActionCenterManager menuItems];
     
@@ -129,6 +132,10 @@
                       {
                           NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                           [prefs setBool:NO forKey:@"isLoggedIn"];
+                          [prefs setBool:NO forKey:@"inVoterVoice"];
+                          [prefs setObject:nil forKey:@"email"];
+                          [prefs setObject:nil forKey:@"phone"];
+                          [prefs setObject:nil forKey:@"prefix"];
                           [prefs synchronize];
                           LoginViewController *vc = (LoginViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"login"];
                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -257,6 +264,7 @@
     
     if ([storyboard isEqualToString:@"webView"]) {
         WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+        vc.shouldRefresh = YES;
         if ([dict[@"title"] isEqualToString:@"Congressional Calendar"])
         {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@", @"congressional-calendar"];
@@ -312,9 +320,37 @@
             vc.viewType = kViewTypeDirectory;
             vc.viewShouldRefresh = YES;
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            if ([prefs boolForKey:@"inVoterVoice"] == NO) {
-                [self requiredInfo];
-                return;
+            if (/*[prefs boolForKey:@"inVoterVoice"] == NO*/YES) {
+                NSString *prefix = [prefs stringForKey:@"prefix"];
+                NSString *phone = [prefs stringForKey:@"phone"];
+                OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
+                if (prefix == nil || phone == nil) {
+                    [self requiredInfo];
+                    return;
+                }
+                else {
+                    NSLog(@"------------");
+                    [hud showHUDWithMessage:@"Checking User Info"];
+                    oam.phone = phone;
+                    oam.prefix = prefix;
+                    NSLog(@"prefix- %@", prefix);
+                    [action createUser:oam
+                             withEmail:[prefs stringForKey:@"email"]
+                            completion:^(NSString *userId, NSString *token, NSError *err) {
+                                [hud showHUDSucces:YES withMessage:@"Success"];
+                                
+                                AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                                    UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+                                    [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
+                                }
+                                else {
+                                    MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+                                    [dynamic setPaneViewController:nav animated:YES completion:nil];
+                                }
+                            }];
+                    return;
+                }
             }
         }
         if ([dict[@"title"] isEqualToString:@"Fact Sheets"]) {
@@ -347,15 +383,12 @@
         }
     }
     
+    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
         [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
-        //NSLog(@"ipad");
     }
     else {
-        //NSLog(@"iphone");
-        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
         [dynamic setPaneViewController:nav animated:YES completion:nil];
     }

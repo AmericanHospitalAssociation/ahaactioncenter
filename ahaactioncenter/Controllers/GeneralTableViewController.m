@@ -63,6 +63,11 @@
     if (_viewType == kViewTypeTwitter && _viewShouldRefresh) {
         self.title = @"Twitter";
         [hud showHUDWithMessage:@"Getting Tweets"];
+        _viewShouldRefresh = NO;
+        
+        if (![action isReachable]) {
+            return;
+        }
         NSMutableArray *items = [NSMutableArray new];
         STTwitterAPI *twitter = [STTwitterAPI twitterAPIAppOnlyWithConsumerKey:kTwitterKey
                                                                 consumerSecret:kTwitterSecret];
@@ -91,30 +96,32 @@
         NSMutableArray *items = [[NSMutableArray alloc] init];
         NSMutableArray *set = [[NSMutableArray alloc] init];
         [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
-            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:YES];
-            NSArray *calendarItems = [calendar.items sortedArrayUsingDescriptors:@[sort]];
-            for (int i = 0; i < calendarItems.count; i++) {
-                AHACalendarItem *item = (AHACalendarItem *)calendarItems[i];
-                if (![set containsObject:item.pretty_date]) {
-                    [set addObject:item.pretty_date];
-                }
-            }
-            for (int i = 0; i < set.count; i++) {
-                NSString *date = set[i];
-                //NSLog(@"set %@", date);
-                NSMutableArray *arr = [[NSMutableArray alloc] init];
+            if (!error) {
+                [hud showHUDSucces:YES withMessage:@"Loaded"];
+                NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:YES];
+                NSArray *calendarItems = [calendar.items sortedArrayUsingDescriptors:@[sort]];
                 for (int i = 0; i < calendarItems.count; i++) {
                     AHACalendarItem *item = (AHACalendarItem *)calendarItems[i];
-                    if ([date isEqualToString:item.pretty_date]) {
-                        [arr addObject:item];
+                    if (![set containsObject:item.pretty_date]) {
+                        [set addObject:item.pretty_date];
                     }
                 }
-                [items addObject:arr];
+                for (int i = 0; i < set.count; i++) {
+                    NSString *date = set[i];
+                    //NSLog(@"set %@", date);
+                    NSMutableArray *arr = [[NSMutableArray alloc] init];
+                    for (int i = 0; i < calendarItems.count; i++) {
+                        AHACalendarItem *item = (AHACalendarItem *)calendarItems[i];
+                        if ([date isEqualToString:item.pretty_date]) {
+                            [arr addObject:item];
+                        }
+                    }
+                    [items addObject:arr];
+                }
+                
+                list = (NSArray *)items;
+                [self.tableView reloadData];
             }
-            
-            list = (NSArray *)items;
-            [self.tableView reloadData];
-            [hud showHUDSucces:YES withMessage:@"Loaded"];
         }];
     }
     if (_viewType == kViewTypeDirectory && _viewShouldRefresh) {
@@ -180,31 +187,36 @@
     if (_viewType == kViewTypeBulletin && _viewShouldRefresh) {
         self.title = @"Special Bulletins";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"bulletin", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeFactSheet && _viewShouldRefresh) {
         self.title = @"Fact Sheets";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"issue-papers", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeAdvisory && _viewShouldRefresh) {
         self.title = @"Advisory";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"advisory", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeTestimony && _viewShouldRefresh) {
         self.title = @"Testimony";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"testimony", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeAdditional && _viewShouldRefresh) {
         self.title = @"Additional Info";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"additional-info", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
         [self.tableView reloadData];
     }
 }
@@ -243,6 +255,32 @@
     }];
     //[[ProgressHUD sharedInstance] showHUDWithMessage:@"Loading"];
     [self.navigationController pushViewController:pc animated:YES];
+}
+
+- (void)showTwitter:(NSString *)string {
+    //https://twitter.com/search?q=%23partners4quality&src=typd
+    NSString *link;
+    NSDictionary *d;
+    WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
+    vc.shouldRefresh = YES;
+    vc.webType = kWebTypeWeb;
+    if ([string hasPrefix:@"#"]) {
+        d = @{@"Title" : string };
+        string = [string stringByReplacingOccurrencesOfString:@"#" withString:@"%23"];
+        link = [NSString stringWithFormat:@"https://twitter.com/search?q=%@&src=typd", string];
+    }
+    if ([string hasPrefix:@"@"]) {
+        d = @{@"Title" : string };
+        string = [string stringByReplacingOccurrencesOfString:@"@" withString:@""];
+        link = [NSString stringWithFormat:@"https://twitter.com/%@", string];
+    }
+    if ([string hasPrefix:@"http://"] || [string hasPrefix:@"https://"] ) {
+        d = @{@"Title" : @"Link"};
+        link = string;
+    }
+    vc.link = link;
+    vc.dict = d;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)requiredInfo
@@ -430,8 +468,16 @@
         
         cell.nameLabel.text = item.user.name;
         cell.accountNameLabel.text = [NSString stringWithFormat:@"@%@", item.user.screenName];
-        
-        cell.tweetLabel.text = [self cleanString:item.text];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //cell.tweetLabel.text = [self cleanString:item.text];
+        [cell.tweetLabel setText:[self cleanString:item.text]];
+        [cell.tweetLabel setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
+            [self showTwitter:string];
+        }];
+        CGSize size = [cell.tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:cell.tweetLabel.frame.size.width];
+        CGRect frame = cell.tweetLabel.frame;
+        frame.size.height = size.height;
+        cell.tweetLabel.frame = frame;
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"eee MMM dd HH:mm:ss ZZZZ yyyy"];
         NSDate *date = [df dateFromString:item.createdAt];
@@ -517,7 +563,7 @@
         
     }
     else if (_viewType == kViewTypeCampaign) {
-        if ([prefs boolForKey:@"inVoterVoice"]) {
+        //if ([prefs boolForKey:@"inVoterVoice"]) {
             VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.row];
             CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
             [detailView setHeader:body.headline];
@@ -527,15 +573,39 @@
                 vc.campaignID = [body.id stringValue];
                 
                 [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-                    [self.navigationController pushViewController:vc animated:YES];
+                    
                     //[self.navigationController presentViewController:vc animated:YES completion:nil];
+                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                    if (/*[prefs boolForKey:@"inVoterVoice"] == NO*/YES) {
+                        NSString *prefix = [prefs stringForKey:@"prefix"];
+                        NSString *phone = [prefs stringForKey:@"phone"];
+                        OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
+                        if (prefix == nil || phone == nil) {
+                            [self requiredInfo];
+                            return;
+                        }
+                        else {
+                            NSLog(@"------------");
+                            [hud showHUDWithMessage:@"Checking User Info"];
+                            oam.phone = phone;
+                            oam.prefix = prefix;
+                            NSLog(@"prefix- %@", prefix);
+                            [action createUser:oam
+                                     withEmail:[prefs stringForKey:@"email"]
+                                    completion:^(NSString *userId, NSString *token, NSError *err) {
+                                        [hud showHUDSucces:YES withMessage:@"Success"];
+                                        [self.navigationController pushViewController:vc animated:YES];
+                                    }];
+                            return;
+                        }
+                    }
                 }];
             };
             [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
-        }
-        else {
-            [self requiredInfo];
-        }
+        //}
+        //else {
+        //    [self requiredInfo];
+        //}
         
     }
     else if (_viewType == kViewTypeActionAlert) {
@@ -557,6 +627,7 @@
                 vc.link = row[@"box_link_dir"];
                 vc.dict = row;
                 vc.webType = kWebTypeFactSheet;
+                vc.shouldRefresh = YES;
                 [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
                     //[self showPDF:row[@"box_link_dir"]];
                     [self.navigationController pushViewController:vc animated:YES];
@@ -584,6 +655,7 @@
                 vc.link = row[@"box_link_dir"];
                 vc.dict = row;
                 vc.webType = kWebTypeFactSheet;
+                vc.shouldRefresh = YES;
                 [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
                     //[self showPDF:row[@"box_link_dir"]];
                     [self.navigationController pushViewController:vc animated:YES];
@@ -613,6 +685,7 @@
             WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
             vc.link = row[@"box_link_dir"];
             vc.dict = row;
+            vc.shouldRefresh = YES;
             vc.webType = kWebTypeFactSheet;
             
             [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
@@ -640,6 +713,7 @@
                 WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
                 vc.link = row[@"box_link_dir"];
                 vc.dict = row;
+                vc.shouldRefresh = YES;
                 vc.webType = kWebTypeFactSheet;
                 [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
                     //[self showPDF:row[@"box_link_dir"]];
@@ -668,6 +742,7 @@
         WebViewController *vc = (WebViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"webView"];
         vc.link = row[@"box_link_dir"];
         vc.dict = row;
+        vc.shouldRefresh = YES;
         vc.webType = kWebTypeFactSheet;
         [self.navigationController pushViewController:vc animated:YES];
         //[self showPDF:row[@"box_link_dir"]];

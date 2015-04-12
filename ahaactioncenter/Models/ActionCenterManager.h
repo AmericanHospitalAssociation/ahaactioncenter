@@ -62,11 +62,13 @@ typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSErr
 
 + (NSString *)formatDate:(NSString *)date;
 
-+ (void)resetViews;
+//+ (void)resetViews;
 
 + (UIBarButtonItem *)refreshButton;
 
 + (void)openPane;
+
+- (BOOL)isReachable;
 
 - (NSString *)encodeURL:(NSString *)url;
 - (NSString *)cleanPhone:(NSString *)str;
