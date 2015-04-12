@@ -286,7 +286,7 @@
 - (void)requiredInfo
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed"
-                                                                   message:@"We need to gather some info you to view this. Would you like to enter the needed info?"
+                                                                   message:@"To enable matching you to your legislators, additional info is needed. Would you like to enter the needed info?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"NO"
                                               style:UIAlertActionStyleCancel

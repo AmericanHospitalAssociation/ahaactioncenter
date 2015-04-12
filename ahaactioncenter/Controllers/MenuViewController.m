@@ -148,6 +148,7 @@
                           [prefs setObject:nil forKey:@"email"];
                           [prefs setObject:nil forKey:@"phone"];
                           [prefs setObject:nil forKey:@"prefix"];
+                          [prefs setObject:nil forKey:@"token"];
                           [prefs synchronize];
                           LoginViewController *vc = (LoginViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"login"];
                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -160,8 +161,8 @@
 
 - (void)requiredInfo
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed to View"
-                                                                   message:@"Would you like to enter the needed info?"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Additional Info Needed"
+                                                                   message:@"To enable matching you to your legislators, additional info is needed. Would you like to enter the needed info?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"NO"
                                               style:UIAlertActionStyleCancel

@@ -173,12 +173,30 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 }
 
 - (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:alert
-                                                 message:msg
-                                                delegate:self
-                                       cancelButtonTitle:@"OK"
-                                       otherButtonTitles:nil, nil];
-    [av show];
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Address Invalid"
+                                                                   message:@"Your address on file does not match U.S. Postal Service records.  Before sending a message to your legislator, please update your profile by visiting: www.aha.org/updateprofile"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Done"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          
+                      }]];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Profile"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.aha.org/updateprofile"]];
+                      }]];
+    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+        [split presentViewController:alert2 animated:YES completion:nil];
+    }
+    else {
+        UIWindow *window = ad.window;
+        [window.rootViewController presentViewController:alert2 animated:YES completion:nil];
+    }
 }
 
 - (BOOL)isReachable {
@@ -433,6 +451,13 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
         else {
             if ([dict valueForKeyPath:@"response.body.userId"] != nil && [dict valueForKeyPath:@"response.body.userToken"] != nil) {
                 NSLog(@"-----------------asdsadsadasdasdsa------");
+                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                [prefs setBool:YES forKey:@"isLoggedIn"];
+                [prefs setBool:YES forKey:@"inVoterVoice"];
+                //[prefs setObject:_emailField.text forKey:@"email"];
+                [prefs setObject:[dict valueForKeyPath:@"response.body.userToken"] forKey:@"token"];
+                [prefs setObject:(NSString *)[dict valueForKeyPath:@"response.body.userId"] forKey:@"userId"];
+                [prefs synchronize];
                 completion((NSString *)[dict valueForKeyPath:@"response.body.userId"], [dict valueForKeyPath:@"response.body.userToken"], nil);
             }
             else {
