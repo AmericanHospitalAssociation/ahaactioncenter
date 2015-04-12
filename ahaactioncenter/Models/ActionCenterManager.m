@@ -165,6 +165,22 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     return error;
 }
 
+- (NSError *)accountError {
+    NSMutableDictionary* details = [NSMutableDictionary dictionary];
+    [details setValue:@"Account Error" forKey:NSLocalizedDescriptionKey];
+    NSError *error = [NSError errorWithDomain:@"aha.org" code:500 userInfo:details];
+    return error;
+}
+
+- (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:alert
+                                                 message:msg
+                                                delegate:self
+                                       cancelButtonTitle:@"OK"
+                                       otherButtonTitles:nil, nil];
+    [av show];
+}
+
 - (BOOL)isReachable {
     AFNetworkReachabilityManager *reach = [AFNetworkReachabilityManager sharedManager];
     [reach startMonitoring];
@@ -410,16 +426,21 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
         
         long status = (long)[dict valueForKeyPath:@"response.status"];
         NSLog(@"dict %@  %ld", dict, status);
-        if ([dict valueForKeyPath:@"response.body.userId"] != nil && [dict valueForKeyPath:@"response.body.userToken"] != nil) {
-            NSLog(@"-----------------asdsadsadasdasdsa------");
-            completion((NSString *)[dict valueForKeyPath:@"response.body.userId"], [dict valueForKeyPath:@"response.body.userToken"], nil);
+        if ([[dict valueForKeyPath:@"response.body"] isKindOfClass:[NSString class]]) {
+            NSLog(@"body %@", [dict valueForKeyPath:@"response.body"]);
+            completion(nil, nil, [self accountError]);
         }
         else {
-            completion(nil, nil, error);
+            if ([dict valueForKeyPath:@"response.body.userId"] != nil && [dict valueForKeyPath:@"response.body.userToken"] != nil) {
+                NSLog(@"-----------------asdsadsadasdasdsa------");
+                completion((NSString *)[dict valueForKeyPath:@"response.body.userId"], [dict valueForKeyPath:@"response.body.userToken"], nil);
+            }
+            else {
+                completion(nil, nil, [self accountError]);
+            }
         }
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(nil, nil, error);
+        completion(nil, nil, [self noInternetError]);
     }];
     
     [operation start];

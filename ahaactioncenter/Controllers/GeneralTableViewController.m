@@ -593,8 +593,14 @@
                             [action createUser:oam
                                      withEmail:[prefs stringForKey:@"email"]
                                     completion:^(NSString *userId, NSString *token, NSError *err) {
-                                        [hud showHUDSucces:YES withMessage:@"Success"];
-                                        [self.navigationController pushViewController:vc animated:YES];
+                                        if (!err) {
+                                            [hud showHUDSucces:YES withMessage:@"Success"];
+                                            [self.navigationController pushViewController:vc animated:YES];
+                                        }
+                                        else {
+                                            [hud showHUDSucces:NO withMessage:@"Failed"];
+                                            [action showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
+                                        }
                                     }];
                             return;
                         }

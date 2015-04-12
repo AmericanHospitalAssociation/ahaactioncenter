@@ -24,7 +24,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        //[self setupHUD];
+        [self setupHUD];
     }
     return self;
 }
@@ -35,6 +35,8 @@
         [HUD removeFromSuperview];
     }
     
+    AppDelegate *ad = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
     progressImage = [[M13ProgressViewImage alloc] init];
     [progressImage setProgressImage:[UIImage imageNamed:@"aha_logo"]];
     HUD = [[M13ProgressHUD alloc] initWithProgressView:progressImage];
@@ -44,13 +46,20 @@
     HUD.statusColor = [UIColor blackColor];
     HUD.shouldAutorotate = YES;
     [HUD setStatusPosition:M13ProgressHUDStatusPositionBelowProgress];
-    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
-    [window addSubview:HUD];
     
+    HUD.maskType = M13ProgressHUDMaskTypeNone;
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-        //HUD.transform = CGAffineTransformMakeRotation(M_PI/2);
-        HUD.maskType = M13ProgressHUDMaskTypeNone;
+        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+        [split.view addSubview:HUD];
     }
+    else {
+        UIWindow *window = ad.window;
+        [window addSubview:HUD];
+    }
+}
+
+- (void)addHUDtoView {
+    
 }
 
 - (void)removeHUD
@@ -61,11 +70,18 @@
 
 - (void)showHUDWithMessage:(NSString *)msg
 {
-    [self setupHUD];
+    AppDelegate *ad = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    //[self setupHUD];
     [HUD setProgress:0.0 animated:YES];
     HUD.status = msg;
-    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
-    [window bringSubviewToFront:HUD];
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+        [split.view bringSubviewToFront:HUD];
+    }
+    else {
+        UIWindow *window = ad.window;
+        [window bringSubviewToFront:HUD];
+    }
     [HUD show:YES];
     hudTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
                                                 target:self

@@ -100,6 +100,10 @@
                         [self dismissViewControllerAnimated:YES completion:nil];
                     }
                 }
+                else {
+                    [hud showHUDSucces:NO withMessage:@"Failed"];
+                    [action showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
+                }
             }];
 }
 

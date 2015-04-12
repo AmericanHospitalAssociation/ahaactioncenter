@@ -349,16 +349,22 @@
                     [action createUser:oam
                              withEmail:[prefs stringForKey:@"email"]
                             completion:^(NSString *userId, NSString *token, NSError *err) {
-                                [hud showHUDSucces:YES withMessage:@"Success"];
-                                
-                                AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-                                    UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
-                                    [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
+                                if (!err) {
+                                    [hud showHUDSucces:YES withMessage:@"Success"];
+                                    
+                                    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                                        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+                                        [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
+                                    }
+                                    else {
+                                        MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+                                        [dynamic setPaneViewController:nav animated:YES completion:nil];
+                                    }
                                 }
                                 else {
-                                    MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
-                                    [dynamic setPaneViewController:nav animated:YES completion:nil];
+                                    [hud showHUDSucces:NO withMessage:@"Failed"];
+                                    [action showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
                                 }
                             }];
                     return;
