@@ -31,7 +31,10 @@
 
 - (void)setupHUD
 {
-    [HUD removeFromSuperview];
+    if (HUD) {
+        [HUD removeFromSuperview];
+    }
+    
     progressImage = [[M13ProgressViewImage alloc] init];
     [progressImage setProgressImage:[UIImage imageNamed:@"aha_logo"]];
     HUD = [[M13ProgressHUD alloc] initWithProgressView:progressImage];
@@ -82,7 +85,7 @@
         [HUD setProgress:0.0 animated:NO];
     }
     HUD.status = msg;
-    [self performSelector:@selector(removeHUD) withObject:nil afterDelay:2.0];
+    [self performSelector:@selector(removeHUD) withObject:nil afterDelay:1.5];
 }
 
 - (void)animateHUD

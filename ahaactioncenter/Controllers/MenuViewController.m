@@ -51,6 +51,10 @@
     //OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
     
     FAKIonIcons *icon = [FAKIonIcons iconWithCode:@"\uf2a9" size:30];
+    
+    NSString * version = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    NSString * build = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleVersionKey];
+    
     [icon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[icon imageWithSize:CGSizeMake(30, 30)]
                                                               style:UIBarButtonItemStyleDone
@@ -59,11 +63,19 @@
     
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"Logout %@",@""]
                                                               style:UIBarButtonItemStyleDone
-                                                             target:self action:@selector(logout)];
+                                                             target:self
+                                                             action:@selector(logout)];
+    UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                          target:nil
+                                                                          action:nil];
     
-    NSArray *buttons = [NSArray arrayWithObjects: item1, item2, nil];
+    UIBarButtonItem *item3 = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"v%@(%@)",version, build]
+                                                              style:UIBarButtonItemStyleDone
+                                                             target:self
+                                                             action:nil];
+    
+    NSArray *buttons = @[item1, item2, flex, item3];
     [self setToolbarItems:buttons];
-    
     
     RATreeView *treeView = [[RATreeView alloc] initWithFrame:self.view.bounds];
     

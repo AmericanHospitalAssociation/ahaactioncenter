@@ -43,21 +43,27 @@
         [hud showHUDWithMessage:@"Loading"];
         if (_webType == kWebTypeCongressCalendar) {
             self.title = @"Congressional Calendar";
-            pdfData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_link]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                pdfData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_link]];
+            });
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
             }
         }
         if (_webType == kWebTypeWorkingWithCongress) {
             self.title = @"Working with Congress";
-            pdfData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_link]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                pdfData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_link]];
+            });
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
             }
         }
         if (_webType == kWebTypeFactSheet) {
             self.title = _dict[@"Title"];
-            pdfData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_link]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                pdfData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_link]];
+            });
             //self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
         }
         if (_webType == kWebTypeWeb) {
