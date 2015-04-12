@@ -309,7 +309,7 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
             [prefs setObject:oam.phone forKey:@"phone"];
         }
         if (oam.prefix != nil) {
-            [prefs setObject:oam.phone forKey:@"prefix"];
+            [prefs setObject:oam.prefix forKey:@"prefix"];
         }
         [prefs synchronize];
         completion(oam, nil);
