@@ -89,7 +89,7 @@
         // End Side Menu Setup
         //[self testVoterVoice];
         //NSLog(@"iphone");
-        //[self testCalendar];
+        [self testCalendar];
         
         _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _window.rootViewController = _dynamicsDrawerViewController;

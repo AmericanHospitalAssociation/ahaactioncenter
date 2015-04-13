@@ -31,12 +31,12 @@
              FXFormFieldType : FXFormFieldTypePhone,
              FXFormFieldCell: [FXFormTextFieldCell class]};
 }
-
+/*
 - (NSArray *)extraFields
 {
     return @[@{FXFormFieldTitle: NSLocalizedString(@"Update Info", nil),
                FXFormFieldHeader: @"",
                FXFormFieldAction: @"updateInfo:"},];
 }
-
+*/
 @end

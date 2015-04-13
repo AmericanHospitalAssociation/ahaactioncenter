@@ -30,7 +30,9 @@
     self.formController.delegate = self;
     self.formController.form = [[UserForm alloc] init];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissModalViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissModalViewControllerAnimated:)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(updateInfo:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -52,6 +54,25 @@
                       }]];
 
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Address Invalid"
+                                                                    message:@"Your address on file does not match U.S. Postal Service records.  Before sending a message to your legislator, please update your profile by visiting: www.aha.org/updateprofile"
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Done"
+                                               style:UIAlertActionStyleCancel
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           
+                       }]];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Profile"
+                                               style:UIAlertActionStyleDefault
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.aha.org/updateprofile"]];
+                       }]];
+    [self presentViewController:alert2 animated:YES completion:nil];
 }
 
 - (void)updateInfo:(id)sender
@@ -102,7 +123,7 @@
                 }
                 else {
                     [hud showHUDSucces:NO withMessage:@"Failed"];
-                    [action showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
+                    [self showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
                 }
             }];
 }
