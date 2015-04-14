@@ -8,6 +8,7 @@
 
 #import "ProgressHUD.h"
 #import "AppDelegate.h"
+#import "MSDynamicsDrawerViewController.h"
 
 @implementation ProgressHUD
 
@@ -31,9 +32,9 @@
 
 - (void)setupHUD
 {
-    if (HUD) {
+    //if (HUD) {
         [HUD removeFromSuperview];
-    }
+    //}
     
     AppDelegate *ad = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
@@ -54,6 +55,8 @@
     }
     else {
         UIWindow *window = ad.window;
+        //MSDynamicsDrawerViewController *d = (MSDynamicsDrawerViewController *)window.rootViewController;
+        //[d.view addSubview:HUD];
         [window addSubview:HUD];
     }
 }
@@ -80,6 +83,8 @@
     }
     else {
         UIWindow *window = ad.window;
+        //MSDynamicsDrawerViewController *d = (MSDynamicsDrawerViewController *)window.rootViewController;
+        //[d.view bringSubviewToFront:HUD];
         [window bringSubviewToFront:HUD];
     }
     [HUD show:YES];

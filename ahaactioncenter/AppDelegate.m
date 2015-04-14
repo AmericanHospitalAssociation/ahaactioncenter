@@ -66,10 +66,8 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         _splitViewController = [[UISplitViewController alloc] init];
-        //_splitViewController.delegate = self;
         _splitViewController.viewControllers = @[menuNav, nav];
         _splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-        //NSLog(@"ipad");
         _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _window.rootViewController = _splitViewController;
     }
@@ -81,20 +79,14 @@
         resize.minimumResizeRevealWidth = 40.0;
         [_dynamicsDrawerViewController addStylersFromArray:@[[MSDynamicsDrawerScaleStyler styler], [MSDynamicsDrawerFadeStyler styler], [MSDynamicsDrawerParallaxStyler styler], resize] forDirection:MSDynamicsDrawerDirectionLeft];
         
-        
         [_dynamicsDrawerViewController setDrawerViewController:menuNav forDirection:MSDynamicsDrawerDirectionLeft];
-        
         
         _dynamicsDrawerViewController.paneViewController = nav;
         // End Side Menu Setup
-        //[self testVoterVoice];
-        //NSLog(@"iphone");
-        [self testCalendar];
-        
+
         _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _window.rootViewController = _dynamicsDrawerViewController;
     }
-    //[self checkVoterVoice];
     [self getFeed];
     
     [_window makeKeyAndVisible];
