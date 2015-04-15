@@ -65,6 +65,7 @@
                                                               style:UIBarButtonItemStyleDone
                                                              target:self
                                                              action:@selector(logout)];
+    /*
     UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                           target:nil
                                                                           action:nil];
@@ -73,8 +74,8 @@
                                                               style:UIBarButtonItemStyleDone
                                                              target:self
                                                              action:nil];
-    
-    NSArray *buttons = @[item1, item2, flex, item3];
+    */
+    NSArray *buttons = @[item1, item2/*, flex, item3*/];
     [self setToolbarItems:buttons];
     
     RATreeView *treeView = [[RATreeView alloc] initWithFrame:self.view.bounds];
