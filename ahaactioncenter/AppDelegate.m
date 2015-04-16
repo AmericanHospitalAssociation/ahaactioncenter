@@ -167,7 +167,7 @@
 {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
-        NSLog(@"calendar %@", calendar);
+        //NSLog(@"calendar %@", calendar);
     }];
 }
 
