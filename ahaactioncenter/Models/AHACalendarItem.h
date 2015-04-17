@@ -22,5 +22,11 @@
 @property (nonatomic, retain) NSString *orig_title;
 @property (nonatomic, retain) NSString *pretty_date;
 @property (nonatomic, retain) NSNumber *unix_date;
+@property (nonatomic, retain) NSString *location_city;
+@property (nonatomic, retain) NSString *location_name;
+@property (nonatomic, retain) NSString *location_phone;
+@property (nonatomic, retain) NSString *location_street;
+@property (nonatomic, retain) NSString *location_stateprovince;
+@property (nonatomic, retain) NSString *location_zippostal;
 
 @end

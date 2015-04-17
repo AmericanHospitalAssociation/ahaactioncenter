@@ -60,6 +60,7 @@
 
 - (void)loadCustomView
 {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if (_viewType == kViewTypeTwitter && _viewShouldRefresh) {
         self.title = @"Twitter";
         [hud showHUDWithMessage:@"Getting Tweets"];
@@ -168,13 +169,25 @@
     if (_viewType == kViewTypeActionAlert && _viewShouldRefresh) {
         self.title = @"Action Alerts";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"action-alert", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeLetter && _viewShouldRefresh) {
         self.title = @"Letters";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"letter", @"0"];
-        list = [action.feeds filteredArrayUsingPredicate:predicate];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
+        list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeContactUs && _viewShouldRefresh) {
@@ -187,36 +200,61 @@
     if (_viewType == kViewTypeBulletin && _viewShouldRefresh) {
         self.title = @"Special Bulletins";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"bulletin", @"0"];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
         list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeFactSheet && _viewShouldRefresh) {
         self.title = @"Fact Sheets";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"issue-papers", @"0"];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
         list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeAdvisory && _viewShouldRefresh) {
-        self.title = @"Advisory";
+        self.title = @"Advisories";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"advisory", @"0"];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
         list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeTestimony && _viewShouldRefresh) {
         self.title = @"Testimony";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"testimony", @"0"];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
         list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
     if (_viewType == kViewTypeAdditional && _viewShouldRefresh) {
         self.title = @"Additional Info";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ContentType == %@ and isHidden == %@", @"additional-info", @"0"];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"Date" ascending:NO];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"unix_date" ascending:NO];
         list = [[action.feeds filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+        NSData *data = [prefs objectForKey:@"feeds"];
+        NSArray *feeds = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (list.count == 0) {
+            list = feeds;
+        }
         [self.tableView reloadData];
     }
 }
@@ -518,7 +556,7 @@
             cell.timeLabel.text = @"all day/non-timed";
         }
         
-        cell.descLabel.text = item.desc;
+        cell.descLabel.text = @"";
         cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
@@ -736,6 +774,20 @@
         [action getAHAArticle:row[@"link"] completion:^(NSString *response, NSError *err) {
             [detailView loadHTMLString:response];
         }];
+        [detailView setButtonTitle:@"Close"];
+        detailView.sendButtonTapped = ^(){
+            [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+            }];
+        };
+        [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+    }
+    else if (_viewType == kViewTypeCalendar) {
+        NSArray *arr = list[indexPath.section];
+        AHACalendarItem *item = (AHACalendarItem *)arr[indexPath.row];
+        CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
+        [detailView setHeader:item.orig_title];
+        NSString *html = [NSString stringWithFormat:@"<center><h3>Location</h3>%@</br>%@ %@, %@</br><h3>Description</h3>%@</br></center>", item.location_street, item.location_city, item.location_stateprovince, item.location_zippostal, item.desc];
+        [detailView loadHTMLString:html];
         [detailView setButtonTitle:@"Close"];
         detailView.sendButtonTapped = ^(){
             [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){

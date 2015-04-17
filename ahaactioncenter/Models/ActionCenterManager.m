@@ -102,7 +102,7 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     NSDictionary *alerts = @{@"title" : @"Action Alerts", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *facts = @{@"title" : @"Fact Sheets", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *bulletins = @{@"title" : @"Special Bulletins", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
-    NSDictionary *advisories = @{@"title" : @"Advisory", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
+    NSDictionary *advisories = @{@"title" : @"Advisories", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *letters = @{@"title" : @"Letters", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *testimony = @{@"title" : @"Testimony", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
     NSDictionary *additional = @{@"title" : @"Additional Info", @"storyboard" : @"general", @"level" : @"3", @"image" : @"", @"items" : @[]};
@@ -261,6 +261,7 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
         AHAFeed *feed = [[AHAFeed alloc] initWithJSONData:jsonData];
          */
         _feeds = (NSArray *)dict[@"FEED_PAYLOAD"];
+        
         completion((NSArray *)dict[@"FEED_PAYLOAD"], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(nil, error);

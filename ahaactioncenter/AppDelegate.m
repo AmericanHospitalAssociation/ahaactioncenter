@@ -160,6 +160,12 @@
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     [action getAHAFeed:^(NSArray *feeds, NSError *error){
         //NSLog(@"Feed %@", feeds);
+        if (!error && feeds.count > 0) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            NSData *dataSave = [NSKeyedArchiver archivedDataWithRootObject:feeds];
+            [prefs setObject:dataSave forKey:@"feeds"];
+            [prefs synchronize];
+        }
     }];
 }
 
