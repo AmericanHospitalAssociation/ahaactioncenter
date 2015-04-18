@@ -17,6 +17,6 @@
 @property (strong, nonatomic) UISplitViewController *splitViewController;
 
 - (void)openSideMenu;
-
+- (void)toggleMenu;
 @end
 

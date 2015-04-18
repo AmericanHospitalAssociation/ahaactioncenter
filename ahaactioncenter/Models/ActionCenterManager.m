@@ -61,6 +61,17 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     return btn;
 }
 
++ (UIBarButtonItem *)splitButton {
+    FAKIonIcons *drag = [FAKIonIcons iconWithCode:@"\uf264" size:30];
+    [drag addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    
+    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithImage:[drag imageWithSize:CGSizeMake(30, 30)]
+                                                            style:UIBarButtonItemStylePlain
+                                                           target:self
+                                                           action:@selector(closeMenu)];
+    return btn;
+}
+
 + (UIBarButtonItem *)refreshButton {
     FAKIonIcons *refresh = [FAKIonIcons iconWithCode:@"\uf49a" size:30];
     [refresh addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
@@ -76,6 +87,13 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 {
     AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [ad openSideMenu];
+}
+
++ (void)closeMenu
+{
+    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    //UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+    [ad toggleMenu];
 }
 
 + (NSString *)formatDate:(NSString *)date {

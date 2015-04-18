@@ -50,6 +50,9 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
     }
+    else {
+        self.navigationItem.leftBarButtonItem = [ActionCenterManager splitButton];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

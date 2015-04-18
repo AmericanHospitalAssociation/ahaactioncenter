@@ -22,6 +22,9 @@
 #import "ActionCenterManager.h"
 
 @interface AppDelegate ()<MSDynamicsDrawerViewControllerDelegate>
+{
+    BOOL hideMenu;
+}
 
 @end
 
@@ -63,6 +66,8 @@
     MainViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"main"];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.toolbarHidden = NO;
+    
+    hideMenu = YES;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         _splitViewController = [[UISplitViewController alloc] init];
@@ -175,6 +180,16 @@
     [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
         //NSLog(@"calendar %@", calendar);
     }];
+}
+
+- (void)toggleMenu {
+    if (!hideMenu) {
+        [_splitViewController setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+    }
+    else {
+        [_splitViewController setPreferredDisplayMode:UISplitViewControllerDisplayModePrimaryHidden];
+    }
+    hideMenu = !hideMenu;
 }
 
 - (void)splitViewController:(UISplitViewController *)splitController

@@ -29,7 +29,12 @@
     
     self.title = @"WELCOME";
     
-    self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+    }
+    else {
+        self.navigationItem.leftBarButtonItem = [ActionCenterManager splitButton];
+    }
     FAKIonIcons *refresh = [FAKIonIcons iconWithCode:@"\uf49a" size:30];
     [refresh addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[refresh imageWithSize:CGSizeMake(30, 30)]

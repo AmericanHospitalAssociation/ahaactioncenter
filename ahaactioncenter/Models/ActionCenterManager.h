@@ -59,6 +59,7 @@ typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSErr
 + (NSArray *)menuItems;
 
 + (UIBarButtonItem *)dragButton;
++ (UIBarButtonItem *)splitButton;
 
 + (NSString *)formatDate:(NSString *)date;
 

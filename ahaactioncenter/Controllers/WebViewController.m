@@ -49,6 +49,9 @@
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
             }
+            else {
+                self.navigationItem.leftBarButtonItem = [ActionCenterManager splitButton];
+            }
         }
         if (_webType == kWebTypeWorkingWithCongress) {
             self.title = @"Working with Congress";
@@ -57,6 +60,9 @@
             });
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+            }
+            else {
+                self.navigationItem.leftBarButtonItem = [ActionCenterManager splitButton];
             }
         }
         if (_webType == kWebTypeFactSheet) {
