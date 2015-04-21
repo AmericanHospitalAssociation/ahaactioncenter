@@ -381,7 +381,7 @@
             vc.viewType = kViewTypeTestimony;
             vc.viewShouldRefresh = YES;
         }
-        if ([dict[@"title"] isEqualToString:@"Advisory"]) {
+        if ([dict[@"title"] isEqualToString:@"Advisories"]) {
             vc.viewType = kViewTypeAdvisory;
             vc.viewShouldRefresh = YES;
         }
