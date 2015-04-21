@@ -59,6 +59,13 @@
     [super viewDidAppear:YES];
     
     [self loadCustomView];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs objectForKey:@"lastCampaign"]) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:[[prefs objectForKey:@"lastCampaign"] integerValue]
+                                               inSection:0];
+        [self tableView:self.tableView didSelectRowAtIndexPath:path];
+        [prefs setObject:nil forKey:@"lastCampaign"];
+    }
 }
 
 - (void)loadCustomView
@@ -622,8 +629,9 @@
                         NSString *phone = [prefs stringForKey:@"phone"];
                         OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
                         if (prefix == nil || phone == nil) {
+                            [prefs setObject:[NSString stringWithFormat:@"%li",(long)indexPath.row]
+                                      forKey:@"lastCampaign"];
                             [self requiredInfo];
-                            //[prefs setObject:[] forKey:<#(NSString *)#>]
                             return;
                         }
                         else {
