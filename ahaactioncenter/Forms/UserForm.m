@@ -10,8 +10,7 @@
 
 @implementation UserForm
 
-- (NSDictionary *)prefixField
-{
+- (NSDictionary *)prefixField {
     return @{FXFormFieldKey: @"prefix",
              FXFormFieldTitle: NSLocalizedString(@"Prefix", nil),
              FXFormFieldOptions: @[NSLocalizedString(@"Mr.", nil),
@@ -24,19 +23,12 @@
              FXFormFieldDefaultValue : NSLocalizedString(@"Mr.", nil), };
 }
 
-- (NSDictionary *)phoneField
-{
+- (NSDictionary *)phoneField {
     return @{FXFormFieldKey: @"phone",
              FXFormFieldTitle: NSLocalizedString(@"Phone", nil),
              FXFormFieldType : FXFormFieldTypePhone,
-             FXFormFieldCell: [FXFormTextFieldCell class]};
+             FXFormFieldCell: [FXFormTextFieldCell class],
+             FXFormFieldFooter: @"This form is used to gather info that is required to get your legislators and to take action on a campaign."};
 }
-/*
-- (NSArray *)extraFields
-{
-    return @[@{FXFormFieldTitle: NSLocalizedString(@"Update Info", nil),
-               FXFormFieldHeader: @"",
-               FXFormFieldAction: @"updateInfo:"},];
-}
-*/
+
 @end

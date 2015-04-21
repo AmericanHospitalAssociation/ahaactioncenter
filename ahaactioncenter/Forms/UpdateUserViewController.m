@@ -58,7 +58,7 @@
 
 - (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
     UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Address Invalid"
-                                                                    message:@"Your address on file does not match U.S. Postal Service records.  Before sending a message to your legislator, please update your profile by visiting: www.aha.org/updateprofile"
+                                                                    message:@"Your address on file does not match U.S. Postal Service records.  Before sending a message to your legislator, please update your profile by visiting: www.aha.org/updateprofile. Once this is complete, please logout and log back in to try again."
                                                              preferredStyle:UIAlertControllerStyleAlert];
     [alert2 addAction:[UIAlertAction actionWithTitle:@"Done"
                                                style:UIAlertActionStyleCancel
