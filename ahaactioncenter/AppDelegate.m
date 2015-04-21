@@ -179,7 +179,9 @@
 
 - (void)checkForNotifications {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
-    if (action.alerts.count > 0) {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if (action.alerts.count > 0 && [prefs boolForKey:@"isLoggedIn"]) {
        double timeNow = (double)[[NSDate date] timeIntervalSince1970];
         NSPredicate *pred = [NSPredicate predicateWithFormat:@"(%f >= start_date_unix) AND (%f <= end_date_unix)", timeNow, timeNow];
         NSArray *filtered = [action.alerts filteredArrayUsingPredicate:pred];
