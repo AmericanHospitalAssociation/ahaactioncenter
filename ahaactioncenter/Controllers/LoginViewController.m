@@ -85,108 +85,111 @@
 
 - (IBAction)login:(id)sender {
     [hud showHUDWithMessage:@"Checking User"];
-    [action getOAMUser:_emailField.text
-          withPassword:_passwordField.text
-            completion:^(OAM *oam, NSError *err) {
-                if (!err) {
-                    /*if ([oam.status isEqualToString:@"found user"]) {
-                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                        [action verifyUser:_emailField.text
-                                   withZip:oam.zip
-                                completion:^(VoterVoice *voter, NSError *err) {
-                                    //NSLog(@"%@", voter);
-                                    if (!err) {
-                                        if (voter.response.body.count > 0) {
-                                            VoterVoiceBody *body = voter.response.body[0];
-                                            
-                                            [hud showHUDSucces:YES withMessage:@"Success"];
-                                            NSLog(@"Already there %@", [body.id stringValue]);
-                                            [prefs setBool:YES forKey:@"isLoggedIn"];
-                                            [prefs setBool:YES forKey:@"showTip"];
-                                            [prefs setBool:YES forKey:@"inVoterVoice"];
-                                            [prefs setObject:_emailField.text forKey:@"email"];
-                                            [prefs setObject:body.token forKey:@"token"];
-                                            [prefs setObject:[body.id stringValue] forKey:@"userId"];
-                                            [prefs synchronize];
-                                            [self dismissViewControllerAnimated:YES completion:nil];
-                                        }
-                                        else {
-                                            if (oam.phone != nil && oam.prefix != nil) {
-                                                [action createUser:oam
-                                                         withEmail:[prefs objectForKey:@"email"]
-                                                        completion:^(NSString *userId, NSString *token, NSError *err) {
-                                                            //NSLog(@"error %@ ----%@", userId, token);
-                                                            if (!err && userId != nil) {
-                                                                //VoterVoiceBody *body = voter.response.body[0];
-                                                                [hud showHUDSucces:YES withMessage:@"Success"];
-                                                                NSLog(@"created %@", userId);
-                                                                [prefs setBool:YES forKey:@"isLoggedIn"];
-                                                                [prefs setBool:YES forKey:@"inVoterVoice"];
-                                                                [prefs setBool:YES forKey:@"showTip"];
-                                                                [prefs setObject:_emailField.text forKey:@"email"];
-                                                                [prefs setObject:token forKey:@"token"];
-                                                                [prefs setObject:userId forKey:@"userId"];
-                                                                [prefs synchronize];
-                                                                [self dismissViewControllerAnimated:YES completion:nil];
-                                                            }
-                                                            else {
-                                                                [self bypassVoterVoice];
-                                                            }
-                                                        }];
-                                            }
-                                            else {
-                                                [self bypassVoterVoice];
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        [self bypassVoterVoice];
-                                    }
-                                }];
-                    } */
-                    if ([oam.status isEqualToString:@"found user"]) {
-                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                        [prefs setBool:YES forKey:@"isLoggedIn"];
-                        [prefs setBool:YES forKey:@"showTip"];
-                        [prefs setBool:NO forKey:@"inVoterVoice"];
-                        [prefs setObject:_emailField.text forKey:@"email"];
-                        [self dismissViewControllerAnimated:YES completion:nil];
-                        [hud showHUDSucces:YES withMessage:@"Success"];
-                        [prefs synchronize];
-                        
-                        AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                        //UIStoryboard *sb = [[ad.window rootViewController] storyboard];
-                        MainViewController *main = (MainViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"main"];
-                        UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:main];
-                        mainNav.toolbarHidden = NO;
-                        MenuViewController *menu = (MenuViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"menu"];
-                        UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menu];
-                        menuNav.toolbarHidden = NO;
-                        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+    if ([action isReachable]) {
+        [action getOAMUser:_emailField.text
+              withPassword:_passwordField.text
+                completion:^(OAM *oam, NSError *err) {
+                    if (!err) {
+                        /*if ([oam.status isEqualToString:@"found user"]) {
+                         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                         [action verifyUser:_emailField.text
+                         withZip:oam.zip
+                         completion:^(VoterVoice *voter, NSError *err) {
+                         //NSLog(@"%@", voter);
+                         if (!err) {
+                         if (voter.response.body.count > 0) {
+                         VoterVoiceBody *body = voter.response.body[0];
+                         
+                         [hud showHUDSucces:YES withMessage:@"Success"];
+                         NSLog(@"Already there %@", [body.id stringValue]);
+                         [prefs setBool:YES forKey:@"isLoggedIn"];
+                         [prefs setBool:YES forKey:@"showTip"];
+                         [prefs setBool:YES forKey:@"inVoterVoice"];
+                         [prefs setObject:_emailField.text forKey:@"email"];
+                         [prefs setObject:body.token forKey:@"token"];
+                         [prefs setObject:[body.id stringValue] forKey:@"userId"];
+                         [prefs synchronize];
+                         [self dismissViewControllerAnimated:YES completion:nil];
+                         }
+                         else {
+                         if (oam.phone != nil && oam.prefix != nil) {
+                         [action createUser:oam
+                         withEmail:[prefs objectForKey:@"email"]
+                         completion:^(NSString *userId, NSString *token, NSError *err) {
+                         //NSLog(@"error %@ ----%@", userId, token);
+                         if (!err && userId != nil) {
+                         //VoterVoiceBody *body = voter.response.body[0];
+                         [hud showHUDSucces:YES withMessage:@"Success"];
+                         NSLog(@"created %@", userId);
+                         [prefs setBool:YES forKey:@"isLoggedIn"];
+                         [prefs setBool:YES forKey:@"inVoterVoice"];
+                         [prefs setBool:YES forKey:@"showTip"];
+                         [prefs setObject:_emailField.text forKey:@"email"];
+                         [prefs setObject:token forKey:@"token"];
+                         [prefs setObject:userId forKey:@"userId"];
+                         [prefs synchronize];
+                         [self dismissViewControllerAnimated:YES completion:nil];
+                         }
+                         else {
+                         [self bypassVoterVoice];
+                         }
+                         }];
+                         }
+                         else {
+                         [self bypassVoterVoice];
+                         }
+                         }
+                         }
+                         else {
+                         [self bypassVoterVoice];
+                         }
+                         }];
+                         } */
+                        if ([oam.status isEqualToString:@"found user"]) {
+                            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                            [prefs setBool:YES forKey:@"isLoggedIn"];
+                            [prefs setBool:YES forKey:@"showTip"];
+                            [prefs setBool:NO forKey:@"inVoterVoice"];
+                            [prefs setObject:_emailField.text forKey:@"email"];
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                            [hud showHUDSucces:YES withMessage:@"Success"];
+                            [prefs synchronize];
+                            
                             AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                            UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
-                            [split setViewControllers:@[menuNav, mainNav]];
-                            //NSLog(@"ipad");
+                            //UIStoryboard *sb = [[ad.window rootViewController] storyboard];
+                            MainViewController *main = (MainViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"main"];
+                            UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:main];
+                            mainNav.toolbarHidden = NO;
+                            MenuViewController *menu = (MenuViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"menu"];
+                            UINavigationController *menuNav = [[UINavigationController alloc] initWithRootViewController:menu];
+                            menuNav.toolbarHidden = NO;
+                            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                                AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+                                [split setViewControllers:@[menuNav, mainNav]];
+                                //NSLog(@"ipad");
+                            }
+                            else {
+                                //NSLog(@"iphone");
+                                
+                                MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+                                [dynamic setPaneState:MSDynamicsDrawerPaneStateClosed];
+                                [dynamic setPaneViewController:mainNav animated:NO completion:nil];
+                            }
+                            
                         }
                         else {
-                            //NSLog(@"iphone");
-                            
-                            MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
-                            [dynamic setPaneState:MSDynamicsDrawerPaneStateClosed];
-                            [dynamic setPaneViewController:mainNav animated:NO completion:nil];
+                            [hud showHUDSucces:NO withMessage:@"Failed"];
+                            [self showAlert];
                         }
-                        
                     }
                     else {
                         [hud showHUDSucces:NO withMessage:@"Failed"];
                         [self showAlert];
                     }
-                }
-                else {
-                    [hud showHUDSucces:NO withMessage:@"Failed"];
-                    [self showAlert];
-                }
-            }];
+                }];
+    }
+    
 }
 
 - (void)showAlert

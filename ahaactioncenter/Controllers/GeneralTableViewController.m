@@ -623,6 +623,7 @@
                         OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
                         if (prefix == nil || phone == nil) {
                             [self requiredInfo];
+                            //[prefs setObject:[] forKey:<#(NSString *)#>]
                             return;
                         }
                         else {
