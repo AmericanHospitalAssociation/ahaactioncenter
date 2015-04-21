@@ -279,10 +279,11 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
         AHAFeed *feed = [[AHAFeed alloc] initWithJSONData:jsonData];
          */
         _feeds = (NSArray *)dict[@"FEED_PAYLOAD"];
+        _alerts = (NSArray *)dict[@"FEED_NOTIFICATIONS"];
         
-        completion((NSArray *)dict[@"FEED_PAYLOAD"], nil);
+        completion(_feeds, _alerts, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(nil, error);
+        completion(nil, nil, error);
     }];
     
     [operation start];

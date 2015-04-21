@@ -18,5 +18,7 @@
 
 - (void)openSideMenu;
 - (void)toggleMenu;
+- (void)getFeed;
+
 @end
 

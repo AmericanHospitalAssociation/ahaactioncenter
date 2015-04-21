@@ -108,7 +108,7 @@
                           ProgressHUD *hud = [ProgressHUD sharedInstance];
                           [hud showHUDWithMessage:@"Refreshing Content"];
                           ActionCenterManager *action2 = [ActionCenterManager sharedInstance];
-                          [action2 getAHAFeed:^(NSArray *feeds, NSError *error){
+                          [action2 getAHAFeed:^(NSArray *feeds, NSArray *alerts, NSError *error){
                               //NSLog(@"Feed %@", feeds);
                               [hud showHUDSucces:YES withMessage:@"Content Refreshed"];
                           }];

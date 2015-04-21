@@ -18,7 +18,8 @@
 #import "MSDynamicsDrawerStyler.h"
 #import "MenuViewController.h"
 #import "MainViewController.h"
-
+#import "KGModal.h"
+#import "CampaignDetailView.h"
 #import "ActionCenterManager.h"
 
 @interface AppDelegate ()<MSDynamicsDrawerViewControllerDelegate>
@@ -163,15 +164,37 @@
 - (void)getFeed
 {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
-    [action getAHAFeed:^(NSArray *feeds, NSError *error){
+    [action getAHAFeed:^(NSArray *feeds, NSArray *alerts, NSError *error){
         //NSLog(@"Feed %@", feeds);
         if (!error && feeds.count > 0) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             NSData *dataSave = [NSKeyedArchiver archivedDataWithRootObject:feeds];
             [prefs setObject:dataSave forKey:@"feeds"];
             [prefs synchronize];
+            [self checkForNotifications];
         }
     }];
+}
+
+- (void)checkForNotifications {
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    if (action.alerts.count > 0) {
+       double timeNow = (double)[[NSDate date] timeIntervalSince1970];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"(%f >= start_date_unix) AND (%f <= end_date_unix)", timeNow, timeNow];
+        NSArray *filtered = [action.alerts filteredArrayUsingPredicate:pred];
+        if (filtered.count > 0) {
+            NSDictionary *alert = (NSDictionary *)filtered[0];
+            CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
+            [detailView setHeader:@"Alert"];
+            [detailView loadHTMLString:alert[@"message"]];
+            [detailView setButtonTitle:@"Close"];
+            detailView.sendButtonTapped = ^(){
+                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                }];
+            };
+            [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+        }
+    }
 }
 
 - (void)testCalendar
@@ -222,8 +245,10 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
+
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [self getFeed];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

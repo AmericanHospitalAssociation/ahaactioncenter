@@ -20,7 +20,7 @@
 
 typedef void (^CompletionAHANews)(NSArray *news, NSError *error);
 typedef void (^CompletionAHALink)(NSString *link, NSError *error);
-typedef void (^CompletionAHAFeed)(NSArray *feeds, NSError *error);
+typedef void (^CompletionAHAFeed)(NSArray *feeds, NSArray *alerts, NSError *error);
 typedef void (^CompletionAHACalendar)(AHACalendar *calendar, NSError *error);
 typedef void (^CompletionOAM)(OAM *oam, NSError *error);
 typedef void (^CompletionVoterVoice)(VoterVoice *voterVoice, NSError *error);
@@ -28,7 +28,7 @@ typedef void (^CompletionVoterVoiceBody)(NSDictionary *dict, NSError *error);
 typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSError *error);
 //typedef void (^CompletionContactBlock)(Contact *contact, NSError *error);
 
-@property(nonatomic, retain)NSArray *feeds;
+@property(nonatomic, retain)NSArray *feeds, *alerts;
 
 ///------------------------------------------------
 /// @name Getting Contact info
