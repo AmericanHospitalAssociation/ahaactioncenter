@@ -189,6 +189,18 @@
                     }
                 }];
     }
+    else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Internet"
+                                                                       message:@"Please check your internet connection and try again."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:^void (UIAlertAction *action)
+                           {
+                               
+                           }]];
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    }
     
 }
 

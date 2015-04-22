@@ -191,8 +191,8 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
 }
 
 - (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
-    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Address Invalid"
-                                                                   message:@"Your address on file does not match U.S. Postal Service records.  Before sending a message to your legislator, please update your profile by visiting: www.aha.org/updateprofile"
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Account Error"
+                                                                   message:@"There is something wrong with your AHA account. Please contact AHA for details"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert2 addAction:[UIAlertAction actionWithTitle:@"Done"
                                               style:UIAlertActionStyleCancel

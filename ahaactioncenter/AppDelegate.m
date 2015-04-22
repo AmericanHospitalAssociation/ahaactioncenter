@@ -180,22 +180,27 @@
 - (void)checkForNotifications {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
+    NSLog(@"last id %ld", (long)[prefs integerForKey:@"lastNotification"]);
     if (action.alerts.count > 0 && [prefs boolForKey:@"isLoggedIn"]) {
        double timeNow = (double)[[NSDate date] timeIntervalSince1970];
         NSPredicate *pred = [NSPredicate predicateWithFormat:@"(%f >= start_date_unix) AND (%f <= end_date_unix)", timeNow, timeNow];
         NSArray *filtered = [action.alerts filteredArrayUsingPredicate:pred];
         if (filtered.count > 0) {
             NSDictionary *alert = (NSDictionary *)filtered[0];
-            CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
-            [detailView setHeader:@"Alert"];
-            [detailView loadHTMLString:alert[@"message"]];
-            [detailView setButtonTitle:@"Close"];
-            detailView.sendButtonTapped = ^(){
-                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-                }];
-            };
-            [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+            NSString *lastNotification = [prefs objectForKey:@"lastNotification"];
+            if (lastNotification ==  nil || ![lastNotification isEqualToString:alert[@"id"]]) {
+                CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
+                [detailView setHeader:@""];
+                [detailView loadHTMLString:alert[@"message"]];
+                [detailView setButtonTitle:@"Close"];
+                detailView.sendButtonTapped = ^(){
+                    [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                    }];
+                };
+                [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+                [prefs setInteger:[alert[@"id"] integerValue] forKey:@"lastNotification"];
+                [prefs synchronize];
+            }
         }
     }
 }

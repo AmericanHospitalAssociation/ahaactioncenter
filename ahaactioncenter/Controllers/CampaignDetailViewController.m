@@ -211,6 +211,11 @@
 - (void)sendContactUsMessage {
     NSString *messageText, *from;
     
+    if (![action isReachable]) {
+        [self showNoInternet];
+        return;
+    }
+    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
     messageText = [[NSString stringWithFormat:@"%@\n\nSent from %@ %@\n%@", _message.text, oam.first_name, oam.last_name, oam.org_name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -260,6 +265,20 @@
                               [dynamic setPaneViewController:mainNav animated:YES completion:nil];
                           }
 
+                      }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showNoInternet {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Internet"
+                                                                   message:@"Please check your internet connection and try again"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          
                       }]];
     [self presentViewController:alert animated:YES completion:nil];
 }
