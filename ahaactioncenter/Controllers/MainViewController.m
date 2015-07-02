@@ -16,9 +16,12 @@
 #import "UpdateUserViewController.h"
 #import "PDFKBasicPDFViewer.h"
 #import "PDFKDocument.h"
+#import <MediaPlayer/MediaPlayer.h>
 //#import "ReaderFileViewController.h"
 
 @interface MainViewController ()<CMPopTipViewDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *mainLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *bgImage;
 
 @end
 
@@ -28,6 +31,13 @@
     [super viewDidLoad];
     
     self.title = @"WELCOME";
+    _mainLabel.textColor = kAHABlue;
+    _bgImage.image = [UIImage imageNamed:@"capital_white_fade_bg.jpg"];
+    [self.view sendSubviewToBack:_bgImage];
+    //UIImageView *iv = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    //iv.image = [UIImage imageNamed:@"capital_white_fade_bg"];
+    //iv.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    //[self.view addSubview:iv];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
@@ -35,12 +45,21 @@
     else {
         self.navigationItem.leftBarButtonItem = [ActionCenterManager splitButton];
     }
+    FAKFontAwesome *question = [FAKFontAwesome iconWithCode:@"\uf059" size:30];
+    [question addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIBarButtonItem *questionBtn = [[UIBarButtonItem alloc] initWithImage:[question imageWithSize:CGSizeMake(30, 30)]
+                                                                   style:UIBarButtonItemStyleDone
+                                                                  target:self
+                                                                  action:@selector(showTutorial:)];
+    
     FAKIonIcons *refresh = [FAKIonIcons iconWithCode:@"\uf49a" size:30];
     [refresh addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[refresh imageWithSize:CGSizeMake(30, 30)]
+    UIBarButtonItem *refreshBtn = [[UIBarButtonItem alloc] initWithImage:[refresh imageWithSize:CGSizeMake(30, 30)]
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
                                                                              action:@selector(refresh:)];
+    
+    self.navigationItem.rightBarButtonItems = @[questionBtn, refreshBtn];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -72,6 +91,31 @@
     }
     
     
+}
+
+- (void)showTutorial:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"View Tutorial"
+                                                                   message:@""
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"NO"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^void (UIAlertAction *action)
+                      {
+
+                      }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"YES"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^void (UIAlertAction *action)
+                      {
+                          NSURL *url = [NSURL URLWithString:
+                                        @"https://aha.box.com/shared/static/1riee2bbvgsr6iox003xv4l9b5546275.mp4"];
+                          MPMoviePlayerViewController *c = [[MPMoviePlayerViewController alloc]
+                                                            initWithContentURL:url];
+                          
+                          [self.navigationController presentMoviePlayerViewControllerAnimated:c];
+                          
+                      }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)refresh:(id)sender {

@@ -94,6 +94,7 @@
                                           }
                                           list = items;
                                           [self.tableView reloadData];
+                                          sleep(1);
                                           [hud showHUDSucces:YES withMessage:@"Loaded"];
                                       } errorBlock:^(NSError *error) {
                                           
@@ -102,8 +103,8 @@
         }];
     }
     if (_viewType == kViewTypeCalendar && _viewShouldRefresh) {
-        self.title = @"Calendar";
-        [hud showHUDWithMessage:@"Loading Calendar"];
+        self.title = @"Events";
+        [hud showHUDWithMessage:@"Loading Events"];
         NSMutableArray *items = [[NSMutableArray alloc] init];
         NSMutableArray *set = [[NSMutableArray alloc] init];
         [action getAHACalendar:^(AHACalendar *calendar, NSError *error){
@@ -170,8 +171,9 @@
         [action getAHANews:^(NSArray *news, NSError *error) {
             if (!error) {
                 list = news;
-                [hud showHUDSucces:YES withMessage:@"Loaded"];
                 [self.tableView reloadData];
+                sleep(0.5);
+                [hud showHUDSucces:YES withMessage:@"Loaded"];
                 _viewShouldRefresh = NO;
             }
         }];
@@ -396,7 +398,11 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, self.view.frame.size.width - 5, 22.0f)];
         [titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
-        titleLabel.text = sectionName;
+        NSString *str;
+        str = [sectionName stringByReplacingOccurrencesOfString:@"st" withString:@""];
+        str = [str stringByReplacingOccurrencesOfString:@"th" withString:@""];
+        str = [str stringByReplacingOccurrencesOfString:@"rd" withString:@""];
+        titleLabel.text = str;
         [v addSubview:titleLabel];
         return v;
     }
@@ -649,7 +655,7 @@
                                         }
                                         else {
                                             [hud showHUDSucces:NO withMessage:@"Failed"];
-                                            [action showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
+                                            [action showAlert:err.description withMessage:@""];
                                         }
                                     }];
                             return;

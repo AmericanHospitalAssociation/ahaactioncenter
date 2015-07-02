@@ -42,8 +42,9 @@
             if (!error) {
                 list = votervoice.response.body;
                 voter = votervoice;
-                [hud showHUDSucces:YES withMessage:@"Loaded"];
+                
                 [self.tableView reloadData];
+                [hud showHUDSucces:YES withMessage:@"Loaded"];
             }
         }];
     }

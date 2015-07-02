@@ -40,22 +40,28 @@
     [Parse setApplicationId:kParseAppId
                   clientKey:kParseClientKey];
     // Register for Push Notitications
+    
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
                                                     UIUserNotificationTypeBadge |
                                                     UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
                                                                              categories:nil];
-    [application registerUserNotificationSettings:settings];
-    [application registerForRemoteNotifications];
     
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        [application registerUserNotificationSettings:settings];
+    } else {
+        //[application registerForRemoteNotificationTypes:<#(UIRemoteNotificationType)#>
+    }
+    [application registerForRemoteNotifications];
+
     //Setup Global Colors
     [[UINavigationBar appearance] setBarTintColor:kAHABlue];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
-    [[UIToolbar appearance] setTintColor:[UIColor whiteColor]]; // this will change the back button tint
-    [[UIToolbar appearance] setBarTintColor:kAHARed];
-    //[[UIToolbar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[UIToolbar appearance] setTintColor:kAHARed]; // this will change the back button tint
+    //[[UIToolbar appearance] setBarTintColor:[UIColor lightGrayColor]];
+    //[[UIToolbar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : kAHARed}];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
@@ -98,6 +104,13 @@
     [_window makeKeyAndVisible];
     
     return YES;
+}
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    NSUInteger orientations = UIInterfaceOrientationMaskAll;
+    
+    return orientations;
 }
 
 - (void)testVoterVoice
@@ -173,6 +186,7 @@
             [prefs synchronize];
             
         }
+        //NSLog(@"feeds %@", action.alerts);
         [self checkForNotifications];
     }];
 }
@@ -180,14 +194,18 @@
 - (void)checkForNotifications {
     ActionCenterManager *action = [ActionCenterManager sharedInstance];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSLog(@"last id %ld", (long)[prefs integerForKey:@"lastNotification"]);
+    //[prefs setObject:nil forKey:@"lastNotification"];
+    NSLog(@"last id %@", [prefs objectForKey:@"lastNotification"]);
     if (action.alerts.count > 0 && [prefs boolForKey:@"isLoggedIn"]) {
        double timeNow = (double)[[NSDate date] timeIntervalSince1970];
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"(%f >= start_date_unix) AND (%f <= end_date_unix)", timeNow, timeNow];
-        NSArray *filtered = [action.alerts filteredArrayUsingPredicate:pred];
-        if (filtered.count > 0) {
-            NSDictionary *alert = (NSDictionary *)filtered[0];
-            NSString *lastNotification = [prefs objectForKey:@"lastNotification"];
+        //NSPredicate *pred = [NSPredicate predicateWithFormat:@"(%f <= end_date_unix)", timeNow];
+        NSDictionary *alert = (NSDictionary *)action.alerts[0];
+         NSLog(@"alert %@", alert[@"id"]);
+        NSString *lastNotification = [prefs objectForKey:@"lastNotification"];
+        //NSArray *filtered = [action.alerts filteredArrayUsingPredicate:pred];
+        if ([alert[@"end_date_unix"] doubleValue] >=  timeNow && ![lastNotification isEqualToString:alert[@"id"]]) {
+            //NSDictionary *alert = (NSDictionary *)filtered[0];
+            
             if (lastNotification ==  nil || ![lastNotification isEqualToString:alert[@"id"]]) {
                 CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
                 [detailView setHeader:@""];
@@ -198,7 +216,7 @@
                     }];
                 };
                 [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
-                [prefs setInteger:[alert[@"id"] integerValue] forKey:@"lastNotification"];
+                [prefs setObject:alert[@"id"] forKey:@"lastNotification"];
                 [prefs synchronize];
             }
         }

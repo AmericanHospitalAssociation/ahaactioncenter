@@ -57,16 +57,23 @@
 }
 
 - (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
-    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Address Invalid"
-                                                                    message:@"Your address on file does not match U.S. Postal Service records.  Before sending a message to your legislator, please update your profile by visiting: www.aha.org/updateprofile. Once this is complete, please logout and log back in to try again."
+    NSString *str;
+    if ([alert containsString:@"address"]) {
+        str = @"Your address on file does not match U.S. Postal Service records. Before sending a message to your legislator, please contact AHA to update your address.";
+    }
+    else {
+        str = @"There is something wrong with your AHA account. Please contact AHA for details";
+    }
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Account Error"
+                                                                    message:str
                                                              preferredStyle:UIAlertControllerStyleAlert];
-    [alert2 addAction:[UIAlertAction actionWithTitle:@"Done"
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"OK"
                                                style:UIAlertActionStyleCancel
                                              handler:^void (UIAlertAction *action)
                        {
                            
                        }]];
-    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Profile"
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Contact AHA"
                                                style:UIAlertActionStyleDefault
                                              handler:^void (UIAlertAction *action)
                        {
@@ -123,7 +130,8 @@
                 }
                 else {
                     [hud showHUDSucces:NO withMessage:@"Failed"];
-                    [self showAlert:@"Can't create Account" withMessage:@"There is something wrong with your AHA account. Please contact AHA for details"];
+                    NSLog(@"error ----------%@", err.description);
+                    [self showAlert:err.description withMessage:@""];
                 }
             }];
 }

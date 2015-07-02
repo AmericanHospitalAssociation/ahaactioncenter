@@ -28,6 +28,12 @@
 		3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8083E1AD20CC300FC8584 /* MainViewController.m */; };
 		3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ED95A861AD0F231003269D8 /* RATableViewCell.m */; };
 		3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ED95A871AD0F231003269D8 /* RATableViewCell.xib */; };
+		5BDA68C51B44859F0073A591 /* capital_white_fade_bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BDA68C41B44859F0073A591 /* capital_white_fade_bg.jpg */; };
+		5BDA68C71B4573200073A591 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDA68C61B4573200073A591 /* AVFoundation.framework */; };
+		5BDA68C91B4573940073A591 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDA68C81B4573940073A591 /* MediaPlayer.framework */; };
+		5BDAAB9C1B458B0D0086C5B0 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDAAB991B458B0D0086C5B0 /* TwitterCore.framework */; };
+		5BDAAB9D1B458B0D0086C5B0 /* DigitsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDAAB9A1B458B0D0086C5B0 /* DigitsKit.framework */; };
+		5BDAAB9E1B458B0D0086C5B0 /* DigitsKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDAAB9B1B458B0D0086C5B0 /* DigitsKitResources.bundle */; };
 		61553F901AD6F353008D5BE4 /* RootForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F8C1AD6F353008D5BE4 /* RootForm.m */; };
 		61553F961AD6F66A008D5BE4 /* UpdateUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F921AD6F66A008D5BE4 /* UpdateUserViewController.m */; };
 		61553F971AD6F66A008D5BE4 /* UserForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 61553F941AD6F66A008D5BE4 /* UserForm.m */; };
@@ -120,6 +126,12 @@
 		3ED95A851AD0F231003269D8 /* RATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RATableViewCell.h; path = Views/RATableViewCell.h; sourceTree = "<group>"; };
 		3ED95A861AD0F231003269D8 /* RATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RATableViewCell.m; path = Views/RATableViewCell.m; sourceTree = "<group>"; };
 		3ED95A871AD0F231003269D8 /* RATableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RATableViewCell.xib; path = Views/RATableViewCell.xib; sourceTree = "<group>"; };
+		5BDA68C41B44859F0073A591 /* capital_white_fade_bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = capital_white_fade_bg.jpg; path = ../../../Downloads/capital_white_fade_bg.jpg; sourceTree = "<group>"; };
+		5BDA68C61B4573200073A591 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		5BDA68C81B4573940073A591 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		5BDAAB991B458B0D0086C5B0 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
+		5BDAAB9A1B458B0D0086C5B0 /* DigitsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DigitsKit.framework; sourceTree = "<group>"; };
+		5BDAAB9B1B458B0D0086C5B0 /* DigitsKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = DigitsKitResources.bundle; path = DigitsKit.framework/Versions/A/Resources/DigitsKitResources.bundle; sourceTree = "<group>"; };
 		61553F8C1AD6F353008D5BE4 /* RootForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootForm.m; path = Forms/RootForm.m; sourceTree = "<group>"; };
 		61553F8D1AD6F353008D5BE4 /* RootForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootForm.h; path = Forms/RootForm.h; sourceTree = "<group>"; };
 		61553F921AD6F66A008D5BE4 /* UpdateUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateUserViewController.m; path = Forms/UpdateUserViewController.m; sourceTree = "<group>"; };
@@ -214,9 +226,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BDA68C91B4573940073A591 /* MediaPlayer.framework in Frameworks */,
+				5BDA68C71B4573200073A591 /* AVFoundation.framework in Frameworks */,
+				5BDAAB9D1B458B0D0086C5B0 /* DigitsKit.framework in Frameworks */,
 				3E373DEC1AD0C85E004DE20B /* Twitter.framework in Frameworks */,
 				3E373DEA1AD0C855004DE20B /* Social.framework in Frameworks */,
 				3E373DE51AD0AFE8004DE20B /* StoreKit.framework in Frameworks */,
+				5BDAAB9C1B458B0D0086C5B0 /* TwitterCore.framework in Frameworks */,
 				3E373DDE1AD0AD80004DE20B /* Crashlytics.framework in Frameworks */,
 				A086770766F0983F6765C99A /* libPods.a in Frameworks */,
 				3E373DDF1AD0AD80004DE20B /* Fabric.framework in Frameworks */,
@@ -237,6 +253,7 @@
 		3E1A1E571AD07C2B00223873 = {
 			isa = PBXGroup;
 			children = (
+				5BDA68C41B44859F0073A591 /* capital_white_fade_bg.jpg */,
 				3E1A1E621AD07C2B00223873 /* ahaactioncenter */,
 				3E1A1E7C1AD07C2B00223873 /* ahaactioncenterTests */,
 				3E1A1E611AD07C2B00223873 /* Products */,
@@ -447,6 +464,11 @@
 		C888BD7119310D63E5238525 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5BDAAB9B1B458B0D0086C5B0 /* DigitsKitResources.bundle */,
+				5BDAAB9A1B458B0D0086C5B0 /* DigitsKit.framework */,
+				5BDAAB991B458B0D0086C5B0 /* TwitterCore.framework */,
+				5BDA68C81B4573940073A591 /* MediaPlayer.framework */,
+				5BDA68C61B4573200073A591 /* AVFoundation.framework */,
 				3E373DEB1AD0C85E004DE20B /* Twitter.framework */,
 				3E373DE91AD0C855004DE20B /* Social.framework */,
 				3E373DE01AD0AF3C004DE20B /* TwitterKit.framework */,
@@ -552,11 +574,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BDAAB9E1B458B0D0086C5B0 /* DigitsKitResources.bundle in Resources */,
 				3E373DE31AD0AF3C004DE20B /* TwitterKitResources.bundle in Resources */,
 				3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */,
 				3E1A1E6F1AD07C2B00223873 /* Main.storyboard in Resources */,
 				3E1A1E741AD07C2B00223873 /* LaunchScreen.xib in Resources */,
 				3E1A1E711AD07C2B00223873 /* Images.xcassets in Resources */,
+				5BDA68C51B44859F0073A591 /* capital_white_fade_bg.jpg in Resources */,
 				61F103961AD46F0200547571 /* DirectoryCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -808,7 +832,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3590acba-a5af-41e4-89fa-db8525b00d54";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -818,8 +842,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: American Hospital Association (JE6NFYVN6T)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: American Hospital Association (JE6NFYVN6T)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -828,7 +852,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4935affd-bad6-44e6-8723-3d20c3cf6f6c";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

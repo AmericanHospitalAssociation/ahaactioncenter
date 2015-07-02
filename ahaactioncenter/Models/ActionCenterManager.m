@@ -136,7 +136,7 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     NSDictionary *twHospitals = @{@"title" : @"@AHAhospitals", @"storyboard" : @"general", @"level" : @"2", @"image" : @"", @"items" : @[]};
     
     NSDictionary *home = @{@"title" : @"Home", @"storyboard" : @"main", @"level" : @"1", @"image" : @"\uf448", @"items" : @[]};
-    NSDictionary *action = @{@"title" : @"Action Center", @"storyboard" : @"", @"level" : @"1", @"image" : @"\uf101", @"items" : @[latest, takeAction]};
+    NSDictionary *action = @{@"title" : @"Action Center", @"storyboard" : @"", @"level" : @"1", @"image" : @"\uf101", @"items" : @[takeAction, latest,]};
     NSDictionary *events = @{@"title" : @"Events", @"storyboard" : @"general", @"level" : @"1", @"image" : @"\uf3f4", @"items" : @[]};
     NSDictionary *twitter = @{@"title" : @"Twitter Feeds", @"storyboard" : @"", @"level" : @"1", @"image" : @"\uf243", @"items" : @[twAdvocacy, twHospitals]};
     NSDictionary *news = @{@"title" : @"AHA News", @"storyboard" : @"general", @"level" : @"1", @"image" : @"\uf472", @"items" : @[]};
@@ -190,17 +190,31 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     return error;
 }
 
+- (NSError *)accountError:(NSString *)descr {
+    NSMutableDictionary* details = [NSMutableDictionary dictionary];
+    [details setValue:descr forKey:NSLocalizedDescriptionKey];
+    NSError *error = [NSError errorWithDomain:@"aha.org" code:500 userInfo:details];
+    return error;
+}
+
 - (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
+    NSString *str;
+    if ([alert containsString:@"address"]) {
+        str = @"Your address on file does not match U.S. Postal Service records. Before sending a message to your legislator, please contact AHA to update your address.";
+    }
+    else {
+        str = @"There is something wrong with your AHA account. Please contact AHA for details";
+    }
     UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Account Error"
-                                                                   message:@"There is something wrong with your AHA account. Please contact AHA for details"
+                                                                   message:str
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    [alert2 addAction:[UIAlertAction actionWithTitle:@"Done"
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"OK"
                                               style:UIAlertActionStyleCancel
                                             handler:^void (UIAlertAction *action)
                       {
                           
                       }]];
-    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Profile"
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Contact AHA"
                                               style:UIAlertActionStyleDefault
                                             handler:^void (UIAlertAction *action)
                       {
@@ -463,14 +477,14 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error];
         
         long status = (long)[dict valueForKeyPath:@"response.status"];
-        NSLog(@"dict %@  %ld", dict, status);
+        //NSLog(@"dict %@  %ld", dict, status);
         if ([[dict valueForKeyPath:@"response.body"] isKindOfClass:[NSString class]]) {
-            NSLog(@"body %@", [dict valueForKeyPath:@"response.body"]);
-            completion(nil, nil, [self accountError]);
+            NSLog(@"body1 %@", [dict valueForKeyPath:@"response.body"]);
+            completion(nil, nil, [self accountError:[dict valueForKeyPath:@"response.body"]]);
         }
         else {
             if ([dict valueForKeyPath:@"response.body.userId"] != nil && [dict valueForKeyPath:@"response.body.userToken"] != nil) {
-                NSLog(@"-----------------asdsadsadasdasdsa------");
+                //NSLog(@"-----------------asdsadsadasdasdsa------");
                 NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                 [prefs setBool:YES forKey:@"isLoggedIn"];
                 [prefs setBool:YES forKey:@"inVoterVoice"];
@@ -481,7 +495,8 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
                 completion((NSString *)[dict valueForKeyPath:@"response.body.userId"], [dict valueForKeyPath:@"response.body.userToken"], nil);
             }
             else {
-                completion(nil, nil, [self accountError]);
+                NSLog(@"body2 %@", [dict valueForKeyPath:@"response.body"]);
+                completion(nil, nil, [self accountError:[dict valueForKeyPath:@"response.body"]]);
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -639,12 +654,14 @@ static NSString *VoterVoiceGetProfile = @"http://54.245.255.190/p/action_center/
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:20.0];
-    NSLog(@"%@", [self encodeURL:strUrl]);
+    //NSLog(@"%@", [self encodeURL:strUrl]);
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         VoterVoice *voter = [[VoterVoice alloc] initWithJSONData:responseObject];
-        
+        NSError *error = nil;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error];
+        NSLog(@"-------%@",dict);
         completion(voter, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(nil, error);
