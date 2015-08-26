@@ -13,5 +13,7 @@
 @interface UpdateUserViewController : UITableViewController <FXFormControllerDelegate>
 
 @property(nonatomic, strong)FXFormController *formController;
+@property(nonatomic, retain)NSArray *excludeList;
+@property(nonatomic, assign)BOOL showCancel, validateAddress;
 
 @end

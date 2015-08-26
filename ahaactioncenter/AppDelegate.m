@@ -40,6 +40,18 @@
     [Parse setApplicationId:kParseAppId
                   clientKey:kParseClientKey];
     // Register for Push Notitications
+    if (application.applicationState != UIApplicationStateBackground) {
+        // Track an app open here if we launch with a push, unless
+        // "content_available" was used to trigger a background push (introduced
+        // in iOS 7). In that case, we skip tracking here to avoid double
+        // counting the app-open.
+        BOOL preBackgroundPush = ![application respondsToSelector:@selector(backgroundRefreshStatus)];
+        BOOL oldPushHandlerOnly = ![self respondsToSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
+        BOOL noPushPayload = ![launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (preBackgroundPush || oldPushHandlerOnly || noPushPayload) {
+            [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+        }
+    }
     
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
                                                     UIUserNotificationTypeBadge |
@@ -53,6 +65,8 @@
         //[application registerForRemoteNotificationTypes:<#(UIRemoteNotificationType)#>
     }
     [application registerForRemoteNotifications];
+    
+    
 
     //Setup Global Colors
     [[UINavigationBar appearance] setBarTintColor:kAHABlue];
@@ -100,6 +114,7 @@
         _window.rootViewController = _dynamicsDrawerViewController;
     }
     [self getFeed];
+    [self checkRequired];
     
     [_window makeKeyAndVisible];
     
@@ -172,6 +187,25 @@
         [prefs setBool:NO forKey:@"inVoterVoice"];
     }
     [prefs synchronize];
+}
+
+- (void)checkAddress {
+     ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    [action verifyAddress:@"155 N Wacker Dr" withZip:@"60606" andCountry:@"US" completion:^(NSDictionary *dict, NSError *err) {
+        //NSLog(@"-----------------------%@----------------------", voter.response);
+    }];
+}
+
+- (void)checkRequired {
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
+    [action getRequiredFields:@"E" withTargetId:@"40410" completion:^(NSDictionary *dict, NSError *err) {
+        NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body"];
+        for (NSDictionary *d in arr) {
+            if ([d[@"deliveryMethod"] isEqualToString:@"webform"]) {
+                NSLog(@"%@", d[@"requiredUserFields"]);
+            }
+        }
+    }];
 }
 
 - (void)getFeed
@@ -289,12 +323,17 @@
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    currentInstallation.channels = @[ @"global" ];
+    currentInstallation.channels = @[ @"global"];
     [currentInstallation saveInBackground];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [PFPush handlePush:userInfo];
+    if (application.applicationState == UIApplicationStateInactive) {
+        // The application was just brought from the background to the foreground,
+        // so we consider the app as having been "opened by a push notification."
+        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+    }
 }
 
 #pragma mark - Side Menu Methods

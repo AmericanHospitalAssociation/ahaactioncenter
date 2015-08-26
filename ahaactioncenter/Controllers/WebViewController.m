@@ -25,6 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"------------------");
     action = [ActionCenterManager sharedInstance];
     hud = [ProgressHUD sharedInstance];
     _webView.delegate = self;

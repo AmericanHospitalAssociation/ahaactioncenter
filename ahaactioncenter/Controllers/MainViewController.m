@@ -11,7 +11,7 @@
 #import "FontAwesomeKit.h"
 #import "ActionCenterManager.h"
 #import "ProgressHUD.h"
-#import "CMPopTipView.h"
+//#import "CMPopTipView.h"
 #import "Constants.h"
 #import "UpdateUserViewController.h"
 #import "PDFKBasicPDFViewer.h"
@@ -19,7 +19,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 //#import "ReaderFileViewController.h"
 
-@interface MainViewController ()<CMPopTipViewDelegate>
+@interface MainViewController ()//<CMPopTipViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *mainLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *bgImage;
 
@@ -81,6 +81,7 @@
     }
     
     if ([prefs boolForKey:@"showTip"] && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        /*
         CMPopTipView *tipView = [[CMPopTipView alloc] initWithMessage:@"Tap here to see menu items"];
         tipView.delegate = self;
         tipView.backgroundColor = kAHABlue;
@@ -88,9 +89,16 @@
         [tipView presentPointingAtBarButtonItem:self.navigationItem.leftBarButtonItem animated:YES];
         [prefs setBool:NO forKey:@"showTip"];
         [prefs synchronize];
+         */
     }
     
     
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    // Do view manipulation here.
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 - (void)showTutorial:(id)sender {
@@ -163,11 +171,12 @@
 }
 
 #pragma mark - CMPopTipViewDelegate methods
+/*
 - (void)popTipViewWasDismissedByUser:(CMPopTipView *)popTipView
 {
     
 }
-
+*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

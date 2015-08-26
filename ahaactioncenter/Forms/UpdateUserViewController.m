@@ -11,6 +11,8 @@
 #import "UserForm.h"
 #import "ActionCenterManager.h"
 #import "ProgressHUD.h"
+#import "WebViewController.h"
+#import "AppDelegate.h"
 
 @interface UpdateUserViewController ()
 
@@ -28,11 +30,22 @@
     self.formController.tableView = self.tableView;
     
     self.formController.delegate = self;
-    self.formController.form = [[UserForm alloc] init];
+    UserForm *form = [[UserForm alloc] init];
+    form.excludedList = _excludeList;
+    self.formController.form = form;
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissModalViewControllerAnimated:)];
+    if (_showCancel) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissModalViewControllerAnimated:)];
+    }
+    else {
+        self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
+    }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(updateInfo:)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Update"
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(updateInfo:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -59,7 +72,7 @@
 - (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
     NSString *str;
     if ([alert containsString:@"address"]) {
-        str = @"Your address on file does not match U.S. Postal Service records. Before sending a message to your legislator, please contact AHA to update your address.";
+        str = @"Your address on file does not match U.S. Postal Service records. Please update your address";
     }
     else {
         str = @"There is something wrong with your AHA account. Please contact AHA for details";
@@ -77,7 +90,19 @@
                                                style:UIAlertActionStyleDefault
                                              handler:^void (UIAlertAction *action)
                        {
-                           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.aha.org/updateprofile"]];
+                           //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.aha.org/updateprofile"]];
+                           ActionCenterManager *acm = [ActionCenterManager sharedInstance];
+                           acm.contacAHA = YES;
+                           NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                           [prefs setObject:@"" forKey:@"lastCampaign"];
+                           [prefs synchronize];
+                           [self dismissViewControllerAnimated:YES completion:^(){
+                               if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                                   [[NSNotificationCenter defaultCenter] postNotificationName: @"showContact" object:nil userInfo:nil];
+                               }
+                               AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                               [ad openSideMenu];
+                           }];
                        }]];
     [self presentViewController:alert2 animated:YES completion:nil];
 }
@@ -87,53 +112,106 @@
     NSLog(@"update");
     
     UserForm *form = (UserForm *)self.formController.form;
+    ProgressHUD *hud = [ProgressHUD sharedInstance];
+    ActionCenterManager *action = [ActionCenterManager sharedInstance];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
     
-    oam.phone = form.phone;
-    oam.prefix = form.prefix;
-    
-    if (form.phone.length != 10)
-    {
-        [self phoneError];
-        return;
-    }
-    
-    if (oam.phone != nil) {
-        [prefs setObject:oam.phone forKey:@"phone"];
-    }
-    if (oam.prefix != nil) {
-        [prefs setObject:oam.prefix forKey:@"prefix"];
-    }
-    
-    ProgressHUD *hud = [ProgressHUD sharedInstance];
-    ActionCenterManager *action = [ActionCenterManager sharedInstance];
-    [hud showHUDWithMessage:@"Updating User"];
-    [action createUser:oam
-             withEmail:[prefs objectForKey:@"email"]
-            completion:^(NSString *userId, NSString *token, NSError *err) {
-                //NSLog(@"error %@", voter);
-                if (!err) {
-                    if (YES) {
-                        //VoterVoiceBody *body = voter.response.body[0];
-                        [hud showHUDSucces:YES withMessage:@"Success"];
-                        NSLog(@"created %@", userId);
-                        [prefs setBool:YES forKey:@"isLoggedIn"];
-                        [prefs setBool:YES forKey:@"inVoterVoice"];
-                        //[prefs setObject:_emailField.text forKey:@"email"];
-                        [prefs setObject:token forKey:@"token"];
-                        [prefs setObject:userId forKey:@"userId"];
-                        [prefs synchronize];
-                        [self dismissViewControllerAnimated:YES completion:nil];
+    if (_validateAddress) {
+        
+        [action verifyAddress:form.address withZip:form.zip andCountry:@"US" completion:^(NSDictionary *dict, NSError *err) {
+            //NSString *suggestedZipCode = (NSString *)[dict valueForKeyPath:@"response.body.suggestedZipCode"];
+            //NSString *message = (NSString *)[dict valueForKeyPath:@"response.body.message"];
+            NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body.addresses"];
+            
+            if ([dict valueForKeyPath:@"response.body.suggestedZipCode"] == [NSNull null] &&
+                [dict valueForKeyPath:@"response.body.message"] == [NSNull null] &&
+                arr.count > 0) {
+                NSDictionary *d = arr[0];
+                [prefs setObject:d[@"streetAddress"] forKey:@"address"];
+                //NSLog(@"********************%@********************", d[@"streetAddress"]);
+                [prefs setObject:d[@"city"] forKey:@"city"];
+                [prefs setObject:d[@"state"] forKey:@"state"];
+                [prefs setObject:d[@"zipCode"] forKey:@"zip"];
+                [prefs synchronize];
+                
+                form.city = d[@"city"];
+                [self.formController.tableView reloadData];
+                
+                NSString *phone = [form.phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+                
+                phone = [phone stringByReplacingOccurrencesOfString:@"(" withString:@""];
+                phone = [phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+                phone = [phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                phone = [phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+                oam.phone = phone;
+                oam.prefix = form.prefix;
+                //NSLog(@"p %@", phone);
+                [prefs setObject:form.firstName forKey:@"firstName"];
+                [prefs setObject:form.lastName forKey:@"lastName"];
+                /*
+                 [prefs setObject:form.address forKey:@"address"];
+                 [prefs setObject:form.city forKey:@"city"];
+                 [prefs setObject:form.state forKey:@"state"];
+                 [prefs setObject:form.zip forKey:@"zip"];
+                 */
+                oam.first_name = form.firstName;
+                oam.last_name = form.lastName;
+                oam.address_line = form.address;
+                oam.city = form.city;
+                oam.state = form.state;
+                oam.zip = form.zip;
+                //NSLog(@"phone %@", phone);
+                if (phone.length > 0) {
+                    if (phone.length != 10)
+                    {
+                        [self phoneError];
+                        return;
                     }
                 }
-                else {
-                    [hud showHUDSucces:NO withMessage:@"Failed"];
-                    NSLog(@"error ----------%@", err.description);
-                    [self showAlert:err.description withMessage:@""];
+                
+                if (oam.phone != nil) {
+                    [prefs setObject:oam.phone forKey:@"phone"];
                 }
-            }];
+                if (oam.prefix != nil) {
+                    [prefs setObject:oam.prefix forKey:@"prefix"];
+                }
+                
+                [prefs synchronize];
+                
+                [hud showHUDWithMessage:@"Updating User"];
+                [action createUser:oam
+                         withEmail:[prefs objectForKey:@"email"]
+                        completion:^(NSString *userId, NSString *token, NSError *err) {
+                            //NSLog(@"error %@", voter);
+                            if (!err) {
+                                if (YES) {
+                                    //VoterVoiceBody *body = voter.response.body[0];
+                                    [hud showHUDSucces:YES withMessage:@"Success"];
+                                    NSLog(@"created %@", userId);
+                                    [prefs setBool:YES forKey:@"isLoggedIn"];
+                                    [prefs setBool:YES forKey:@"inVoterVoice"];
+                                    //[prefs setObject:_emailField.text forKey:@"email"];
+                                    [prefs setObject:token forKey:@"token"];
+                                    [prefs setObject:userId forKey:@"userId"];
+                                    [prefs synchronize];
+                                    [self dismissViewControllerAnimated:YES completion:nil];
+                                }
+                            }
+                            else {
+                                [hud showHUDSucces:NO withMessage:@"Failed"];
+                                NSLog(@"error ----------%@", err.description);
+                                [self showAlert:err.description withMessage:@""];
+                            }
+                        }];
+            }
+            else {
+                [self showAlert:@"address" withMessage:@""];
+                return;
+            }
+        }];
+    }
 }
 
 @end

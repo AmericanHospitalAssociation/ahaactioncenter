@@ -151,6 +151,14 @@
                             [prefs setBool:YES forKey:@"showTip"];
                             [prefs setBool:NO forKey:@"inVoterVoice"];
                             [prefs setObject:_emailField.text forKey:@"email"];
+                            [prefs setObject:(oam.first_name == nil) ? @"" : oam.first_name forKey:@"firstName"];
+                            [prefs setObject:(oam.last_name == nil) ? @"" : oam.last_name forKey:@"lastName"];
+                            [prefs setObject:(oam.address_line == nil) ? @"" : oam.address_line forKey:@"address"];
+                            [prefs setObject:(oam.city == nil) ? @"" : oam.city forKey:@"city"];
+                            [prefs setObject:(oam.state == nil) ? @"" : oam.state forKey:@"state"];
+                            [prefs setObject:(oam.zip == nil) ? @"" : oam.zip forKey:@"zip"];
+                            [prefs setObject:(oam.prefix == nil) ? @"" : oam.prefix forKey:@"prefix"];
+                            [prefs setObject:(oam.phone == nil) ? @"" : oam.phone forKey:@"phone"];
                             [self dismissViewControllerAnimated:YES completion:nil];
                             [hud showHUDSucces:YES withMessage:@"Success"];
                             [prefs synchronize];

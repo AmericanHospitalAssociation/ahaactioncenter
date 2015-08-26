@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "MenuViewController.h"
+#import "UpdateUserViewController.h"
 
 @interface CampaignDetailViewController ()
 {
@@ -25,6 +26,7 @@
     VoterVoice *voterVoice;
     VoterVoice *matchVoter;
     BOOL campaignFlow;
+    NSMutableSet *required;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *subjectLabel;
@@ -37,6 +39,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    required = [[NSMutableSet alloc] init];
     
     _message.layer.cornerRadius = 5;
     _message.layer.borderWidth = 1.5f;
@@ -153,6 +157,28 @@
                                        for (VoterVoiceMatches *match in body.matches) {
                                            [urlString appendString:@"<li>"];
                                            [urlString appendString:match.name];
+                                           [urlString appendFormat:@"<ul><b>Required Fields:</b>"];
+                                           
+                                           NSString *url = [ NSString stringWithFormat:@"http://54.245.255.190/p/action_center/api/v1/messagedeliveryoptions?targettype=E&targetid=%@", match.id];
+                                           NSURL *requireURL = [NSURL URLWithString:url];
+                                           NSData *jsonData = [NSData dataWithContentsOfURL:requireURL];
+                                           NSError *error = nil;
+                                           NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+                                           //NSLog(@"%@", dict);
+                                           NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body"];
+                                           for (NSDictionary *d in arr) {
+                                               if ([d[@"deliveryMethod"] isEqualToString:@"webform"]) {
+                                                   //NSLog(@"%@", d[@"requiredUserFields"]);
+                                                   NSArray *arr = (NSArray *)d[@"requiredUserFields"];
+                                                   for (NSString *s in arr) {
+                                                       [urlString appendString:@"<li>"];
+                                                       [required addObject:s];
+                                                       [urlString appendString:[s uppercaseString]];
+                                                       [urlString appendString:@"</li>"];
+                                                   }
+                                               }
+                                           }
+                                           [urlString appendFormat:@"</ul>"];
                                            [urlString appendString:@"</li>"];
                                        }
                                    }
@@ -292,6 +318,33 @@
     }
 }
 
+- (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:alert
+                                                                    message:msg
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Info"
+                                               style:UIAlertActionStyleCancel
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                           update.excludeList = @[@"excludedList", @"showPhone"/*, @"firstName", @"lastName", @"prefix", @"phone"*/];
+                           UserForm *form = (UserForm *)update.formController.form;
+                           form.firstName = @"test";
+                           update.validateAddress = YES;
+                           update.showCancel = YES;
+                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
+                           nav.modalPresentationStyle = UIModalPresentationFormSheet;
+                           [self.navigationController presentViewController:nav animated:YES completion:nil];
+                       }]];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Cancel"
+                                               style:UIAlertActionStyleDefault
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           
+                       }]];
+    [self presentViewController:alert2 animated:YES completion:nil];
+}
+
 - (void)sendCampaignMessage {
     // Create the array of matched targets to be sent in the GET request
     NSMutableString *targetString = [NSMutableString new];
@@ -305,8 +358,32 @@
         
     }
     
+    
+    
     //[self viewFadeOut:background];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString *prefix = [prefs stringForKey:@"prefix"];
+    NSString *phone = [prefs stringForKey:@"phone"];
+    NSString *address = [prefs stringForKey:@"address"];
+    NSString *city = [prefs stringForKey:@"city"];
+    NSString *state = [prefs stringForKey:@"state"];
+    NSString *zip = [prefs stringForKey:@"zip"];
+    
+    phone = [phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+    phone = [phone stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    phone = [phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+    phone = [phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    phone = [phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    if ([required containsObject:@"phone"] && phone.length != 10) {
+        [self showAlert:@"Phone number needed" withMessage:@"One of the legislators needs you phone number to send a message. Please update your info with your phone number."];
+        return;
+    }
+    if ([required containsObject:@"prefix"] && prefix.length < 1) {
+        [self showAlert:@"Prefix needed" withMessage:@"One of the legislators needs you prefix to send a message. Please update your info with your prefix."];
+        return;
+    }
+    
     OAM *oam = [[OAM alloc] initWithJSONData:[prefs dataForKey:@"user"]];
     VoterVoiceBody *body = (VoterVoiceBody *)voterVoice.response.body[0];
     //VoterVoiceMessage *message = (VoterVoiceMessage *)body.messages[0];
@@ -321,7 +398,7 @@
                              "&signature=%@"
                              "&messageId=%@"
                              "%@"
-                             /*"&phone=%@"*/
+                             "&phone=%@"
                              "&email=%@"
                              "&address=%@"
                              "&zipcode=%@"
@@ -334,7 +411,7 @@
                              [NSString stringWithFormat:@"%@ %@", oam.first_name, oam.last_name],
                              [body.id stringValue],
                              targetString,
-                             /* @"3124223000",*/
+                             ([required containsObject:@"phone"]) ? phone : @"",
                              [prefs stringForKey:@"email"],
                              oam.address_line,
                              [oam.zip substringToIndex:5],
@@ -342,10 +419,15 @@
                              ]
      ];
     
+    if (![required containsObject:@"phone"]) {
+        urlString = (NSMutableString *)[urlString stringByReplacingOccurrencesOfString:@"&phone=" withString:@""];
+    }
+    
     NSLog(@"\n\nURL STRING:\n\n%@", [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
     //NSURL *url =[NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     [hud showHUDWithMessage:@"Sending"];
     //NSLog(@"\n\nURL STRING:\n\n%@", urlString);
+    
     [action postVoterUrl:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
               completion:^(VoterVoice *voter, NSError *err) {
                   if (!err) {
@@ -355,6 +437,7 @@
                       [self showCompleted];
                   }
               }];
+     
 }
 
 - (void)showCompleted {

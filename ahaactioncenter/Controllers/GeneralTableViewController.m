@@ -26,6 +26,7 @@
 #import "WebViewController.h"
 #import "UpdateUserViewController.h"
 #import <AMPPreviewController/AMPPreviewController.h>
+#import "AppDelegate.h"
 
 @interface GeneralTableViewController ()
 {
@@ -46,6 +47,8 @@
     action = [ActionCenterManager sharedInstance];
     voter = [[VoterVoice alloc] init];
     
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
     self.tableView.backgroundColor = [UIColor lightGrayColor];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         self.navigationItem.leftBarButtonItem = [ActionCenterManager dragButton];
@@ -59,13 +62,16 @@
     [super viewDidAppear:YES];
     
     [self loadCustomView];
+    /*
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if ([prefs objectForKey:@"lastCampaign"]) {
+    if (![[prefs objectForKey:@"lastCampaign"] isEqualToString:@""]) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:[[prefs objectForKey:@"lastCampaign"] integerValue]
                                                inSection:0];
         [self tableView:self.tableView didSelectRowAtIndexPath:path];
         [prefs setObject:nil forKey:@"lastCampaign"];
+        [prefs synchronize];
     }
+     */
 }
 
 - (void)loadCustomView
@@ -140,11 +146,18 @@
         self.title = @"Directory";
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [hud showHUDWithMessage:@"Getting Representatives"];
-        [action getMatchesForCampaign:@"30763"
+        [action getMatchesForCampaign:nil
                             withToken:[prefs objectForKey:@"token"]
                            completion:^(VoterVoice *votervoice, NSError *error){
             if (!error) {
-                list = votervoice.response.body;
+                NSMutableArray *arr = [[NSMutableArray alloc] init];
+                for (VoterVoiceBody *body in votervoice.response.body) {
+                    if ([body.groupId isEqualToString:@"US Representative"] || [body.groupId isEqualToString:@"US Senators"]) {
+                        [arr addObject:body];
+                    }
+                }
+                list = (NSArray *)arr;
+                NSLog(@"%@", list);
                 voter = votervoice;
                 [hud showHUDSucces:YES withMessage:@"Loaded"];
                 [self.tableView reloadData];
@@ -349,6 +362,11 @@
                                             handler:^void (UIAlertAction *action)
                       {
                           UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                          update.excludeList = @[@"excludedList", @"showPhone"/*, @"firstName", @"lastName", @"prefix", @"phone"*/];
+                          UserForm *form = (UserForm *)update.formController.form;
+                          form.firstName = @"test";
+                          update.validateAddress = YES;
+                          update.showCancel = YES;
                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
                           nav.modalPresentationStyle = UIModalPresentationFormSheet;
                           [self.navigationController presentViewController:nav animated:YES completion:nil];
@@ -360,6 +378,47 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
+    NSString *str;
+    if ([alert containsString:@"address"]) {
+        str = @"Your address on file does not match U.S. Postal Service records. Please update your address.";
+    }
+    else {
+        str = @"There is something wrong with your AHA account. Please contact AHA for details";
+    }
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Account Error"
+                                                                    message:str
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Info"
+                                               style:UIAlertActionStyleCancel
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                           update.excludeList = @[@"excludedList", @"showPhone"/*, @"firstName", @"lastName", @"prefix", @"phone"*/];
+                           UserForm *form = (UserForm *)update.formController.form;
+                           form.firstName = @"test";
+                           update.validateAddress = YES;
+                           update.showCancel = YES;
+                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
+                           nav.modalPresentationStyle = UIModalPresentationFormSheet;
+                           [self.navigationController presentViewController:nav animated:YES completion:nil];
+                       }]];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Contact AHA"
+                                               style:UIAlertActionStyleDefault
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.aha.org/updateprofile"]];
+                           ActionCenterManager *acm = [ActionCenterManager sharedInstance];
+                           acm.contacAHA = YES;
+                           AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                           [ad openSideMenu];
+                           if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                               [[NSNotificationCenter defaultCenter] postNotificationName: @"showContact" object:nil userInfo:nil];
+                           }
+                       }]];
+    [self presentViewController:alert2 animated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -379,7 +438,7 @@
         return arr.count;
     }
     if (_viewType == kViewTypeDirectory) {
-        VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[section];
+        VoterVoiceBody *body = (VoterVoiceBody *)list[section];
         return body.matches.count;
     }
     else {
@@ -407,17 +466,18 @@
         return v;
     }
     if (_viewType == kViewTypeDirectory) {
-        VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[section];
+        VoterVoiceBody *body = (VoterVoiceBody *)list[section];
         
         CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, 40);
         UIView *headerView = [[UIView alloc] initWithFrame:frame];
-        UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, frame.size.width - 55, 30)];
+        UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(5, -5, frame.size.width - 55, 30)];
         NSString *str = body.groupId;
         [headerView setBackgroundColor:[UIColor colorWithRed:185.0/255.0f green:217.0f/255.0f blue:235.0f/255.0f alpha:1.0f]];
         header.text = [NSString stringWithFormat:@"%@", str];
         [header setFont:[UIFont fontWithName:@"Helvetica-Bold"  size:15.0f]];
         [headerView addSubview:header];
         // need a button
+        /*
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 55, 0, 50, 30)];
         [button addTarget:self action:@selector(sectionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [headerView addSubview:button];
@@ -428,6 +488,7 @@
         button.layer.cornerRadius = 2.0f;
         [button setBackgroundColor:[UIColor colorWithRed:157.0f/255.0f green:34.0f/255.0f blue:53.0f/255.0f alpha:1.0f]];
         [button.titleLabel setTextColor:[UIColor blackColor]];
+         */
         return headerView;
     }
     else {
@@ -448,13 +509,15 @@
         return 110.0f;
     }
     else if (_viewType == kViewTypeActionAlert) {
-        return 300.0f;
+        //return 300.0f;
+        return 235.0f;
     }
     else if (_viewType == kViewTypeLetter || _viewType == kViewTypeAdvisory || _viewType == kViewTypeTestimony) {
         return 235.0f;
     }
     else if (_viewType == kViewTypeBulletin) {
-        return 215.0f;
+        //return 215.0f;
+        return 235.0f;
     }
     else if (_viewType == kViewTypeContactUs) {
         return 235.0f;
@@ -466,13 +529,27 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_viewType == kViewTypeActionAlert) {
-        ActionAlertTableViewCell *cell = (ActionAlertTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"action_alert_cell"];
+        //ActionAlertTableViewCell *cell = (ActionAlertTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"action_alert_cell"];
+        
+        
+        AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"advisories"];
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
-        cell.titleLabel.text = row[@"Title"];
-        cell.actionFromLabel.text = row[@"ActionFrom"];
-        cell.actionNeededLabel.text = row[@"ActionNeeded"];
-        cell.whenLabel.text = row[@"When_c"];
-        cell.whyLabel.text = row[@"Why"];
+        NSString *str = [NSString stringWithFormat:@"We need action from %@. We %@. This needs to be done %@ because %@.",
+                         row[@"ActionFrom"],
+                         row[@"ActionNeeded"],
+                         row[@"When_c"],
+                         row[@"Why"]];
+        
+        [cell setupCellWithTitle:row[@"Title"]
+         //date:row[@"Date"]
+                            date:[ActionCenterManager formatDate:row[@"Date"]]
+                     description:str];
+        //cell.titleLabel.text = row[@"Title"];
+        //cell.actionFromLabel.text = row[@"ActionFrom"];
+        //cell.actionNeededLabel.text = row[@"ActionNeeded"];
+        //cell.whenLabel.text = row[@"When_c"];
+        //cell.whyLabel.text = row[@"Why"];
+        
         cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
     }
@@ -484,11 +561,18 @@
         return cell;
     }
     if (_viewType == kViewTypeBulletin) {
-        SpecialBulletinTableViewCell *cell = (SpecialBulletinTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"special_bulletin_cell"];
+        AHAAdvisoryTableViewCell *cell = (AHAAdvisoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"advisories"];
+        //SpecialBulletinTableViewCell *cell = (SpecialBulletinTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"special_bulletin_cell"];
         NSDictionary *row = (NSDictionary *)list[indexPath.row];
+        /*
         cell.titleLabel.text = row[@"Title"];
         cell.dateLabel.text = [ActionCenterManager formatDate:row[@"Date"]];
         [cell setDescriptionLabelText:row[@"Description"]];
+         */
+        [cell setupCellWithTitle:row[@"Title"]
+         //date:row[@"Date"]
+                            date:[ActionCenterManager formatDate:row[@"Date"]]
+                     description:row[@"Description"]];
         
         cell.backgroundColor = [UIColor lightGrayColor];
         return cell;
@@ -595,7 +679,7 @@
     if (_viewType == kViewTypeDirectory) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         [cell.textLabel setFont:[UIFont fontWithName:@"Helvetica-Light" size:17.5f]];
-        VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.section];
+        VoterVoiceBody *body = (VoterVoiceBody *)list[indexPath.section];
         VoterVoiceMatches *match = (VoterVoiceMatches *)body.matches[indexPath.row];
         cell.textLabel.text = match.name;
         //cell.backgroundColor = [UIColor lightGrayColor];
@@ -617,35 +701,51 @@
         
     }
     else if (_viewType == kViewTypeCampaign) {
+        OAM *oam;
         //if ([prefs boolForKey:@"inVoterVoice"]) {
             VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.row];
             CampaignDetailView *detailView = [[CampaignDetailView alloc] initWithFrame:CGRectMake(0, 0, 280, 400)];
             [detailView setHeader:body.headline];
             [detailView loadHTMLString:body.alert];
-            detailView.sendButtonTapped = ^(){
-                CampaignDetailViewController *vc = (CampaignDetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"campaignDetail"];
-                vc.campaignID = [body.id stringValue];
-                
-                [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
-                    
-                    //[self.navigationController presentViewController:vc animated:YES completion:nil];
-                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                    if (/*[prefs boolForKey:@"inVoterVoice"] == NO*/YES) {
-                        NSString *prefix = [prefs stringForKey:@"prefix"];
-                        NSString *phone = [prefs stringForKey:@"phone"];
-                        OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
-                        if (prefix == nil || phone == nil) {
-                            [prefs setObject:[NSString stringWithFormat:@"%li",(long)indexPath.row]
-                                      forKey:@"lastCampaign"];
-                            [self requiredInfo];
-                            return;
-                        }
-                        else {
-                            NSLog(@"------------");
-                            [hud showHUDWithMessage:@"Checking User Info"];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        if (/*[prefs boolForKey:@"inVoterVoice"] == NO*/YES) {
+            NSString *prefix = [prefs stringForKey:@"prefix"];
+            NSString *phone = [prefs stringForKey:@"phone"];
+            NSString *token = [prefs stringForKey:@"token"];
+            NSString *address = [prefs stringForKey:@"address"];
+            NSString *city = [prefs stringForKey:@"city"];
+            NSString *state = [prefs stringForKey:@"state"];
+            NSString *zip = [prefs stringForKey:@"zip"];
+            zip = [zip substringToIndex:5];
+            oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
+            if (address == nil) {
+                [self requiredInfo];
+                return;
+            }
+            else {
+                detailView.sendButtonTapped = ^(){
+                    CampaignDetailViewController *vc = (CampaignDetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"campaignDetail"];
+                    vc.campaignID = [body.id stringValue];
+                    [action verifyAddress:address withZip:zip andCountry:@"US" completion:^(NSDictionary *dict, NSError *err) {
+                        NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body.addresses"];
+                        if ([dict valueForKeyPath:@"response.body.suggestedZipCode"] == [NSNull null] &&
+                            [dict valueForKeyPath:@"response.body.message"] == [NSNull null] &&
+                            arr.count > 0) {
+                            NSDictionary *d = arr[0];
+                            [prefs setObject:d[@"streetAddress"] forKey:@"address"];
+                            //NSLog(@"********************%@********************", d[@"streetAddress"]);
+                            [prefs setObject:d[@"city"] forKey:@"city"];
+                            [prefs setObject:d[@"state"] forKey:@"state"];
+                            [prefs setObject:d[@"zipCode"] forKey:@"zip"];
+                            [prefs synchronize];
+                            
+                            oam.address_line = address;
+                            oam.city = city;
+                            oam.state = state;
+                            oam.zip = zip;
                             oam.phone = phone;
                             oam.prefix = prefix;
-                            NSLog(@"prefix- %@", prefix);
+                            
                             [action createUser:oam
                                      withEmail:[prefs stringForKey:@"email"]
                                     completion:^(NSString *userId, NSString *token, NSError *err) {
@@ -655,15 +755,26 @@
                                         }
                                         else {
                                             [hud showHUDSucces:NO withMessage:@"Failed"];
-                                            [action showAlert:err.description withMessage:@""];
+                                            [self showAlert:err.description withMessage:@""];
                                         }
                                     }];
-                            return;
                         }
-                    }
-                }];
-            };
-            [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+                        else {
+                            [self showAlert:@"address" withMessage:@""];
+                        }
+                    }];
+                    
+                    [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
+                        
+                        //[self.navigationController presentViewController:vc animated:YES completion:nil];
+                        
+                    }];
+                };
+                [[KGModal sharedInstance] showWithContentView:detailView andAnimated:YES];
+            }
+        }
+        
+        
         //}
         //else {
         //    [self requiredInfo];
@@ -832,7 +943,7 @@
             [[KGModal sharedInstance] hideAnimated:YES withCompletionBlock:^(){
             }];
         };
-        VoterVoiceBody *body = (VoterVoiceBody *)voter.response.body[indexPath.section];
+        VoterVoiceBody *body = (VoterVoiceBody *)list[indexPath.section];
         VoterVoiceMatches *match = (VoterVoiceMatches *)body.matches[indexPath.row];
         [hud showHUDWithMessage:@"Getting Profile"];
         NSMutableString *htmlString = [NSMutableString new];

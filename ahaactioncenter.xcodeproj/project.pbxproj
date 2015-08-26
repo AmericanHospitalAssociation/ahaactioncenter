@@ -28,6 +28,7 @@
 		3EB8083F1AD20CC300FC8584 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8083E1AD20CC300FC8584 /* MainViewController.m */; };
 		3ED95A881AD0F231003269D8 /* RATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ED95A861AD0F231003269D8 /* RATableViewCell.m */; };
 		3ED95A891AD0F231003269D8 /* RATableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ED95A871AD0F231003269D8 /* RATableViewCell.xib */; };
+		5B6CBEC41B4DA41E0019C65E /* TweetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6CBEC21B4DA41E0019C65E /* TweetViewController.m */; };
 		5BDA68C51B44859F0073A591 /* capital_white_fade_bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BDA68C41B44859F0073A591 /* capital_white_fade_bg.jpg */; };
 		5BDA68C71B4573200073A591 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDA68C61B4573200073A591 /* AVFoundation.framework */; };
 		5BDA68C91B4573940073A591 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDA68C81B4573940073A591 /* MediaPlayer.framework */; };
@@ -126,6 +127,8 @@
 		3ED95A851AD0F231003269D8 /* RATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RATableViewCell.h; path = Views/RATableViewCell.h; sourceTree = "<group>"; };
 		3ED95A861AD0F231003269D8 /* RATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RATableViewCell.m; path = Views/RATableViewCell.m; sourceTree = "<group>"; };
 		3ED95A871AD0F231003269D8 /* RATableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RATableViewCell.xib; path = Views/RATableViewCell.xib; sourceTree = "<group>"; };
+		5B6CBEC21B4DA41E0019C65E /* TweetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TweetViewController.m; path = Controllers/TweetViewController.m; sourceTree = "<group>"; };
+		5B6CBEC31B4DA41E0019C65E /* TweetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TweetViewController.h; path = Controllers/TweetViewController.h; sourceTree = "<group>"; };
 		5BDA68C41B44859F0073A591 /* capital_white_fade_bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = capital_white_fade_bg.jpg; path = ../../../Downloads/capital_white_fade_bg.jpg; sourceTree = "<group>"; };
 		5BDA68C61B4573200073A591 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		5BDA68C81B4573940073A591 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -360,6 +363,8 @@
 				61F103A01AD4727100547571 /* GeneralTableViewController.m */,
 				61F103A81AD4B4DB00547571 /* WebViewController.h */,
 				61F103A91AD4B4DB00547571 /* WebViewController.m */,
+				5B6CBEC31B4DA41E0019C65E /* TweetViewController.h */,
+				5B6CBEC21B4DA41E0019C65E /* TweetViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -646,6 +651,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B6CBEC41B4DA41E0019C65E /* TweetViewController.m in Sources */,
 				619BC2431AD3123100E9FAE4 /* User.m in Sources */,
 				61F1039E1AD46F0200547571 /* AHAStaffTableViewCell.m in Sources */,
 				61F103681AD3A98B00547571 /* VoterVoiceMatches.m in Sources */,

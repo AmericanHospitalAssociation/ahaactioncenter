@@ -24,6 +24,7 @@
 #import "AppDelegate.h"
 #import "UpdateUserViewController.h"
 #import "ProgressHUD.h"
+#import "TweetViewController.h"
 
 @interface MenuViewController () <RATreeViewDelegate, RATreeViewDataSource>
 {
@@ -54,6 +55,11 @@
     
     NSString * version = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     NSString * build = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleVersionKey];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showContact:)
+                                                 name:@"showContact"
+                                               object:nil];
     
     [icon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[icon imageWithSize:CGSizeMake(30, 30)]
@@ -125,8 +131,21 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    
     [super viewDidAppear:YES];
+    if (action.contacAHA) {
+        NSLog(@"appear");
+        NSDictionary *dict = @{@"storyboard" : @"general", @"title" : @"Contact AHA"};
+        //[self transitionToViewController:<#(NSDictionary *)#>]
+        [self performSelector:@selector(transitionToViewController:) withObject:dict afterDelay:1.0];
+        action.contacAHA = NO;
+    }
     //[[ProgressHUD sharedInstance] showHUDWithMessage:@"tesin"];
+}
+
+- (void)showContact:(NSNotification *)note {
+    NSDictionary *dict = @{@"storyboard" : @"general", @"title" : @"Contact AHA"};
+    [self performSelector:@selector(transitionToViewController:) withObject:dict afterDelay:1.0];
 }
 
 - (void)logout {
@@ -150,6 +169,12 @@
                           [prefs setObject:nil forKey:@"phone"];
                           [prefs setObject:nil forKey:@"prefix"];
                           [prefs setObject:nil forKey:@"token"];
+                          [prefs setObject:nil forKey:@"firstName"];
+                          [prefs setObject:nil forKey:@"lastName"];
+                          [prefs setObject:nil forKey:@"address"];
+                          [prefs setObject:nil forKey:@"city"];
+                          [prefs setObject:nil forKey:@"state"];
+                          [prefs setObject:nil forKey:@"zip"];
                           [prefs synchronize];
                           LoginViewController *vc = (LoginViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"login"];
                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -176,12 +201,57 @@
                                             handler:^void (UIAlertAction *action)
                       {
                           UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                          update.excludeList = @[@"excludedList", @"showPhone"/*, @"firstName", @"lastName", @"prefix", @"phone"*/];
+                          UserForm *form = (UserForm *)update.formController.form;
+                          form.firstName = @"test";
+                          update.validateAddress = YES;
+                          update.showCancel = YES;
                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
                           nav.modalPresentationStyle = UIModalPresentationFormSheet;
                           [self.navigationController presentViewController:nav animated:YES completion:nil];
                           
                       }]];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showAlert:(NSString *)alert withMessage:(NSString *)msg {
+    NSString *str;
+    if ([alert containsString:@"address"]) {
+        str = @"Your address on file does not match U.S. Postal Service records. Please update your address.";
+    }
+    else {
+        str = @"There is something wrong with your AHA account. Please contact AHA for details";
+    }
+    UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Account Error"
+                                                                    message:str
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"OK"
+                                               style:UIAlertActionStyleCancel
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                           update.excludeList = @[@"excludedList", @"showPhone"/*, @"firstName", @"lastName", @"prefix", @"phone"*/];
+                           UserForm *form = (UserForm *)update.formController.form;
+                           form.firstName = @"test";
+                           update.validateAddress = YES;
+                           update.showCancel = YES;
+                           UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:update];
+                           nav.modalPresentationStyle = UIModalPresentationFormSheet;
+                           [self.navigationController presentViewController:nav animated:YES completion:nil];
+                       }]];
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Contact AHA"
+                                               style:UIAlertActionStyleDefault
+                                             handler:^void (UIAlertAction *action)
+                       {
+                           //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.aha.org/updateprofile"]];
+                           //ActionCenterManager *acm = [ActionCenterManager sharedInstance];
+                           NSDictionary *dict = @{@"storyboard" : @"general", @"title" : @"Contact AHA"};
+                           //[self transitionToViewController:<#(NSDictionary *)#>]
+                           [self performSelector:@selector(transitionToViewController:) withObject:dict afterDelay:0.5];
+                           //action.contacAHA = NO;
+                           
+                       }]];
+    [self presentViewController:alert2 animated:YES completion:nil];
 }
 
 #pragma mark TreeView Data Source
@@ -192,6 +262,20 @@
     RATableViewCell *cell = [self.treeView dequeueReusableCellWithIdentifier:NSStringFromClass([RATableViewCell class])];
     [cell setupWithTitle:row[@"title"] level:row[@"level"]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    
+    BOOL expanded = [_treeView isCellExpanded:cell];
+    UIColor *labelColor = [UIColor colorWithRed:0.188 green:0.498 blue:0.886 alpha:1];
+    NSString *chevronCode = (expanded) ? @"\uf123" : @"\uf126" ;
+    FAKIonIcons *chevron = [FAKIonIcons iconWithCode:chevronCode size:15];
+    [chevron addAttribute:NSForegroundColorAttributeName value:labelColor];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[chevron imageWithSize:CGSizeMake(15, 15)]];
+    NSArray *items = (NSArray *)row[@"items"];
+    if (items.count > 0) {
+        cell.accessoryView = iv;
+    }
+    else {
+        cell.accessoryView = nil;
+    }
     
     if ([row[@"level"] intValue] == 1)
     {
@@ -205,6 +289,42 @@
     }
     
     return cell;
+}
+
+- (void)treeView:(RATreeView *)treeView didExpandRowForItem:(id)item {
+    NSDictionary *row = (NSDictionary *)item;
+    UITableViewCell *cell = [_treeView cellForItem:item];
+    BOOL expanded = [_treeView isCellExpanded:cell];
+    UIColor *labelColor = [UIColor colorWithRed:0.188 green:0.498 blue:0.886 alpha:1];
+    NSString *chevronCode = (expanded) ? @"\uf123" : @"\uf126" ;
+    FAKIonIcons *chevron = [FAKIonIcons iconWithCode:chevronCode size:15];
+    [chevron addAttribute:NSForegroundColorAttributeName value:labelColor];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[chevron imageWithSize:CGSizeMake(15, 15)]];
+    NSArray *items = (NSArray *)row[@"items"];
+    if (items.count > 0) {
+        cell.accessoryView = iv;
+    }
+    else {
+        cell.accessoryView = nil;
+    }
+}
+
+- (void)treeView:(RATreeView *)treeView didCollapseRowForItem:(id)item {
+    NSDictionary *row = (NSDictionary *)item;
+    UITableViewCell *cell = [_treeView cellForItem:item];
+    BOOL expanded = [_treeView isCellExpanded:cell];
+    UIColor *labelColor = [UIColor colorWithRed:0.188 green:0.498 blue:0.886 alpha:1];
+    NSString *chevronCode = (expanded) ? @"\uf123" : @"\uf126" ;
+    FAKIonIcons *chevron = [FAKIonIcons iconWithCode:chevronCode size:15];
+    [chevron addAttribute:NSForegroundColorAttributeName value:labelColor];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[chevron imageWithSize:CGSizeMake(15, 15)]];
+    NSArray *items = (NSArray *)row[@"items"];
+    if (items.count > 0) {
+        cell.accessoryView = iv;
+    }
+    else {
+        cell.accessoryView = nil;
+    }
 }
 
 - (NSInteger)treeView:(RATreeView *)treeView numberOfChildrenOfItem:(id)item
@@ -259,6 +379,19 @@
     UINavigationController *nav;
     NSString *storyboard = dict[@"storyboard"];
     
+    if ([storyboard isEqualToString:@"profile"])
+    {
+        UpdateUserViewController *update = [[UpdateUserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        update.excludeList = @[@"excludedList", @"showPhone"];
+        UserForm *form = (UserForm *)update.formController.form;
+        form.firstName = @"test";
+        update.validateAddress = YES;
+        update.showCancel =YES;
+        nav = [[UINavigationController alloc] initWithRootViewController:update];
+        nav.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
+        return;
+    }
     if ([storyboard isEqualToString:@"main"])
     {
         MainViewController *vc = (MainViewController *)[self.storyboard instantiateViewControllerWithIdentifier:storyboard];
@@ -337,8 +470,15 @@
             if (/*[prefs boolForKey:@"inVoterVoice"] == NO*/YES) {
                 NSString *prefix = [prefs stringForKey:@"prefix"];
                 NSString *phone = [prefs stringForKey:@"phone"];
+                NSString *address = [prefs stringForKey:@"address"];
+                NSString *city = [prefs stringForKey:@"city"];
+                NSString *state = [prefs stringForKey:@"state"];
+                NSString *zip = [prefs stringForKey:@"zip"];
+                NSLog(@"zip - %@",zip);
+                zip = [zip substringToIndex:5];
+                NSLog(@"zip - %@",zip);
                 OAM *oam = [[OAM alloc] initWithJSONData:[prefs objectForKey:@"user"]];
-                if (prefix == nil || phone == nil) {
+                if (address == nil) {
                     [self requiredInfo];
                     return;
                 }
@@ -347,29 +487,54 @@
                     [hud showHUDWithMessage:@"Checking User Info"];
                     oam.phone = phone;
                     oam.prefix = prefix;
-                    NSLog(@"prefix- %@", prefix);
-                    [action createUser:oam
-                             withEmail:[prefs stringForKey:@"email"]
-                            completion:^(NSString *userId, NSString *token, NSError *err) {
-                                if (!err) {
-                                    [hud showHUDSucces:YES withMessage:@"Success"];
-                                    
-                                    AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-                                        UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
-                                        [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
-                                    }
-                                    else {
-                                        MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
-                                        [dynamic setPaneViewController:nav animated:YES completion:nil];
-                                    }
-                                }
-                                else {
-                                    [hud showHUDSucces:NO withMessage:@"Failed"];
-                                    [action showAlert:err.description withMessage:@""];
-                                }
-                            }];
-                    return;
+                   
+                    [action verifyAddress:address withZip:zip andCountry:@"US" completion:^(NSDictionary *dict, NSError *err) {
+                        //NSString *suggestedZipCode = (NSString *)[dict valueForKeyPath:@"response.body.suggestedZipCode"];
+                        //NSString *message = (NSString *)[dict valueForKeyPath:@"response.body.message"];
+                        if ([dict valueForKeyPath:@"response.body.suggestedZipCode"] == [NSNull null] && [dict valueForKeyPath:@"response.body.message"] == [NSNull null]) {
+                            NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body.addresses"];
+                            NSDictionary *d = arr[0];
+                            [prefs setObject:d[@"streetAddress"] forKey:@"address"];
+                            //NSLog(@"********************%@********************", d[@"streetAddress"]);
+                            [prefs setObject:d[@"city"] forKey:@"city"];
+                            [prefs setObject:d[@"state"] forKey:@"state"];
+                            [prefs setObject:d[@"zipCode"] forKey:@"zip"];
+                            [prefs synchronize];
+                            oam.address_line = d[@"streetAddress"];
+                            oam.city = d[@"city"];
+                            oam.state = d[@"state"];
+                            oam.zip = d[@"zipCode"];
+                            
+                            [action createUser:oam
+                                     withEmail:[prefs stringForKey:@"email"]
+                                    completion:^(NSString *userId, NSString *token, NSError *err) {
+                                        if (!err) {
+                                            [hud showHUDSucces:YES withMessage:@"Success"];
+                                            
+                                            AppDelegate *ad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                                                UISplitViewController *split = (UISplitViewController *)ad.splitViewController;
+                                                [split setViewControllers:@[(UINavigationController *)self.navigationController,nav]];
+                                            }
+                                            else {
+                                                MSDynamicsDrawerViewController *dynamic = (MSDynamicsDrawerViewController *)ad.dynamicsDrawerViewController;
+                                                [dynamic setPaneViewController:nav animated:YES completion:nil];
+                                            }
+                                        }
+                                        else {
+                                            [hud showHUDSucces:NO withMessage:@"Failed"];
+                                            [self showAlert:err.description withMessage:@""];
+                                        }
+                                    }];
+
+                        }
+                        else {
+                            [hud showHUDSucces:NO withMessage:@"Failed"];
+                            [self showAlert:@"address" withMessage:@""];
+                            return;
+                        }
+                    }];
+                                        return;
                 }
             }
         }

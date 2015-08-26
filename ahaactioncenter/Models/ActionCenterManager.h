@@ -29,7 +29,7 @@ typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSErr
 //typedef void (^CompletionContactBlock)(Contact *contact, NSError *error);
 
 @property(nonatomic, retain)NSArray *feeds, *alerts;
-
+@property(nonatomic, assign)BOOL contacAHA;
 ///------------------------------------------------
 /// @name Getting Contact info
 ///------------------------------------------------
@@ -46,7 +46,8 @@ typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSErr
 - (void)getOAMUser:(NSString *)email withPassword:(NSString *)password completion:(CompletionOAM)completion;
 
 - (void)verifyUser:(NSString *)email withZip:(NSString *)zip completion:(CompletionVoterVoice)completion;
-- (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoice)completion;
+- (void)getUser:(NSString *)token completion:(CompletionVoterVoice)completion;
+- (void)verifyAddress:(NSString *)address withZip:(NSString *)zip  andCountry:(NSString *)country completion:(CompletionVoterVoiceBody)completion;
 - (void)createUser:(OAM *)oam withEmail:(NSString *)email completion:(CompletionVoterVoiceNew)completion;
 - (void)sendEmailVerification:(NSString *)email completion:(CompletionVoterVoice)completion;
 - (void)getMatchesForCampaign:(NSString*)campaignId withToken:(NSString *)token completion:(CompletionVoterVoice)completion;
@@ -54,6 +55,7 @@ typedef void (^CompletionVoterVoiceNew)(NSString *userId, NSString *token, NSErr
 - (void)getCampaignSummaries:(CompletionVoterVoice)completion;
 - (void)postVoterUrl:(NSString *)strUrl completion:(CompletionVoterVoice)completion;
 - (void)getTargetedMessages:(NSString *)campaignID completion:(CompletionVoterVoice)completion;
+- (void)getRequiredFields:(NSString *)targetType withTargetId:(NSString *)targetId completion:(CompletionVoterVoiceBody)completion;
 - (void)getProfile:(NSString *)profileID withType:(NSString *)type completion:(CompletionVoterVoiceBody)completion;
 
 + (NSArray *)menuItems;
