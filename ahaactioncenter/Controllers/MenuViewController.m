@@ -225,7 +225,7 @@
     UIAlertController *alert2 = [UIAlertController alertControllerWithTitle:@"Account Error"
                                                                     message:str
                                                              preferredStyle:UIAlertControllerStyleAlert];
-    [alert2 addAction:[UIAlertAction actionWithTitle:@"OK"
+    [alert2 addAction:[UIAlertAction actionWithTitle:@"Update Info"
                                                style:UIAlertActionStyleCancel
                                              handler:^void (UIAlertAction *action)
                        {
@@ -251,6 +251,7 @@
                            //action.contacAHA = NO;
                            
                        }]];
+
     [self presentViewController:alert2 animated:YES completion:nil];
 }
 
@@ -491,8 +492,10 @@
                     [action verifyAddress:address withZip:zip andCountry:@"US" completion:^(NSDictionary *dict, NSError *err) {
                         //NSString *suggestedZipCode = (NSString *)[dict valueForKeyPath:@"response.body.suggestedZipCode"];
                         //NSString *message = (NSString *)[dict valueForKeyPath:@"response.body.message"];
-                        if ([dict valueForKeyPath:@"response.body.suggestedZipCode"] == [NSNull null] && [dict valueForKeyPath:@"response.body.message"] == [NSNull null]) {
-                            NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body.addresses"];
+                        NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body.addresses"];
+                        if ([dict valueForKeyPath:@"response.body.suggestedZipCode"] == [NSNull null] && [dict valueForKeyPath:@"response.body.message"] == [NSNull null] &&
+                            arr.count > 0) {
+                            //NSArray *arr = (NSArray *)[dict valueForKeyPath:@"response.body.addresses"];
                             NSDictionary *d = arr[0];
                             [prefs setObject:d[@"streetAddress"] forKey:@"address"];
                             //NSLog(@"********************%@********************", d[@"streetAddress"]);
